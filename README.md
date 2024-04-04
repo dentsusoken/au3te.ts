@@ -1,9 +1,11 @@
 # How to use
 
 ## Preparing the project
+
 ```bash
 git clone https://github.com/dentsusoken/au3te.ts
 cd au3te.ts
+npm run build
 npm link
 ```
 
@@ -29,4 +31,3 @@ Executing index.js
 ```bash
 node index.js
 ```
-
