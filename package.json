@@ -21,7 +21,6 @@
     }
   },
   "scripts": {
-    "dev": "vite",
     "build": "vite build && tsc",
     "test": "vitest"
   },
