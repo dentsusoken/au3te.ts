@@ -1,8 +1,8 @@
 interface ResponseHeaders {
   [key: string]: string[];
 }
-
-class AuthleteApiException extends Error {
+// TODO implment this class
+export default class AuthleteApiException extends Error {
   private mStatusCode: number;
   private mStatusMessage: string | null;
   private mResponseBody: string | null;
@@ -22,19 +22,19 @@ class AuthleteApiException extends Error {
     this.mResponseHeaders = responseHeaders || null;
   }
 
-  get statusCode(): number {
+  getStatusCode(): number {
     return this.mStatusCode;
   }
 
-  get statusMessage(): string | null {
+  getStatusMessage(): string | null {
     return this.mStatusMessage;
   }
 
-  get responseBody(): string | null {
+  getResponseBody(): string | null {
     return this.mResponseBody;
   }
 
-  get responseHeaders(): ResponseHeaders | null {
+  getResponseHeaders(): ResponseHeaders | null {
     return this.mResponseHeaders;
   }
 }

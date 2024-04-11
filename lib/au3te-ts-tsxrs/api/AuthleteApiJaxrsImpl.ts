@@ -1,234 +1,243 @@
-import { AuthleteApi, AuthleteApiException, AuthleteConfiguration, Settings } from 'authlete-jaxrs-api';
-import { JWK, JWSHeader, JWTClaimsSet, JWSObject, SignedJWT } from 'jsonwebtoken';
-import { ClientBuilder } from 'javax.ws.rs.client';
-import { WebApplicationException, ResponseProcessingException, Response, StatusType } from 'javax.ws.rs.core';
+import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
+import Settings from '../../au3te-ts-common/api/Settings';
+import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 
-export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
-    private static readonly JSON_UTF8_TYPE = 'application/json;charset=UTF-8';
+export default abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
+  private static readonly JSON_UTF8_TYPE = 'application/json;charset=UTF-8';
 
-    private readonly mBaseUrl: string;
-    private readonly mSettings: Settings;
-    private mJaxRsClient: javax.ws.rs.client.Client | null;
+  private readonly mBaseUrl: string;
+  private readonly mSettings: Settings;
+  //   private mJaxRsClient: javax.ws.rs.client.Client | null;
 
-    private mCurrentConnectionTimeout: number;
-    private mCurrentReadTimeout: number;
+  //   private mCurrentConnectionTimeout: number;
+  //   private mCurrentReadTimeout: number;
 
-    private jaxRsClientBuilder: ClientBuilder;
+  //   private jaxRsClientBuilder: ClientBuilder;
+  //　TODO implement JWK in TypeScript
+  //   private mDpopJwk: JWK | null;
+  // private mDpopJwk: string | null = null;
+  //   private mJwsSigner: JWSSigner | null;
 
-    private mDpopJwk: JWK | null;
-    private mJwsSigner: JWSSigner | null;
-
-    constructor(configuration: AuthleteConfiguration) {
-        if (!configuration) {
-            throw new Error('configuration is null.');
-        }
-
-        this.mBaseUrl = configuration.getBaseUrl();
-        this.extractDpop(configuration);
-        this.mSettings = new Settings();
+  constructor(configuration: AuthleteConfiguration) {
+    if (!configuration) {
+      throw new Error('configuration is null.');
     }
 
-    private extractDpop(configuration: AuthleteConfiguration): void {
-        if (configuration.getDpopKey()) {
-            try {
-                this.mDpopJwk = JWK.parse(configuration.getDpopKey());
-                if (!this.mDpopJwk.getAlgorithm()) {
-                    throw new Error("DPoP JWK must contain an 'alg' field.");
-                }
-                this.mJwsSigner = new DefaultJWSSignerFactory().createJWSSigner(this.mDpopJwk);
-            } catch (e) {
-                throw new Error("DPoP JWK is not valid.");
-            }
-        }
-    }
+    this.mBaseUrl = configuration.getBaseUrl();
+    // this.extractDpop(configuration);
+    this.mSettings = new Settings();
+  }
 
-    private getJaxRsClient(): javax.ws.rs.client.Client {
-        if (!this.mJaxRsClient) {
-            const client = this.createJaxRsClient();
+  abstract pushAuthorizationRequest(
+    request: PushedAuthReqRequest
+  ): PushedAuthReqResponse;
 
-            synchronized (this) {
-                if (!this.mJaxRsClient) {
-                    this.mJaxRsClient = client;
-                }
-            }
-        }
+  // private extractDpop(configuration: AuthleteConfiguration): void {
+  //   if (configuration.getDpopKey()) {
+  // TODO - Implement this
+  //   try {
+  //     this.mDpopJwk = JWK.parse(configuration.getDpopKey());
+  //     if (!this.mDpopJwk.getAlgorithm()) {
+  //       throw new Error("DPoP JWK must contain an 'alg' field.");
+  //     }
+  //     this.mJwsSigner = new DefaultJWSSignerFactory().createJWSSigner(
+  //       this.mDpopJwk
+  //     );
+  //   } catch (e) {
+  //     throw new Error('DPoP JWK is not valid.');
+  //   }
+  //   }
+  // }
 
-        this.setConnectionTimeout(this.mJaxRsClient);
-        this.setReadTimeout(this.mJaxRsClient);
+  // private getJaxRsClient(): javax.ws.rs.client.Client {
+  //     if (!this.mJaxRsClient) {
+  //         const client = this.createJaxRsClient();
 
-        return this.mJaxRsClient;
-    }
+  //         synchronized (this) {
+  //             if (!this.mJaxRsClient) {
+  //                 this.mJaxRsClient = client;
+  //             }
+  //         }
+  //     }
 
-    private createJaxRsClient(): javax.ws.rs.client.Client {
-        if (this.getJaxRsClientBuilder()) {
-            return this.getJaxRsClientBuilder().build();
-        } else {
-            return ClientBuilder.newClient();
-        }
-    }
+  //     this.setConnectionTimeout(this.mJaxRsClient);
+  //     this.setReadTimeout(this.mJaxRsClient);
 
-    private setConnectionTimeout(client: javax.ws.rs.client.Client): void {
-        const timeout = this.mSettings.getConnectionTimeout();
+  //     return this.mJaxRsClient;
+  // }
 
-        synchronized (this.mConnectionTimeoutLock) {
-            if (this.mCurrentConnectionTimeout === timeout) {
-                return;
-            }
+  // private createJaxRsClient(): javax.ws.rs.client.Client {
+  //     if (this.getJaxRsClientBuilder()) {
+  //         return this.getJaxRsClientBuilder().build();
+  //     } else {
+  //         return ClientBuilder.newClient();
+  //     }
+  // }
 
-            this.mCurrentConnectionTimeout = timeout;
-        }
+  // private setConnectionTimeout(client: javax.ws.rs.client.Client): void {
+  //     const timeout = this.mSettings.getConnectionTimeout();
 
-        const value = Integer.valueOf(timeout);
+  //     synchronized (this.mConnectionTimeoutLock) {
+  //         if (this.mCurrentConnectionTimeout === timeout) {
+  //             return;
+  //         }
 
-        client.property('jersey.config.client.connectTimeout', value);
-        client.property('http.connection.timeout', value);
-        client.property('com.ibm.ws.jaxrs.client.connection.timeout', value);
-    }
+  //         this.mCurrentConnectionTimeout = timeout;
+  //     }
 
-    private setReadTimeout(client: javax.ws.rs.client.Client): void {
-        const timeout = this.mSettings.getReadTimeout();
+  //     const value = Integer.valueOf(timeout);
 
-        synchronized (this.mReadTimeoutLock) {
-            if (this.mCurrentReadTimeout === timeout) {
-                return;
-            }
+  //     client.property('jersey.config.client.connectTimeout', value);
+  //     client.property('http.connection.timeout', value);
+  //     client.property('com.ibm.ws.jaxrs.client.connection.timeout', value);
+  // }
 
-            this.mCurrentReadTimeout = timeout;
-        }
+  // private setReadTimeout(client: javax.ws.rs.client.Client): void {
+  //     const timeout = this.mSettings.getReadTimeout();
 
-        const value = Integer.valueOf(timeout);
+  //     synchronized (this.mReadTimeoutLock) {
+  //         if (this.mCurrentReadTimeout === timeout) {
+  //             return;
+  //         }
 
-        client.property('jersey.config.client.readTimeout', value);
-        client.property('http.receive.timeout', value);
-        client.property('com.ibm.ws.jaxrs.client.receive.timeout', value);
-    }
+  //         this.mCurrentReadTimeout = timeout;
+  //     }
 
-    protected getTarget(): WebTarget {
-        return this.getJaxRsClient().target(this.mBaseUrl);
-    }
+  //     const value = Integer.valueOf(timeout);
 
-    protected wrapWithDpop(target: Invocation.Builder, path: string, method: string): Invocation.Builder {
-        if (this.mDpopJwk) {
-            const htu = this.mBaseUrl + path;
+  //     client.property('jersey.config.client.readTimeout', value);
+  //     client.property('http.receive.timeout', value);
+  //     client.property('com.ibm.ws.jaxrs.client.receive.timeout', value);
+  // }
 
-            const header = new JWSHeader.Builder(JWSAlgorithm.RS256)
-                .type(new JOSEObjectType('dpop+jwt'))
-                .jwk(this.mDpopJwk)
-                .build();
+  // protected getTarget(): WebTarget {
+  //     return this.getJaxRsClient().target(this.mBaseUrl);
+  // }
 
-            const claims = new JWTClaimsSet.Builder()
-                .claim('htm', method)
-                .claim('htu', htu)
-                .jwtID(UUID.randomUUID().toString())
-                .issueTime(new Date())
-                .build();
+  // protected wrapWithDpop(target: Invocation.Builder, path: string, method: string): Invocation.Builder {
+  //     if (this.mDpopJwk) {
+  //         const htu = this.mBaseUrl + path;
 
-            const dpop = new SignedJWT(header, claims);
+  //         const header = new JWSHeader.Builder(JWSAlgorithm.RS256)
+  //             .type(new JOSEObjectType('dpop+jwt'))
+  //             .jwk(this.mDpopJwk)
+  //             .build();
 
-            try {
-                dpop.sign(this.mJwsSigner);
-            } catch (e) {
-                throw new Error('Failed to sign DPoP JWT.');
-            }
+  //         const claims = new JWTClaimsSet.Builder()
+  //             .claim('htm', method)
+  //             .claim('htu', htu)
+  //             .jwtID(UUID.randomUUID().toString())
+  //             .issueTime(new Date())
+  //             .build();
 
-            return target.header('DPoP', dpop.serialize());
-        } else {
-            return target;
-        }
-    }
+  //         const dpop = new SignedJWT(header, claims);
 
-    protected executeApiCall<TResponse>(apiCall: AuthleteApiCall<TResponse>): TResponse {
-        try {
-            return apiCall.call();
-        } catch (e) {
-            if (e instanceof WebApplicationException || e instanceof ResponseProcessingException) {
-                throw this.createApiException(e, e.getResponse());
-            } else {
-                throw this.createApiException(e, null);
-            }
-        }
-    }
+  //         try {
+  //             dpop.sign(this.mJwsSigner);
+  //         } catch (e) {
+  //             throw new Error('Failed to sign DPoP JWT.');
+  //         }
 
-    private createApiException(cause: Error, response: Response | null): AuthleteApiException {
-        const message = cause.message;
-        let statusCode = 0;
-        let statusMessage = null;
-        let responseBody = null;
-        let headers = null;
+  //         return target.header('DPoP', dpop.serialize());
+  //     } else {
+  //         return target;
+  //     }
+  // }
 
-        if (response) {
-            const type = response.getStatusInfo();
-            if (type) {
-                statusCode = type.getStatusCode();
-                statusMessage = type.getReasonPhrase();
-            }
+  // protected executeApiCall<TResponse>(apiCall: AuthleteApiCall<TResponse>): TResponse {
+  //     try {
+  //         return apiCall.call();
+  //     } catch (e) {
+  //         if (e instanceof WebApplicationException || e instanceof ResponseProcessingException) {
+  //             throw this.createApiException(e, e.getResponse());
+  //         } else {
+  //             throw this.createApiException(e, null);
+  //         }
+  //     }
+  // }
 
-            if (this.hasEntity(response)) {
-                responseBody = this.extractResponseBody(response);
-            }
+  // private createApiException(cause: Error, response: Response | null): AuthleteApiException {
+  //     const message = cause.message;
+  //     let statusCode = 0;
+  //     let statusMessage = null;
+  //     let responseBody = null;
+  //     let headers = null;
 
-            headers = response.getStringHeaders();
-        }
+  //     if (response) {
+  //         const type = response.getStatusInfo();
+  //         if (type) {
+  //             statusCode = type.getStatusCode();
+  //             statusMessage = type.getReasonPhrase();
+  //         }
 
-        return new AuthleteApiException(message, cause, statusCode, statusMessage, responseBody, headers);
-    }
+  //         if (this.hasEntity(response)) {
+  //             responseBody = this.extractResponseBody(response);
+  //         }
 
-    private hasEntity(response: Response): boolean {
-        try {
-            return response.hasEntity();
-        } catch (e) {
-            return false;
-        }
-    }
+  //         headers = response.getStringHeaders();
+  //     }
 
-    private extractResponseBody(response: Response): string | null {
-        try {
-            return response.readEntity(String);
-        } catch (e) {
-            console.error('Failed to read response body:', e);
-            return null;
-        }
-    }
+  //     return new AuthleteApiException(message, cause, statusCode, statusMessage, responseBody, headers);
+  // }
 
-    protected callGetApi<TResponse>(auth: string, path: string, responseClass: Class<TResponse>, params: Map<string, Object[]> | null): TResponse {
-        let webTarget = this.getTarget().path(path);
+  // private hasEntity(response: Response): boolean {
+  //     try {
+  //         return response.hasEntity();
+  //     } catch (e) {
+  //         return false;
+  //     }
+  // }
 
-        if (params) {
-            for (const [key, value] of params.entries()) {
-                webTarget = webTarget.queryParam(key, value);
-            }
-        }
+  // private extractResponseBody(response: Response): string | null {
+  //     try {
+  //         return response.readEntity(String);
+  //     } catch (e) {
+  //         console.error('Failed to read response body:', e);
+  //         return null;
+  //     }
+  // }
 
-        return this.wrapWithDpop(webTarget.request(APPLICATION_JSON_TYPE), path, 'GET')
-            .header(AUTHORIZATION, auth)
-            .get(responseClass);
-    }
+  // protected callGetApi<TResponse>(auth: string, path: string, responseClass: Class<TResponse>, params: Map<string, Object[]> | null): TResponse {
+  //     let webTarget = this.getTarget().path(path);
 
-    protected callDeleteApi(auth: string, path: string): void {
-        this.wrapWithDpop(this.getTarget().path(path).request(), path, 'DELETE')
-            .header(AUTHORIZATION, auth)
-            .delete();
-    }
+  //     if (params) {
+  //         for (const [key, value] of params.entries()) {
+  //             webTarget = webTarget.queryParam(key, value);
+  //         }
+  //     }
 
-    protected callPostApi<TResponse>(auth: string, path: string, request: any, responseClass: Class<TResponse>): TResponse {
-        return this.wrapWithDpop(this.getTarget().path(path).request(APPLICATION_JSON_TYPE), path, 'POST')
-            .header(AUTHORIZATION, auth)
-            .post(Entity.entity(request, JSON_UTF8_TYPE), responseClass);
-    }
+  //     return this.wrapWithDpop(webTarget.request(APPLICATION_JSON_TYPE), path, 'GET')
+  //         .header(AUTHORIZATION, auth)
+  //         .get(responseClass);
+  // }
 
-    public getJaxRsClientBuilder(): ClientBuilder {
-        return this.jaxRsClientBuilder;
-    }
+  // protected callDeleteApi(auth: string, path: string): void {
+  //     this.wrapWithDpop(this.getTarget().path(path).request(), path, 'DELETE')
+  //         .header(AUTHORIZATION, auth)
+  //         .delete();
+  // }
 
-    public setJaxRsClientBuilder(jaxRsClientBuilder: ClientBuilder): void {
-        this.jaxRsClientBuilder = jaxRsClientBuilder;
-    }
+  // protected callPostApi<TResponse>(auth: string, path: string, request: any, responseClass: Class<TResponse>): TResponse {
+  //     return this.wrapWithDpop(this.getTarget().path(path).request(APPLICATION_JSON_TYPE), path, 'POST')
+  //         .header(AUTHORIZATION, auth)
+  //         .post(Entity.entity(request, JSON_UTF8_TYPE), responseClass);
+  // }
 
-    public getSettings(): Settings {
-        return this.mSettings;
-    }
+  // public getJaxRsClientBuilder(): ClientBuilder {
+  //     return this.jaxRsClientBuilder;
+  // }
 
-    protected isDpopEnabled(): boolean {
-        return this.mDpopJwk !== null;
-    }
+  // public setJaxRsClientBuilder(jaxRsClientBuilder: ClientBuilder): void {
+  //     this.jaxRsClientBuilder = jaxRsClientBuilder;
+  // }
+
+  // public getSettings(): Settings {
+  //     return this.mSettings;
+  // }
+
+  // protected isDpopEnabled(): boolean {
+  //   return this.mDpopJwk !== null;
+  // }
 }

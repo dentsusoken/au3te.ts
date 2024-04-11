@@ -1,67 +1,67 @@
 /**
  * Request to Authlete's /api/pushed_auth_req API.
  */
-export class PushedAuthReqRequest {
+export default class PushedAuthReqRequest {
   /**
    * Request parameters that the pushed authorization request endpoint of the
    * authorization server implementation received from the client application.
    * Its format is application/x-www-form-urlencoded.
    */
-  parameters: string;
+  parameters?: string;
 
   /**
    * The client ID extracted from the Authorization header of the request
    * to the pushed authorization request endpoint.
    */
-  clientId: string;
+  clientId?: string;
 
   /**
    * The client secret extracted from the Authorization header of the
    * request to the pushed authorization request endpoint.
    */
-  clientSecret: string;
+  clientSecret?: string;
 
   /**
    * The client certificate used in the TLS connection between the client
    * application and the pushed authorization request endpoint of the
    * authorization server.
    */
-  clientCertificate: string;
+  clientCertificate?: string;
 
   /**
    * The client certificate path presented by the client during client
    * authentication. Each element is a string in PEM format.
    */
-  clientCertificatePath: string[];
+  clientCertificatePath?: string[];
 
   /**
    * The value of the DPoP HTTP header.
    */
-  dpop: string;
+  dpop?: string;
 
   /**
    * The HTTP method of the PAR request. In normal cases, the value is "POST".
    * When this parameter is omitted, "POST" is used as the default value.
    */
-  htm: string;
+  htm?: string;
 
   /**
    * The URL of the PAR endpoint, without query or path components. If omitted,
    * the pushedAuthReqEndpoint property of Service is used as the default value.
    */
-  htu: string;
+  htu?: string;
 
   /**
    * The flag indicating whether to require the DPoP proof JWT to include
    * the nonce claim.
    */
-  dpopNonceRequired: boolean;
+  dpopNonceRequired?: boolean;
 
   /**
    * Get the request parameters that the pushed authorization request
    * endpoint received from the client application.
    */
-  getParameters(): string {
+  getParameters(): string | undefined {
     return this.parameters;
   }
 
@@ -78,7 +78,7 @@ export class PushedAuthReqRequest {
    * Get the client ID extracted from the Authorization header of the
    * request to the pushed authorization request endpoint.
    */
-  getClientId(): string {
+  getClientId(): string | undefined {
     return this.clientId;
   }
 
@@ -95,7 +95,7 @@ export class PushedAuthReqRequest {
    * Get the client secret extracted from the Authorization header of
    * the request to the pushed authorization request endpoint.
    */
-  getClientSecret(): string {
+  getClientSecret(): string | undefined {
     return this.clientSecret;
   }
 
@@ -112,7 +112,7 @@ export class PushedAuthReqRequest {
    * Get the client certificate used in the TLS connection between the client
    * application and the pushed authorization request endpoint.
    */
-  getClientCertificate(): string {
+  getClientCertificate(): string | undefined {
     return this.clientCertificate;
   }
 
@@ -129,7 +129,7 @@ export class PushedAuthReqRequest {
    * Get the client certificate path presented by the client during client
    * authentication.
    */
-  getClientCertificatePath(): string[] {
+  getClientCertificatePath(): string[] | undefined {
     return this.clientCertificatePath;
   }
 
@@ -146,7 +146,7 @@ export class PushedAuthReqRequest {
    * Get the DPoP header presented by the client during the request
    * to the PAR endpoint.
    */
-  getDpop(): string {
+  getDpop(): string | undefined {
     return this.dpop;
   }
 
@@ -162,7 +162,7 @@ export class PushedAuthReqRequest {
   /**
    * Get the HTTP method of the pushed authorization request.
    */
-  getHtm(): string {
+  getHtm(): string | undefined {
     return this.htm;
   }
 
@@ -177,7 +177,7 @@ export class PushedAuthReqRequest {
   /**
    * Get the URL of the PAR endpoint.
    */
-  getHtu(): string {
+  getHtu(): string | undefined {
     return this.htu;
   }
 
@@ -193,7 +193,7 @@ export class PushedAuthReqRequest {
    * Get the flag indicating whether to check if the DPoP proof JWT includes
    * the expected nonce value.
    */
-  isDpopNonceRequired(): boolean {
+  isDpopNonceRequired(): boolean | undefined {
     return this.dpopNonceRequired;
   }
 

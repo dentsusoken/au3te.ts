@@ -1,9 +1,14 @@
 /**
  * Settings of AuthleteApi implementation.
  */
-export class Settings {
+export default class Settings {
   private connectionTimeout: number;
   private readTimeout: number;
+
+  constructor() {
+    this.connectionTimeout = 0;
+    this.readTimeout = 0;
+  }
 
   /**
    * Get the timeout value in milliseconds for socket connection.
