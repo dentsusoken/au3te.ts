@@ -1,28 +1,24 @@
 interface X509Certificate {
   getEncoded(): Uint8Array;
 }
-
-interface HttpServletRequest {
-  getAttribute(attributeName: string): X509Certificate[] | null;
-}
-
 interface ClientCertificateExtractor {
-  extractClientCertificateChain(request: HttpServletRequest): string[] | null;
+  extractClientCertificateChain(request: Request): Promise<string[] | null>;
 }
 
-class HttpsRequestClientCertificateExtractor
+// TODO move to  util?
+const base64 = {
+  encode: (data: string):string=> {
+    const encoded = btoa(data);
+    const wrapped = encoded.replace(/(.{64})/g, "$1\n");
+    return wrapped;
+  }
+}
+
+export default class HttpsRequestClientCertificateExtractor
   implements ClientCertificateExtractor
 {
-  private base64: Base64;
-
-  constructor() {
-    this.base64 = new Base64(Base64.PEM_CHUNK_SIZE, '\n'.getBytes());
-  }
-
-  extractClientCertificateChain(request: HttpServletRequest): string[] | null {
-    const certs = request.getAttribute(
-      'javax.servlet.request.X509Certificate'
-    ) as X509Certificate[] | null;
+  async extractClientCertificateChain(request: Request): Promise<string[] | null> {
+    const certs = (await request.json())['javax.servlet.request.X509Certificate'] as X509Certificate[] | null;
 
     if (!certs || certs.length === 0) {
       return null;
@@ -42,12 +38,12 @@ class HttpsRequestClientCertificateExtractor
   }
 
   private toPEM(certificate: X509Certificate): string {
-    const sb = new StringBuilder();
+    let sb:string = ""
+    // TODO Confirm if this is operate correctly or not
+    sb += '-----BEGIN CERTIFICATE-----\n';
+    sb += base64.encode(new TextDecoder().decode(certificate.getEncoded()));
+    sb += '\n-----END CERTIFICATE-----\n';
 
-    sb.append('-----BEGIN CERTIFICATE-----\n');
-    sb.append(this.base64.encode(certificate.getEncoded()));
-    sb.append('\n-----END CERTIFICATE-----\n');
-
-    return sb.toString();
+    return sb;
   }
 }

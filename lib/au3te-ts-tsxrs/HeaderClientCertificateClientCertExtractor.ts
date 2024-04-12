@@ -1,60 +1,46 @@
-import { Request } from 'express';
-
-class HeaderClientCertificateExtractor {
-  protected clientCertificateChainHeaders: string[] = [];
-
-  public extractClientCertificateChain(request: Request): string[] | null {
-    const listCert: Buffer[] = [];
-    let byteSequenceCerts: Buffer[] = [];
-
-    for (const headerName of this.getClientCertificateChainHeaders()) {
-      const header = request.header(headerName);
-      if (!header) {
-        return null;
-      }
-      const parseCerts = parseList(header);
-      byteSequenceCerts = parseCerts.get().toArray();
-
-      for (const item of byteSequenceCerts) {
-        listCert.push(item);
-      }
-    }
-
-    if (listCert.length < 1) {
-      return null;
-    }
-
-    return this.decodeByteBufferCerts(listCert);
-  }
-
-  private decodeByteBufferCerts(sequenceItems: Buffer[]): string[] {
-    const certs: string[] = [];
-
-    for (const item of sequenceItems) {
-      certs.push(item.toString('utf-8'));
-    }
-
-    return certs;
-  }
-
-  public getClientCertificateChainHeaders(): string[] {
-    return this.clientCertificateChainHeaders;
-  }
-
-  public setClientCertificateChainHeaders(
-    clientCertificateChainHeaders: string[]
-  ): void {
-    throw new Error('Unsupported operation');
-  }
-}
-
-class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
+import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
+// TODO Implement this class
+export default class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
   private clientCertificateChainHeaders: string[] = [
     'Client-Cert',
     'Client-Cert-Chain',
   ];
 
-  public getClientCertificateChainHeaders(): string[] {
+  public override extractClientCertificateChain(
+    request: Request
+  ): string[] | null {
+    const listCert: string[] = [];
+
+    for (const headerName of this.getClientCertificateChainHeaders()) {
+      const cert = request.headers.get(headerName);
+      if (cert) {
+        listCert.push(cert);
+      }
+    }
+    if (listCert.length === 0) {
+      return null;
+    }
+    return this.decodeByteBufferCerts(listCert);
+  }
+
+  // TODO Confirm if this operates correctly or not
+  private decodeByteBufferCerts(sequenceItems: any): string[] {
+    const certs: string[] = [];
+    for (const sequenceItem of sequenceItems) {
+      const cert = Buffer.from(sequenceItem).toString('base64');
+      certs.push(cert);
+    }
+    return certs;
+  }
+
+  public override getClientCertificateChainHeaders(): string[] {
     return this.clientCertificateChainHeaders;
+  }
+
+  public override setClientCertificateChainHeaders(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    clientCertificateChainHeaders: string[]
+  ): void {
+    throw new Error('Unsupported operation');
   }
 }
