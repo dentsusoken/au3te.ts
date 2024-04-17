@@ -10,5 +10,5 @@ export default interface ClientCertificateExtractor {
    *          The client's MTLS certificate chain. All certificates are in PEM format,
    *          the first certificate is the client's own certificate.
    */
-  extractClientCertificateChain(request: Request): string[] | null;
+  extractClientCertificateChain(request: Request): Promise<string[] | null>;
 }

@@ -6,9 +6,9 @@ export default class HeaderClientCertificateClientCertExtractor extends HeaderCl
     'Client-Cert-Chain',
   ];
 
-  public override extractClientCertificateChain(
+  public override async extractClientCertificateChain(
     request: Request
-  ): string[] | null {
+  ): Promise<string[] | null> {
     const listCert: string[] = [];
 
     for (const headerName of this.getClientCertificateChainHeaders()) {
