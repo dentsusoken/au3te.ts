@@ -10,12 +10,13 @@ interface AuthleteApi {
    */
   pushAuthorizationRequest(
     request: PushedAuthReqRequest
-  ): PushedAuthReqResponse;
+  ): Promise<PushedAuthReqResponse>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace AuthleteApi {
-  export function instanceofAuthleteApi(obj: any): obj is AuthleteApi {
-    return obj.pushAuthorizationRequest !== undefined;
+  export function instanceofAuthleteApi(obj: unknown): obj is AuthleteApi {
+    return (obj as AuthleteApi).pushAuthorizationRequest !== undefined;
   }
 }
 

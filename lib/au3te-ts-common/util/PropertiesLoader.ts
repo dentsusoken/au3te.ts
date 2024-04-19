@@ -19,7 +19,7 @@ export default class PropertiesLoader {
 
     if (Array.isArray(locations)) {
       let properties: TypedProperties | null = null;
-      for (let location of locations) {
+      for (const location of locations) {
         properties = this.load(file, location);
 
         if (typeof properties !== 'undefined') {

@@ -2,11 +2,13 @@ import AuthleteApiVersion from '../../au3te-ts-common/conf/AuthleteApiVersion';
 import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
 import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
-import AuthleteApiJaxrsImpl from './AuthleteApiJaxrsImpl';
+import ClientAuthMethod from '../../au3te-ts-common/types/ClientAuthMethod';
+import AuthleteApiJaxrsImpl, { AuthleteApiCall } from './AuthleteApiJaxrsImpl';
 
 export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =
     '/api/%d/pushed_auth_req';
+  // '/api/3586851703/pushed_auth_req';
 
   private readonly mAuth: string;
   // TODO Java Long -> TypeScript number?
@@ -59,66 +61,118 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     }
   }
 
-  //   private abstract class ApiCaller<TResponse> implements AuthleteApiCall<TResponse> {
-  //     protected readonly mPath: string;
-  //     protected readonly mRequest: any;
-  //     protected readonly mResponseClass: new () => TResponse;
-  //     protected readonly mParams: Map<string, any[]> = new Map<string, any[]>();
+  private PostApiCaller = class extends ApiCaller {
+    public api: AuthleteApiImplV3;
+    constructor(
+      api: AuthleteApiImplV3,
+      // responseClass: new () => TResponse,
+      request: unknown,
+      path?: string,
+      format?: string,
+      ...args: unknown[]
+    ) {
+      if (typeof path === 'string') {
+        super(request, path);
+      } else {
+        super(request, path!, format!, args);
+      }
+      this.api = api;
+    }
 
-  //     constructor(responseClass: new () => TResponse, request: any, path: string) {
-  //         this.mPath = path;
-  //         this.mRequest = request;
-  //         this.mResponseClass = responseClass;
-  //     }
+    async call(): Promise<Response> {
+      return await this.api.callPostApi(
+        this.mPath,
+        this.mRequest
+        // this.mResponseClass
+      );
+    }
+  };
 
-  //     constructor(responseClass: new () => TResponse, request: any, format: string, ...args: any[]) {
-  //         this(responseClass, request, format.replace(/\{(\d+)\}/g, (_, index) => args[index]));
-  //     }
-
-  //     public addParam(name: string, ...values: any[]): ApiCaller<TResponse> {
-  //         this.mParams.set(name, values);
-  //         return this;
-  //     }
-  // }
-
-  //   private class PostApiCaller<TResponse> extends ApiCaller<TResponse> {
-  //     constructor(responseClass: new () => TResponse, request: any, path: string) {
-  //         super(responseClass, request, path);
-  //     }
-
-  //     constructor(responseClass: new () => TResponse, request: any, format: string, ...args: any[]) {
-  //         super(responseClass, request, format, args);
-  //     }
-
-  //     call(): TResponse {
-  //         return this.callPostApi(this.mPath, this.mRequest, this.mResponseClass);
-  //     }
-  // }
-
-  //   private callPostApi<TResponse>(
-  //     path: string,
-  //     request: any,
-  //     responseClass: new () => TResponse
-  //   ): TResponse {
-  //     return this.callPostApi(this.mAuth, path, request, responseClass);
-  //   }
+  // TODO private method in Java
+  protected async callPostApi(
+    path: string,
+    request: unknown
+  ): Promise<Response> {
+    return await super.callPostApi(this.mAuth, path, request);
+  }
 
   // TODO implement this method
-  public pushAuthorizationRequest(
+  public async pushAuthorizationRequest(
     request: PushedAuthReqRequest
-  ): PushedAuthReqResponse {
-    return new PushedAuthReqResponse();
+  ): Promise<PushedAuthReqResponse> {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.PUSHED_AUTH_REQ_API_PATH,
+        this.mServiceId
+      )
+    );
+
+    const params = await response.json();
+
+    const parResonse = new PushedAuthReqResponse();
+    parResonse.setAction(params.action);
+    parResonse.setDpopNonce(params.dpopNonce);
+    parResonse.setResponseContent(params.responseContent);
+    parResonse.setResultCode(response.status.toString());
+    parResonse.setResultMessage(response.statusText);
+    parResonse.setClientAuthMethod(ClientAuthMethod[params.clientAuthMethod]);
+    parResonse.setRequestUri(new URL(params.requestUri));
+
+    return parResonse;
   }
-  // public pushAuthorizationRequest(
-  //   request: PushedAuthReqRequest
-  // ): Promise<PushedAuthReqResponse> {
-  //   return this.executeApiCall<PushedAuthReqResponse>(
-  //     new PostApiCaller<PushedAuthReqResponse>(
-  //       PushedAuthReqResponse,
-  //       request,
-  //       PUSHED_AUTH_REQ_API_PATH,
-  //       this.mServiceId
-  //     )
-  //   );
-  // }
+}
+
+// private class(do not export)
+abstract class ApiCaller implements AuthleteApiCall {
+  protected readonly mPath: string;
+  protected readonly mRequest: unknown;
+  protected readonly mParams: Map<string, unknown[]> = new Map<
+    string,
+    unknown[]
+  >();
+
+  constructor(request: unknown, path: string);
+  constructor(request: unknown, format: string, ...args: unknown[]);
+  constructor(
+    request: unknown,
+    path?: string,
+    format?: string,
+    ...args: unknown[]
+  ) {
+    if (!path && !format) {
+      throw new Error('Either path or format must be provided');
+    }
+    // Throw Error when both path and format are not provided
+    // if path is not provided, format must be provided
+    // TODO implment logic to check args[index] is string
+    // this.mPath = path ? path : '';
+
+    // this.mPath =
+    //   Array.isArray(args) && typeof format === 'string'
+    //     ? format.replace(/\{(\d+)\}/g, (_, index) => args[index] as string)
+    //     : path!;
+    if (path) {
+      this.mPath = path;
+    } else if (format && args.length > 0) {
+      // this.mPath = format.replace(/%d/g, (_, index) => args[index] as string);
+      let replaced = '';
+      args.forEach((arg) => {
+        replaced = format.replace(/%d/g, arg as string);
+      });
+      this.mPath = replaced;
+    } else {
+      this.mPath = '';
+    }
+    this.mRequest = request;
+  }
+
+  abstract call(): Promise<Response>;
+
+  public addParam(name: string, ...values: unknown[]): ApiCaller {
+    this.mParams.set(name, values);
+    return this;
+  }
 }

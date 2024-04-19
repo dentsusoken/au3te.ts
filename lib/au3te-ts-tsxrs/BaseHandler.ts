@@ -1,7 +1,7 @@
-import { InternalServerErrorException, Response } from 'express';
-import { AuthleteApi } from 'authlete';
+import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
+import AuthleteApiCaller from './AuthleteApiCaller';
 
-abstract class BaseHandler {
+export default abstract class BaseHandler {
   private readonly mApiCaller: AuthleteApiCaller;
 
   protected constructor(api: AuthleteApi) {
@@ -12,21 +12,21 @@ abstract class BaseHandler {
     return this.mApiCaller;
   }
 
-  protected unexpected(
-    message: string,
-    cause: Error
-  ): InternalServerErrorException {
-    if (cause != null && cause.message != null) {
-      // Append the message of the cause.
-      message += ': ' + cause.message;
-    }
+  // protected unexpected(
+  //   message: string,
+  //   cause: Error
+  // ): InternalServerErrorException {
+  //   if (cause != null && cause.message != null) {
+  //     // Append the message of the cause.
+  //     message += ': ' + cause.message;
+  //   }
 
-    // Response having a response body.
-    const response: Response = ResponseUtil.internalServerError(
-      message,
-      'text/plain'
-    );
+  //   // Response having a response body.
+  //   const response: Response = ResponseUtil.internalServerError(
+  //     message,
+  //     'text/plain'
+  //   );
 
-    return new InternalServerErrorException(message, response, cause);
-  }
+  //   return new InternalServerErrorException(message, response, cause);
+  // }
 }

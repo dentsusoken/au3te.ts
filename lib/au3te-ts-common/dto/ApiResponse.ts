@@ -1,7 +1,4 @@
 export default class ApiResponse {
-  // TODO Confirm if this is needed in TypeScript
-  //   private static serialVersionUID: number = 1;
-
   private resultCode?: string;
   private resultMessage?: string;
 

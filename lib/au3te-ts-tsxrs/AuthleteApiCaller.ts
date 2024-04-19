@@ -1,36 +1,10 @@
-import { AuthleteApi, AuthleteApiException } from 'authlete';
-import { AuthorizationFailRequest, AuthorizationFailResponse } from 'authlete';
-import {
-  AuthorizationIssueRequest,
-  AuthorizationIssueResponse,
-} from 'authlete';
-import { AuthorizationRequest, AuthorizationResponse } from 'authlete';
-import {
-  BackchannelAuthenticationCompleteRequest,
-  BackchannelAuthenticationCompleteResponse,
-} from 'authlete';
-import {
-  BackchannelAuthenticationFailRequest,
-  BackchannelAuthenticationFailResponse,
-} from 'authlete';
-import {
-  BackchannelAuthenticationIssueRequest,
-  BackchannelAuthenticationIssueResponse,
-} from 'authlete';
-import {
-  BackchannelAuthenticationRequest,
-  BackchannelAuthenticationResponse,
-} from 'authlete';
-import {
-  ClientRegistrationRequest,
-  ClientRegistrationResponse,
-} from 'authlete';
-import {
-  CredentialIssuerMetadataRequest,
-  CredentialIssuerMetadataResponse,
-} from 'authlete';
+// import { AuthleteApi, AuthleteApiException } from 'authlete';
+import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
+import PushedAuthReqRequest from '../au3te-ts-common/dto/PushedAuthReqRequest';
+import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import URLCoder from '../au3te-ts-common/web/URLCoder';
 
-class AuthleteApiCaller {
+export default class AuthleteApiCaller {
   private readonly mApi: AuthleteApi;
 
   constructor(api: AuthleteApi) {
@@ -41,40 +15,41 @@ class AuthleteApiCaller {
    * Create an {@link InternalServerErrorException} instance to indicate
    * that an Authlete API call failed.
    */
-  private apiFailure(
-    path: string,
-    e: AuthleteApiException
-  ): InternalServerErrorException {
+  private apiFailure(path: string, e: Error): Error {
     // Error message.
-    const message = `Authlete ${path} API failed: ${e.getMessage()}`;
+    const message = `Authlete ${path} API failed: ${e.message}`;
 
-    // Response body in the response from the Authlete server.
-    if (e.getResponseBody() != null) {
-      // Append the content of the response body to the error message.
-      message = `${message}: ${e.getResponseBody()}`;
-    }
+    // // Response body in the response from the Authlete server.
+    // if (e() != null) {
+    //   // Append the content of the response body to the error message.
+    //   message = `${message}: ${e.getResponseBody()}`;
+    // }
 
     // 500 Internal Server Error
-    return internalServerError(message, e);
+    return new Error(message);
   }
 
   /**
    * Call Authlete's `/api/pushed_auth_req` API.
    */
-  public callPushedAuthReq(
-    parameters: string | Record<string, string>,
-    clientId: string,
-    clientSecret: string,
-    clientCertificate: string,
-    clientCertificatePath: string[],
-    dpop: string,
-    htm: string,
-    htu: string
-  ): PushedAuthReqResponse {
+  public async callPushedAuthReq(
+    parameters?: string | Record<string, string>,
+    clientId?: string,
+    clientSecret?: string,
+    clientCertificate?: string,
+    clientCertificatePath?: string[],
+    dpop?: string,
+    htm?: string,
+    htu?: string
+  ): Promise<PushedAuthReqResponse> {
     const params =
-      typeof parameters === 'string' ? parameters : formUrlEncode(parameters);
+      typeof parameters === 'string'
+        ? parameters
+        : typeof parameters !== 'undefined'
+        ? URLCoder.formUrlEncode(parameters)
+        : '';
 
-    return this.callPushedAuthReqInternal(
+    return await this.callPushedAuthReqInternal(
       params,
       clientId,
       clientSecret,
@@ -86,32 +61,42 @@ class AuthleteApiCaller {
     );
   }
 
-  private callPushedAuthReqInternal(
-    parameters: string,
-    clientId: string,
-    clientSecret: string,
-    clientCertificate: string,
-    clientCertificatePath: string[],
-    dpop: string,
-    htm: string,
-    htu: string
-  ): PushedAuthReqResponse {
-    const request: PushedAuthReqRequest = {
-      parameters,
-      clientId,
-      clientSecret,
-      clientCertificate,
-      clientCertificatePath,
-      dpop,
-      htm,
-      htu,
-    };
+  private async callPushedAuthReqInternal(
+    parameters?: string,
+    clientId?: string,
+    clientSecret?: string,
+    clientCertificate?: string,
+    clientCertificatePath?: string[],
+    dpop?: string,
+    htm?: string,
+    htu?: string
+  ): Promise<PushedAuthReqResponse> {
+    const request: PushedAuthReqRequest = new PushedAuthReqRequest();
+    parameters && request.setParameters(parameters);
+    clientId && request.setClientId(clientId);
+    clientSecret && request.setClientSecret(clientSecret);
+    clientCertificate && request.setClientCertificate(clientCertificate);
+    clientCertificatePath &&
+      request.setClientCertificatePath(clientCertificatePath);
+    dpop && request.setDpop(dpop);
+    htm && request.setHtm(htm);
+    htu && request.setHtu(htu);
 
     try {
-      return this.mApi.pushAuthorizationRequest(request);
-    } catch (e: AuthleteApiException) {
+      return await this.mApi.pushAuthorizationRequest(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       // the API call failed
-      throw apiFailure('/api/pushed_auth_req', e);
+      // TODO Confirm does this work?
+      throw this.apiFailure('/api/pushed_auth_req', e);
     }
+  }
+
+  public unknownAction(path: string, action: unknown): Error {
+    // Error message.
+    const message = `Authlete ${path} API returned an unknown action: ${action}`;
+
+    // 500 Internal Server Error
+    return new Error(message);
   }
 }

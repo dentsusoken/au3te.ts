@@ -1,18 +1,19 @@
-import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertificateExtractor';
+import ClientCertificateExtractor from './ClientCertificateExtractor';
 import HeaderClientCertificateClientCertExtractor from './HeaderClientCertificateClientCertExtractor';
 import HeaderClientCertificateXSslExtractor from './HeaderClientCertificateXSslExtractor';
-import ClientCertificateExtractor from './ClientCertificateExtractor';
+import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertificateExtractor';
 
-class BaseEndpoint {
+export default class BaseEndpoint {
   private clientCertificateExtractors: ClientCertificateExtractor[] = [
     new HttpsRequestClientCertificateExtractor(),
     new HeaderClientCertificateXSslExtractor(),
-    new HeaderClientCertificateClientCertExtractor()
+    new HeaderClientCertificateClientCertExtractor(),
   ];
 
-  // protected onError(exception: WebApplicationException): void {
-  //   // The default implementation does nothing.
-  // }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onError(_: Error): void {
+    // The default implementation does nothing.
+  }
 
   protected async extractClientCertificateChain(request: Request) {
     for (const extractor of this.clientCertificateExtractors) {
@@ -24,20 +25,4 @@ class BaseEndpoint {
 
     return null;
   }
-
-  // protected extractClientCertificate(request: string[]) {
-  //   const certs = this.extractClientCertificateChain(request);
-
-  //   if (certs != null && certs.length > 0) {
-  //     return certs[0];
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  //   protected takeAttribute(session: HttpSession, key: string): any {
-  //     const value = session.getAttribute(key);
-  //     session.removeAttribute(key);
-  //     return value;
-  //   }
 }

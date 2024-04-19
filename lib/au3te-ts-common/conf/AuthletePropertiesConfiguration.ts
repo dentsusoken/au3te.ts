@@ -31,14 +31,15 @@ export default class AuthletePropertiesConfiguration
   public constructor();
   public constructor(file: string);
   public constructor(file?: string) {
-    const props = file
-      ? PropertiesLoader.load(file)
-      : PropertiesLoader.load(
-          path.resolve(
-            process.cwd(),
-            AuthletePropertiesConfiguration.DEFAULT_FILE
-          )
-        );
+    const props =
+      typeof file === 'string'
+        ? PropertiesLoader.load(file)
+        : PropertiesLoader.load(
+            path.resolve(
+              process.cwd(),
+              AuthletePropertiesConfiguration.DEFAULT_FILE
+            )
+          );
     path.resolve(process.cwd(), AuthletePropertiesConfiguration.DEFAULT_FILE);
 
     console.log(

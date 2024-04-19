@@ -1,4 +1,4 @@
-class BasicCredentials {
+export default class BasicCredentials {
   private static readonly CHALLENGE_PATTERN = /^Basic *([^ ]+) *$/i;
 
   private readonly mUserId: string;
@@ -27,7 +27,7 @@ class BasicCredentials {
     const matcher = input.match(BasicCredentials.CHALLENGE_PATTERN);
 
     if (!matcher) {
-      return new BasicCredentials(null, null);
+      return new BasicCredentials('', '');
     }
 
     const encoded = matcher[1];
@@ -36,21 +36,21 @@ class BasicCredentials {
     let userId: string | null = null;
     let password: string | null = null;
 
-    switch (credentials.length) {
-      case 2:
-        password = credentials[1];
-      // FALLTHROUGH
+    // switch (credentials.length) {
+    //   case 2:
+    password = credentials[1];
+    // FALLTHROUGH
 
-      case 1:
-        userId = credentials[0];
-    }
+    // case 1:
+    userId = credentials[0];
+    // }
 
-    return new BasicCredentials(userId, password);
+    return new BasicCredentials(userId || '', password || '');
   }
 
-  private static createString(bytes: Uint8Array): string {
-    return new TextDecoder().decode(bytes);
-  }
+  // private static createString(bytes: Uint8Array): string {
+  //   return new TextDecoder().decode(bytes);
+  // }
 
   format(): string {
     if (this.mFormatted !== null) {

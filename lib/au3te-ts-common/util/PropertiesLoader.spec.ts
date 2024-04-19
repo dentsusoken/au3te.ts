@@ -11,7 +11,7 @@ describe('PropertiesLoader', () => {
       const file = path.resolve(process.cwd(), 'asset/existing.properties');
       const properties = PropertiesLoader.load(file);
       expect(properties).not.toBeNull();
-      expect(properties!.getString('base_url')).toBe('value');
+      expect(properties!.getString('base_url')).toBe('https://example.com');
     });
   });
 });

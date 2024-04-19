@@ -1,9 +1,6 @@
-import { WebApplicationException, MultivaluedMap, Response } from 'javax.ws.rs';
-import { AuthleteApi } from 'com.authlete.common.api.AuthleteApi';
-import {
-  PushedAuthReqHandler,
-  Params,
-} from 'com.authlete.jaxrs.PushedAuthReqHandler';
+import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
+import BaseEndpoint from './BaseEndpoint';
+import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
 
 /**
  * A base class for pushed authorization endpoints.
@@ -45,19 +42,19 @@ export class BasePushedAuthReqEndpoint extends BaseEndpoint {
    * @return
    *         A response that should be returned to the client application.
    */
-  protected handle(
-    api: AuthleteApi,
-    parameters: MultivaluedMap<string, string>,
-    authorization: string,
-    clientCertificates: string[]
-  ): Response {
-    const params: Params = new Params()
-      .setParameters(parameters)
-      .setAuthorization(authorization)
-      .setClientCertificatePath(clientCertificates);
+  // protected handle(
+  //   api: AuthleteApi,
+  //   parameters: MultivaluedMap<string, string>,
+  //   authorization: string,
+  //   clientCertificates: string[]
+  // ): Response {
+  //   const params: Params = new Params()
+  //     .setParameters(parameters)
+  //     .setAuthorization(authorization)
+  //     .setClientCertificatePath(clientCertificates);
 
-    return this.handle(api, params);
-  }
+  //   return this.handle(api, params);
+  // }
 
   /**
    * Handle a PAR request.
@@ -84,19 +81,19 @@ export class BasePushedAuthReqEndpoint extends BaseEndpoint {
    *
    * @since 2.70
    */
-  public handle(api: AuthleteApi, params: Params): Response {
+  public async handle(api: AuthleteApi, params: Params): Promise<Response> {
     try {
       // Create a handler.
       const handler: PushedAuthReqHandler = new PushedAuthReqHandler(api);
 
       // Delegate the task to the handler.
-      return handler.handle(params);
-    } catch (e) {
+      return await handler.handle(params);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       // An error occurred in the handler.
       this.onError(e);
-
       // Convert the error to a Response.
-      return e.getResponse();
+      return new Response(e.message, { status: 500 });
     }
   }
 }
