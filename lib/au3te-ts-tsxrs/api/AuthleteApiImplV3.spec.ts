@@ -1,4 +1,3 @@
-import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import AuthletePropertiesConfiguration from '../../au3te-ts-common/conf/AuthletePropertiesConfiguration';
 import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
@@ -9,8 +8,8 @@ describe('AuthleteApiJaxrsImpl', () => {
   let properties: AuthletePropertiesConfiguration;
 
   beforeAll(() => {
-    const file = path.resolve(process.cwd(), 'asset/existing.properties');
-    properties = new AuthletePropertiesConfiguration(file);
+    // const file = path.resolve(process.cwd(), 'asset/existing.properties');
+    properties = new AuthletePropertiesConfiguration();
   });
 
   describe('constructor', () => {

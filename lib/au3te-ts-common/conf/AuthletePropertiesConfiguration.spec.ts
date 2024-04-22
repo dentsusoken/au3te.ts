@@ -1,12 +1,11 @@
-import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import AuthletePropertiesConfiguration from './AuthletePropertiesConfiguration';
 
 describe('AuthletePropertiesConfiguration', () => {
   let properties: AuthletePropertiesConfiguration;
   beforeAll(() => {
-    const file = path.resolve(process.cwd(), 'asset/existing.properties');
-    properties = new AuthletePropertiesConfiguration(file);
+    // const file = path.resolve(process.cwd(), 'asset/existing.properties');
+    properties = new AuthletePropertiesConfiguration();
   });
   describe('constructor', () => {
     it('should load properties from default file', () => {
@@ -15,8 +14,8 @@ describe('AuthletePropertiesConfiguration', () => {
       expect(Object.keys(properties).length > 0).toBe(true);
     });
     it('should load properties from sepecifc file', () => {
-      const file = path.resolve(process.cwd(), 'asset/existing.properties');
-      const properties = new AuthletePropertiesConfiguration(file);
+      // const file = path.resolve(process.cwd(), 'asset/existing.properties');
+      const properties = new AuthletePropertiesConfiguration();
       expect(properties).not.toBeNull();
       expect(Object.keys(properties).length > 0).toBe(true);
     });

@@ -1,6 +1,7 @@
 // import { Request, Response } from 'express';
 // import { AuthleteApi, AuthleteApiFactory } from 'authlete-js';
 // import { BasePushedAuthReqEndpoint, Params } from 'authlete-js';
+import * as process from 'node:process';
 
 import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
 import AuthleteApiFactory from '../../au3te-ts-common/api/AuthleteApiFactory';
@@ -16,6 +17,8 @@ import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
  *
  */
 export default class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
+  readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
+  readonly MEDIA_TYPE_URLENCODED = 'application/x-www-form-urlencoded';
   /**
    * The pushed authorization request endpoint. This uses the
    * `POST` method and the same client authentication as
@@ -23,6 +26,7 @@ export default class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
    */
   // public async post(request: Request, response: Response): Promise<Response> {
   public async post(request: Request): Promise<Response> {
+    console.log('process.env :>> ', process.env);
     // Authlete API
     const authleteApi: AuthleteApi = await AuthleteApiFactory.getDefaultApi();
 
@@ -44,7 +48,14 @@ export default class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
 
     // RFC 6749
     // The OAuth 2.0 Authorization Framework
-    params.setParameters(await request.json());
+    if (request.headers.get('Content-Type') === this.MEDIA_TYPE_JSON) {
+      params.setParameters(await request.json());
+    } else if (
+      request.headers.get('Content-Type') === this.MEDIA_TYPE_URLENCODED
+    ) {
+      const query = new URLSearchParams(await request.text());
+      params.setParameters(Object.fromEntries(query.entries()));
+    }
     params.setAuthorization(request.headers.get('Authorization') || '');
 
     // MTLS

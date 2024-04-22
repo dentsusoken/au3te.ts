@@ -1,5 +1,4 @@
-import path from 'path';
-import PropertiesLoader from '../util/PropertiesLoader';
+import * as process from 'node:process';
 import AuthleteConfiguration from './AuthleteConfiguration';
 
 export default class AuthletePropertiesConfiguration
@@ -31,39 +30,40 @@ export default class AuthletePropertiesConfiguration
   public constructor();
   public constructor(file: string);
   public constructor(file?: string) {
-    const props =
-      typeof file === 'string'
-        ? PropertiesLoader.load(file)
-        : PropertiesLoader.load(
-            path.resolve(
-              process.cwd(),
-              AuthletePropertiesConfiguration.DEFAULT_FILE
-            )
-          );
-    path.resolve(process.cwd(), AuthletePropertiesConfiguration.DEFAULT_FILE);
-
-    console.log(
-      path.resolve(process.cwd(), AuthletePropertiesConfiguration.DEFAULT_FILE)
-    );
-
-    if (!props) {
-      const message = `Failed to load '${file}'.`;
-      throw new Error(message);
-    }
-
-    this.mBaseUrl = props.getString(
-      AuthletePropertiesConfiguration.PROPERTY_KEY_BASE_URL,
-      AuthletePropertiesConfiguration.BASE_URL_DEFAULT
-    );
-    this.mServiceApiKey = props.getString(
-      AuthletePropertiesConfiguration.PROPERTY_KEY_SERVICE_API_KEY
-    );
-    this.mServiceAccessToken = props.getString(
-      AuthletePropertiesConfiguration.PROPERTY_KEY_SERVICE_ACCESS_TOKEN
-    );
-    this.mApiVersion = props.getString(
-      AuthletePropertiesConfiguration.PROPERTY_KEY_API_VERSION
-    );
+    this.mBaseUrl = process.env['BASE_URL'] || '';
+    this.mServiceApiKey = process.env['API_KEY'] || '';
+    this.mServiceAccessToken = process.env['ACCESS_TOKEN'] || '';
+    this.mApiVersion = process.env['API_VERSION'] || '';
+    // const props =
+    //   typeof file === 'string'
+    //     ? PropertiesLoader.load(file)
+    //     : PropertiesLoader.load(
+    //         path.resolve(
+    //           process.cwd(),
+    //           AuthletePropertiesConfiguration.DEFAULT_FILE
+    //         )
+    //       );
+    // path.resolve(process.cwd(), AuthletePropertiesConfiguration.DEFAULT_FILE);
+    // console.log(
+    //   path.resolve(process.cwd(), AuthletePropertiesConfiguration.DEFAULT_FILE)
+    // );
+    // if (!props) {
+    //   const message = `Failed to load '${file}'.`;
+    //   throw new Error(message);
+    // }
+    // this.mBaseUrl = props.getString(
+    //   AuthletePropertiesConfiguration.PROPERTY_KEY_BASE_URL,
+    //   AuthletePropertiesConfiguration.BASE_URL_DEFAULT
+    // );
+    // this.mServiceApiKey = props.getString(
+    //   AuthletePropertiesConfiguration.PROPERTY_KEY_SERVICE_API_KEY
+    // );
+    // this.mServiceAccessToken = props.getString(
+    //   AuthletePropertiesConfiguration.PROPERTY_KEY_SERVICE_ACCESS_TOKEN
+    // );
+    // this.mApiVersion = props.getString(
+    //   AuthletePropertiesConfiguration.PROPERTY_KEY_API_VERSION
+    // );
   }
 
   public getApiVersion(): string {

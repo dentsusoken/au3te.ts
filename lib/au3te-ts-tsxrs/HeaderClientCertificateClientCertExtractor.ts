@@ -1,14 +1,8 @@
 import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
 // TODO Implement this class
 export default class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
-  // TODO Implement this class
-  // private override clientCertificateChainHeaders: string[] = [
-  //   'Client-Cert',
-  //   'Client-Cert-Chain',
-  // ];
   constructor() {
-    super();
-    this.setClientCertificateChainHeaders(['Client-Cert', 'Client-Cert-Chain']);
+    super(['Client-Cert', 'Client-Cert-Chain']);
   }
 
   public override async extractClientCertificateChain(

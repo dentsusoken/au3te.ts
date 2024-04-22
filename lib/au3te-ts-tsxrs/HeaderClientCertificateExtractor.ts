@@ -1,10 +1,17 @@
 import ClientCertificateExtractor from './ClientCertificateExtractor';
 
 export default class HeaderClientCertificateExtractor
-  implements ClientCertificateExtractor {
+  implements ClientCertificateExtractor
+{
   private clientCertificateChainHeaders: string[] = [];
 
-  public async extractClientCertificateChain(request: Request): Promise<string[] | null> {
+  constructor(clientCertificateChainHeaders: string[] = []) {
+    this.clientCertificateChainHeaders = clientCertificateChainHeaders;
+  }
+
+  public async extractClientCertificateChain(
+    request: Request
+  ): Promise<string[] | null> {
     const headerCerts = new Array<string>();
 
     for (const headerName of this.getClientCertificateChainHeaders()) {

@@ -1,3 +1,4 @@
+import AuthleteApiImplV3 from '../../au3te-ts-tsxrs/api/AuthleteApiImplV3';
 import AuthleteApiVersion from '../conf/AuthleteApiVersion';
 import AuthleteConfiguration from '../conf/AuthleteConfiguration';
 import AuthletePropertiesConfiguration from '../conf/AuthletePropertiesConfiguration';
@@ -55,25 +56,25 @@ export default class AuthleteApiFactory {
       throw new Error('configuration is null.');
     }
 
-    if (!className) {
-      throw new Error('className is null.');
-    }
+    // if (!className) {
+    //   throw new Error('className is null.');
+    // }
 
-    let clazz: any;
+    // let clazz: any;
 
-    try {
-      clazz = await import(className);
-    } catch (e) {
-      throw new Error(`${className} is not found.`);
-    }
+    // try {
+    //   clazz = await import(className);
+    // } catch (e) {
+    //   throw new Error(`${className} is not found.`);
+    // }
 
-    let constructor: any;
-    constructor = clazz.default;
+    // let constructor: any;
+    // constructor = clazz.default;
 
     let api: AuthleteApi;
 
     try {
-      api = new constructor(configuration);
+      api = new AuthleteApiImplV3(configuration);
       if (!AuthleteApi.instanceofAuthleteApi(api)) {
         throw new Error(
           `${className} does not implement AuthleteApi interface.`
