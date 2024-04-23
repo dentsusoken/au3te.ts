@@ -4,7 +4,10 @@ import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertific
 describe('HttpsRequestClientCertificateExtractor', () => {
   it('extractClientCertificateChain returns null when no certificates are present', async () => {
     const extractor = new HttpsRequestClientCertificateExtractor();
-    const request = new Request('https://example.com');
+    const request = new Request('https://example.com', {
+      method: 'POST',
+      body: JSON.stringify({ 'javax.servlet.request.X509Certificate': [] }),
+    });
     const result = await extractor.extractClientCertificateChain(request);
     expect(result).toBeNull();
   });

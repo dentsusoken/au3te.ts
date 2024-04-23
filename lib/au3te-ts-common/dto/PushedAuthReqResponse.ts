@@ -11,8 +11,6 @@ export enum Action {
 }
 
 export default class PushedAuthReqResponse extends ApiResponse {
-  // TODO Confirm if this is needed in TypeScript
-  // private static readonly serialVersionUID: number = 2;
   private action?: Action;
   private responseContent?: string;
   private clientAuthMethod?: ClientAuthMethodProperty;

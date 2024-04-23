@@ -1,11 +1,6 @@
-// import { Request, Response } from 'express';
-// import { AuthleteApi, AuthleteApiFactory } from 'authlete-js';
-// import { BasePushedAuthReqEndpoint, Params } from 'authlete-js';
-import * as process from 'node:process';
-
 import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
 import AuthleteApiFactory from '../../au3te-ts-common/api/AuthleteApiFactory';
-import { BasePushedAuthReqEndpoint } from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
+import BasePushedAuthReqEndpoint from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
 
 /**
@@ -13,20 +8,12 @@ import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
  *
  * @see <a href="https://tools.ietf.org/html/draft-lodderstedt-oauth-par"
  *      >OAuth 2.0 Pushed Authorization Requests</a>
- *
- *
  */
 export default class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
   readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
   readonly MEDIA_TYPE_URLENCODED = 'application/x-www-form-urlencoded';
-  /**
-   * The pushed authorization request endpoint. This uses the
-   * `POST` method and the same client authentication as
-   * is available on the Token Endpoint.
-   */
-  // public async post(request: Request, response: Response): Promise<Response> {
+
   public async post(request: Request): Promise<Response> {
-    console.log('process.env :>> ', process.env);
     // Authlete API
     const authleteApi: AuthleteApi = await AuthleteApiFactory.getDefaultApi();
 

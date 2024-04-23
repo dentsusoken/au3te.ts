@@ -1,5 +1,6 @@
 import { describe, expect, it, vitest } from 'vitest';
 import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import URLCoder from '../au3te-ts-common/web/URLCoder';
 import AuthleteApiCaller from './AuthleteApiCaller';
 
 describe('AuthleteApiCaller', () => {
@@ -36,7 +37,7 @@ describe('AuthleteApiCaller', () => {
       // Assert
       expect(mockApi.pushAuthorizationRequest).toHaveBeenCalledWith(
         expect.objectContaining({
-          parameters,
+          parameters: URLCoder.formUrlEncode(parameters)!,
           clientId,
           clientSecret,
           clientCertificate,
@@ -70,9 +71,12 @@ describe('AuthleteApiCaller', () => {
         pushAuthorizationRequest: vitest.fn().mockRejectedValue(mockError),
       };
       const caller = new AuthleteApiCaller(mockApi);
+      const reg = new RegExp(
+        `Authlete /api/.* API failed: ${mockError.message}`
+      );
 
       // Act & Assert
-      await expect(caller.callPushedAuthReq()).rejects.toThrowError(mockError);
+      await expect(caller.callPushedAuthReq()).rejects.toThrowError(reg);
     });
   });
 });

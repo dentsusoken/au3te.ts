@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import AuthletePropertiesConfiguration from './AuthletePropertiesConfiguration';
 
@@ -5,6 +7,7 @@ describe('AuthletePropertiesConfiguration', () => {
   let properties: AuthletePropertiesConfiguration;
   beforeAll(() => {
     // const file = path.resolve(process.cwd(), 'asset/existing.properties');
+    dotenv.config({ path: path.resolve('.env.test') });
     properties = new AuthletePropertiesConfiguration();
   });
   describe('constructor', () => {
@@ -14,8 +17,8 @@ describe('AuthletePropertiesConfiguration', () => {
       expect(Object.keys(properties).length > 0).toBe(true);
     });
     it('should load properties from sepecifc file', () => {
-      // const file = path.resolve(process.cwd(), 'asset/existing.properties');
-      const properties = new AuthletePropertiesConfiguration();
+      const file = path.resolve('asset/existing.properties');
+      const properties = new AuthletePropertiesConfiguration(file);
       expect(properties).not.toBeNull();
       expect(Object.keys(properties).length > 0).toBe(true);
     });

@@ -8,10 +8,8 @@ import AuthleteApiJaxrsImpl, { AuthleteApiCall } from './AuthleteApiJaxrsImpl';
 export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =
     '/api/%d/pushed_auth_req';
-  // '/api/3586851703/pushed_auth_req';
 
   private readonly mAuth: string;
-  // TODO Java Long -> TypeScript number?
   private readonly mServiceId: number | null;
   /**
    * The constructor with an instance of {@link AuthleteConfiguration}.
@@ -65,7 +63,6 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     public api: AuthleteApiImplV3;
     constructor(
       api: AuthleteApiImplV3,
-      // responseClass: new () => TResponse,
       request: unknown,
       path?: string,
       format?: string,
@@ -80,15 +77,10 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     }
 
     async call(): Promise<Response> {
-      return await this.api.callPostApi(
-        this.mPath,
-        this.mRequest
-        // this.mResponseClass
-      );
+      return await this.api.callPostApi(this.mPath, this.mRequest);
     }
   };
 
-  // TODO private method in Java
   protected async callPostApi(
     path: string,
     request: unknown
@@ -96,7 +88,6 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return await super.callPostApi(this.mAuth, path, request);
   }
 
-  // TODO implement this method
   public async pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse> {
@@ -125,7 +116,6 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   }
 }
 
-// private class(do not export)
 abstract class ApiCaller implements AuthleteApiCall {
   protected readonly mPath: string;
   protected readonly mRequest: unknown;
@@ -145,19 +135,9 @@ abstract class ApiCaller implements AuthleteApiCall {
     if (!path && !format) {
       throw new Error('Either path or format must be provided');
     }
-    // Throw Error when both path and format are not provided
-    // if path is not provided, format must be provided
-    // TODO implment logic to check args[index] is string
-    // this.mPath = path ? path : '';
-
-    // this.mPath =
-    //   Array.isArray(args) && typeof format === 'string'
-    //     ? format.replace(/\{(\d+)\}/g, (_, index) => args[index] as string)
-    //     : path!;
     if (path) {
       this.mPath = path;
     } else if (format && args.length > 0) {
-      // this.mPath = format.replace(/%d/g, (_, index) => args[index] as string);
       let replaced = '';
       args.forEach((arg) => {
         replaced = format.replace(/%d/g, arg as string);

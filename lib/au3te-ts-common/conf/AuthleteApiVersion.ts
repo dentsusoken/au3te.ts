@@ -4,6 +4,7 @@ enum AuthleteApiVersion {
   V3 = 'V3',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace AuthleteApiVersion {
   export function parse(version: string): AuthleteApiVersion | null {
     if (version === null) {

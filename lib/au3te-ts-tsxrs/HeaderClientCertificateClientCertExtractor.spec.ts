@@ -3,22 +3,21 @@ import HeaderClientCertificateClientCertExtractor from './HeaderClientCertificat
 
 describe('HeaderClientCertificateClientCertExtractor', () => {
   describe('extractClientCertificateChain', () => {
-    it('should return null when no client certificate headers are present', () => {
+    it('should return null when no client certificate headers are present', async () => {
       // Arrange
       const extractor = new HeaderClientCertificateClientCertExtractor();
-      const request = new Request('', { headers: [] });
+      const request = new Request('https://example.com', { headers: [] });
 
       // Act
-      const result = extractor.extractClientCertificateChain(request);
-
+      const result = await extractor.extractClientCertificateChain(request);
       // Assert
       expect(result).toBeNull();
     });
 
-    it('should return the decoded client certificate chain when headers are present', () => {
+    it('should return the decoded client certificate chain when headers are present', async () => {
       // Arrange
       const extractor = new HeaderClientCertificateClientCertExtractor();
-      const request = new Request('', {
+      const request = new Request('https://example.com', {
         headers: [
           ['Client-Cert', 'cert1'],
           ['Client-Cert-Chain', 'cert2'],
@@ -26,7 +25,7 @@ describe('HeaderClientCertificateClientCertExtractor', () => {
       });
 
       // Act
-      const result = extractor.extractClientCertificateChain(request);
+      const result = await extractor.extractClientCertificateChain(request);
 
       // Assert
       expect(result).toEqual(['Y2VydDE=', 'Y2VydDI=']); // Base64 encoded values of 'cert1' and 'cert2'

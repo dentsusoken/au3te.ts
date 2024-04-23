@@ -16,9 +16,9 @@ describe('AuthleteApiVersion', () => {
     expect(result).toBeNull();
   });
 
-  // it('parse - null version', () => {
-  //   const version = null;
-  //   const result = AuthleteApiVersion.parse(version!);
-  //   expect(result).toBeNull();
-  // });
+  it('parse - null version', () => {
+    const version = null;
+    const result = AuthleteApiVersion.parse(version!);
+    expect(result).toBeNull();
+  });
 });

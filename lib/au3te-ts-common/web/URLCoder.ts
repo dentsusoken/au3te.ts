@@ -3,8 +3,6 @@
 export default class URLCoder {
   static encode(input: string): string {
     try {
-      console.log(input);
-
       return encodeURIComponent(input).replace(/[!'()*]/g, function (c) {
         return '%' + c.charCodeAt(0).toString(16);
       });

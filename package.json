@@ -35,7 +35,7 @@
     "vitest": "^1.4.0"
   },
   "dependencies": {
-    "hono": "^4.2.5",
+    "dotenv": "^16.4.5",
     "memfs": "^4.8.2",
     "properties-file": "^3.5.4"
   }

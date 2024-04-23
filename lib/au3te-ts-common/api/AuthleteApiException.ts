@@ -1,7 +1,5 @@
-interface ResponseHeaders {
-  [key: string]: string[];
-}
-// TODO implment this class
+type ResponseHeaders = Record<string,unknown>
+
 export default class AuthleteApiException extends Error {
   private mStatusCode: number;
   private mStatusMessage: string | null;

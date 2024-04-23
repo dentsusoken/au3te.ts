@@ -11,51 +11,7 @@ import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
  *      >OAuth 2.0 Pushed Authorization Requests</a>
  *
  */
-export class BasePushedAuthReqEndpoint extends BaseEndpoint {
-  /**
-   * Handle a pushed authorization request.
-   *
-   * This method internally creates a `PushedAuthReqHandler` instance
-   * and calls its `handle(MultivaluedMap, string, string[])` method.
-   * Then, this method uses the value returned from the `handle()`
-   * method as a response from this method.
-   *
-   * When `PushedAuthReqHandler.handle()` method raises a `WebApplicationException`,
-   * this method calls `onError(WebApplicationException)` method with the exception.
-   * The default implementation of `onError()` does nothing. You can override the method as necessary.
-   * After calling `onError()` method, this method calls `getResponse()` method of
-   * the exception and uses the returned value as a response from this method.
-   *
-   * @param api
-   *            An implementation of `AuthleteApi`.
-   *
-   * @param parameters
-   *            Request parameters of the pushed authorization request.
-   *
-   * @param authorization
-   *            The value of `Authorization` header of the pushed authorization request.
-   *
-   * @param clientCertificates
-   *            The certificate path used in mutual TLS authentication, in PEM format. The
-   *            client's own certificate is the first in this array. Can be `null`.
-   *
-   * @return
-   *         A response that should be returned to the client application.
-   */
-  // protected handle(
-  //   api: AuthleteApi,
-  //   parameters: MultivaluedMap<string, string>,
-  //   authorization: string,
-  //   clientCertificates: string[]
-  // ): Response {
-  //   const params: Params = new Params()
-  //     .setParameters(parameters)
-  //     .setAuthorization(authorization)
-  //     .setClientCertificatePath(clientCertificates);
-
-  //   return this.handle(api, params);
-  // }
-
+export default class BasePushedAuthReqEndpoint extends BaseEndpoint {
   /**
    * Handle a PAR request.
    *

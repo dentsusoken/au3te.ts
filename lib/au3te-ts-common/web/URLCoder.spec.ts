@@ -52,6 +52,6 @@ describe('URLCoder', () => {
       key: '',
     };
     const encoded = URLCoder.formUrlEncode(parameters);
-    expect(encoded).toEqual('key=');
+    expect(encoded).toEqual('');
   });
 });

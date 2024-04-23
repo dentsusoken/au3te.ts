@@ -1,14 +1,28 @@
+import dotenv from 'dotenv';
+import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import AuthletePropertiesConfiguration from '../../au3te-ts-common/conf/AuthletePropertiesConfiguration';
 import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import URLCoder from '../../au3te-ts-common/web/URLCoder';
 import AuthleteApiImplV3 from './AuthleteApiImplV3';
 
-describe('AuthleteApiJaxrsImpl', () => {
+dotenv.config({ path: path.resolve('.env.test') });
+
+const params = {
+  scope: 'org.iso.18013.5.1.mDL openid',
+  code_challenge: '-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs',
+  state: '7342EFBD-3D9F-4895-8445-18F365B8C66C',
+  redirect_uri: process.env.REDIRECT_URI || '',
+  code_challenge_method: 'S256',
+  response_type: 'code',
+  client_id: process.env.CLIENT_ID || '',
+};
+
+describe('AuthleteApiImplV3', () => {
   let properties: AuthletePropertiesConfiguration;
 
   beforeAll(() => {
-    // const file = path.resolve(process.cwd(), 'asset/existing.properties');
     properties = new AuthletePropertiesConfiguration();
   });
 
@@ -17,23 +31,23 @@ describe('AuthleteApiJaxrsImpl', () => {
       const impl = new AuthleteApiImplV3(properties);
       expect(impl).not.toBeNull();
     });
+
+    it('should throw an error if configuration is not set to V3', () => {
+      process.env['API_VERSION'] = 'V2';
+      const invalidConfig = new AuthletePropertiesConfiguration();
+      expect(() => new AuthleteApiImplV3(invalidConfig)).toThrowError(
+        'Configuration must be set to V3 for this implementation.'
+      );
+    });
   });
 
   describe('pushAuthorizationRequest', () => {
-    it('should return PushedAuthReqResponse instance', () => {
+    it('should return a PushedAuthReqResponse instance', async () => {
       const impl = new AuthleteApiImplV3(properties);
       const request = new PushedAuthReqRequest();
-      const response = impl.pushAuthorizationRequest(request);
+      request.setParameters(URLCoder.formUrlEncode(params)!);
+      const response = await impl.pushAuthorizationRequest(request);
       expect(response instanceof PushedAuthReqResponse).toBe(true);
     });
   });
-  // TODO delete this test
-  // describe('require', () => {
-  //   it('should return PushedAuthReqResponse instance', async () => {
-  //     const aa = await import('../../../au3te-ts-tsxrs/api/AuthleteApiImplV3');
-  //     console.log(new aa.default(properties));
-
-  //     // expect(response instanceof PushedAuthReqResponse).toBe(true);
-  //   });
-  // });
 });

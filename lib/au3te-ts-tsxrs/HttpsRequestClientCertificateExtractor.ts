@@ -7,18 +7,23 @@ interface ClientCertificateExtractor {
 
 // TODO move to  util?
 const base64 = {
-  encode: (data: string):string=> {
+  encode: (data: string): string => {
     const encoded = btoa(data);
-    const wrapped = encoded.replace(/(.{64})/g, "$1\n");
+    const wrapped = encoded.replace(/(.{64})/g, '$1\n');
     return wrapped;
-  }
-}
+  },
+};
 
 export default class HttpsRequestClientCertificateExtractor
   implements ClientCertificateExtractor
 {
-  async extractClientCertificateChain(request: Request): Promise<string[] | null> {
-    const certs = (await request.json())['javax.servlet.request.X509Certificate'] as X509Certificate[] | null;
+  async extractClientCertificateChain(
+    request: Request
+  ): Promise<string[] | null> {
+    // TODO comfirm is this correct
+    const certs = (await request.json())[
+      'javax.servlet.request.X509Certificate'
+    ] as X509Certificate[] | null;
 
     if (!certs || certs.length === 0) {
       return null;
@@ -38,7 +43,7 @@ export default class HttpsRequestClientCertificateExtractor
   }
 
   private toPEM(certificate: X509Certificate): string {
-    let sb:string = ""
+    let sb: string = '';
     // TODO Confirm if this is operate correctly or not
     sb += '-----BEGIN CERTIFICATE-----\n';
     sb += base64.encode(new TextDecoder().decode(certificate.getEncoded()));

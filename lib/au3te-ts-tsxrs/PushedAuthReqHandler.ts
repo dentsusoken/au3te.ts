@@ -20,19 +20,7 @@ export default class PushedAuthReqHandler extends BaseHandler {
   /**
    * Handle a PAR request.
    */
-
-  /**
-   * Handle a PAR request.
-   */
-  public async handle(
-    params: Params
-    // authorization: string,
-    // clientCertificatePath: string[]
-  ): Promise<Response> {
-    // const params: Params = new Params();
-    // params.setparameters(parameters);
-    // params.setAuthorization(authorization);
-    // params.setclientCertificatePath(clientCertificatePath);
+  public async handle(params: Params): Promise<Response> {
     const authorization = params.getAuthorization();
     const credentials =
       typeof authorization === 'string'

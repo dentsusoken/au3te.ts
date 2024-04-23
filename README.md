@@ -31,3 +31,25 @@ Executing index.js
 ```bash
 node index.js
 ```
+
+## Launch Hono + Cloudflare Workers dev server 
+
+```bash
+cd app
+npm link au3te
+```
+
+Creating app/.dev.vars
+
+```
+API_BASE_URL = "https://nextdev-api.authlete.net"
+API_VERSION = "V3"
+API_KEY = "xxxx"
+ACCESS_TOKEN = "xxxx"
+```
+
+Executing index.js
+
+```bash
+npm run dev
+```

@@ -25,11 +25,6 @@ export default abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   protected getTarget(): string {
     return this.mBaseUrl;
   }
-  // TODO Read timeout(Confirm fetch API has read timeout setting)
-  // TODO Connection timeout
-  // private setConnectionTimeout(request: RequestInit): void {
-  //   request.signal = AbortSignal.timeout(this.mSettings.getConnectionTimeout());
-  // }
 
   protected async executeApiCall(apiCall: AuthleteApiCall): Promise<Response> {
     try {
