@@ -1,5 +1,9 @@
-import * as process from 'node:process';
-
+const ENV_IDENTIFERS = [
+  'API_BASE_URL',
+  'API_VERSION',
+  'API_KEY',
+  'ACCESS_TOKEN',
+];
 /**
  * Load environment variables.
  * "process" module is polyfilled by vite-plugin-node.
@@ -13,11 +17,12 @@ export function loadEnv(env?: Record<string, unknown>) {
   // Skip if no environment variables.
   if (!env) return;
 
-  for (const [key, value] of Object.entries(env)) {
+  ENV_IDENTIFERS.forEach((key) => {
     // Skip if already set.
     if (process.env[key]) return;
     // Skip if value is empty.
-    if (!value) continue;
+    const value = env[key];
+    if (!value) return;
 
     if (typeof value === 'object') {
       loadEnv(value as Record<string, unknown>);
@@ -26,5 +31,13 @@ export function loadEnv(env?: Record<string, unknown>) {
     } else {
       process.env[key] = value.toString();
     }
-  }
+  });
+  // Object.entries(env).forEach(([key, value]) => {
+  //   if (!value) return;
+  //   process.env[key] = value as string;
+  // });
+  // console.log('process.env :>> ', process.env);
+  // (process.env._Session as unknown as KVNamespace)
+  //   .get('test')
+  //   .then((value) => console.log('value :>> ', value));
 }
