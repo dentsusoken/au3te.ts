@@ -1,9 +1,9 @@
-import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
-import AuthorizationIssueRequest from '../dto/AuthorizationIssueRequest';
-import AuthorizationIssueResponse from '../dto/AuthorizationIssueResponse';
-import AuthorizationRequest from '../dto/AuthorizationRequest';
-import AuthorizationResponse from '../dto/AuthorizationResponse';
+import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { AuthorizationIssueRequest } from '../dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../dto/AuthorizationIssueResponse';
+import { AuthorizationRequest } from '../dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../dto/AuthorizationResponse';
 
 interface AuthleteApi {
   /**
@@ -45,4 +45,4 @@ namespace AuthleteApi {
   }
 }
 
-export default AuthleteApi;
+export { AuthleteApi };

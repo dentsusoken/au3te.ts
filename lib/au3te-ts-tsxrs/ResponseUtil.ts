@@ -11,7 +11,7 @@ enum Status {
   INTERNAL_SERVER_ERROR = 500,
 }
 
-export default class ResponseUtil {
+export class ResponseUtil {
   static readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
   static readonly MEDIA_TYPE_HTML = 'text/html;charset=UTF-8';
   // Unused

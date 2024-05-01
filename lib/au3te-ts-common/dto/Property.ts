@@ -1,4 +1,4 @@
-export default class Property {
+export class Property {
   private key: string;
   private value: string;
   private hidden: boolean;

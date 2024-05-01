@@ -1,9 +1,9 @@
-import Client from '../../au3te-ts-common/dto/Client';
-import User from '../../au3te-ts-common/types/User';
-import AuthorizationDecisionHandlerSpiAdapter from '../../au3te-ts-tsxrs/spi/AuthorizationDecisionHandlerSpiAdapter';
+import { Client } from '../../au3te-ts-common/dto/Client';
+import { User } from '../../au3te-ts-common/types/User';
+import { AuthorizationDecisionHandlerSpiAdapter } from '../../au3te-ts-tsxrs/spi/AuthorizationDecisionHandlerSpiAdapter';
 
 // TODO Authorization Endpoint
-export default class AuthorizationDecisionHandlerSpiImpl extends AuthorizationDecisionHandlerSpiAdapter {
+export class AuthorizationDecisionHandlerSpiImpl extends AuthorizationDecisionHandlerSpiAdapter {
   private mUser: User;
   private mUserAuthenticatedAt: number;
   private mIdTokenClaims: Record<string, string>;

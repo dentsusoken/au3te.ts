@@ -1,6 +1,6 @@
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import BaseEndpoint from './BaseEndpoint';
-import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { BaseEndpoint } from './BaseEndpoint';
+import { Params, PushedAuthReqHandler } from './PushedAuthReqHandler';
 
 /**
  * A base class for pushed authorization endpoints.
@@ -11,7 +11,7 @@ import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
  *      >OAuth 2.0 Pushed Authorization Requests</a>
  *
  */
-export default class BasePushedAuthReqEndpoint extends BaseEndpoint {
+export class BasePushedAuthReqEndpoint extends BaseEndpoint {
   /**
    * Handle a PAR request.
    *

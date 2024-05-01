@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import AuthleteApiVersion from './AuthleteApiVersion';
+import { AuthleteApiVersion } from './AuthleteApiVersion';
 
 describe('AuthleteApiVersion', () => {
   it('parse - valid version', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import PropertiesWrapper from './PropertiesWrapper';
+import { PropertiesWrapper } from './PropertiesWrapper';
 
 describe('PropertiesWrapper', () => {
   describe('constructor', () => {

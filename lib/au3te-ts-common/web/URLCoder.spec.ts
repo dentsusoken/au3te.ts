@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import URLCoder from './URLCoder';
+import { URLCoder } from './URLCoder';
 
 describe('URLCoder', () => {
   it('encode', () => {

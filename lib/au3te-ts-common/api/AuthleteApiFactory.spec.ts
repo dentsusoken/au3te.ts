@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { beforeAll, describe, expect, it, vitest } from 'vitest';
-import AuthleteApiImplV3 from '../../au3te-ts-tsxrs/api/AuthleteApiImplV3';
-import AuthletePropertiesConfiguration from '../conf/AuthletePropertiesConfiguration';
-import AuthleteApiFactory from './AuthleteApiFactory';
+import { AuthleteApiImplV3 } from '../../au3te-ts-tsxrs/api/AuthleteApiImplV3';
+import { AuthletePropertiesConfiguration } from '../conf/AuthletePropertiesConfiguration';
+import { AuthleteApiFactory } from './AuthleteApiFactory';
 
 dotenv.config({ path: path.resolve('.env.test') });
 

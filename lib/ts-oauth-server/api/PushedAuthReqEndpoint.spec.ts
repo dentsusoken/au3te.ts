@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
-import PushedAuthReqEndpoint from './PushedAuthReqEndpoint';
+import { PushedAuthReqEndpoint } from './PushedAuthReqEndpoint';
 
 dotenv.config({ path: path.resolve('.env.test') });
 

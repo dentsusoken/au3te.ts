@@ -1,7 +1,7 @@
 /**
  * Settings of AuthleteApi implementation.
  */
-export default class Settings {
+export class Settings {
   private connectionTimeout: number;
   private readTimeout: number;
 

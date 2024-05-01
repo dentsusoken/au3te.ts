@@ -1,2 +1,2 @@
 // TODO Authorization Endpoint
-export default interface User {}
+export interface User {}

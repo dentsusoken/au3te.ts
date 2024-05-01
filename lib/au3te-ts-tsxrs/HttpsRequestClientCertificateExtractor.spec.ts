@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertificateExtractor';
+import { HttpsRequestClientCertificateExtractor } from './HttpsRequestClientCertificateExtractor';
 
 describe('HttpsRequestClientCertificateExtractor', () => {
   it('extractClientCertificateChain returns null when no certificates are present', async () => {

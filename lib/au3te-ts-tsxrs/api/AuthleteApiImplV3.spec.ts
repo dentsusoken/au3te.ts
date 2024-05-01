@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import AuthletePropertiesConfiguration from '../../au3te-ts-common/conf/AuthletePropertiesConfiguration';
-import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
-import URLCoder from '../../au3te-ts-common/web/URLCoder';
-import AuthleteApiImplV3 from './AuthleteApiImplV3';
+import { AuthletePropertiesConfiguration } from '../../au3te-ts-common/conf/AuthletePropertiesConfiguration';
+import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { URLCoder } from '../../au3te-ts-common/web/URLCoder';
+import { AuthleteApiImplV3 } from './AuthleteApiImplV3';
 
 dotenv.config({ path: path.resolve('.env.test') });
 

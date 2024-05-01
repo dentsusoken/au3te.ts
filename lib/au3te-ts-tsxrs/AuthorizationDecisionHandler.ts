@@ -1,6 +1,6 @@
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import BaseHandler from './BaseHandler';
-import AuthorizationDecisionHandlerSpi from './spi/AuthorizationDecisionHandlerSpi';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { BaseHandler } from './BaseHandler';
+import { AuthorizationDecisionHandlerSpi } from './spi/AuthorizationDecisionHandlerSpi';
 // TODO Authorization Endpoint
 class AuthorizationDecisionHandler extends BaseHandler {
   private readonly mSpi: AuthorizationDecisionHandlerSpi;
@@ -36,4 +36,4 @@ namespace AuthorizationDecisionHandler {
     public from() {}
   }
 }
-export default AuthorizationDecisionHandler;
+export { AuthorizationDecisionHandler };

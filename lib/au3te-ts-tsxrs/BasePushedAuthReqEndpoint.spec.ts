@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import BasePushedAuthReqEndpoint from './BasePushedAuthReqEndpoint';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { BasePushedAuthReqEndpoint } from './BasePushedAuthReqEndpoint';
 import { Params } from './PushedAuthReqHandler';
 
 describe('BasePushedAuthReqEndpoint', () => {

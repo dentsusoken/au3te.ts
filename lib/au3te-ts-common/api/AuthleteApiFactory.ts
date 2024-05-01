@@ -1,10 +1,10 @@
-import AuthleteApiImplV3 from '../../au3te-ts-tsxrs/api/AuthleteApiImplV3';
-import AuthleteApiVersion from '../conf/AuthleteApiVersion';
-import AuthleteConfiguration from '../conf/AuthleteConfiguration';
-import AuthletePropertiesConfiguration from '../conf/AuthletePropertiesConfiguration';
-import AuthleteApi from './AuthleteApi';
+import { AuthleteApiImplV3 } from '../../au3te-ts-tsxrs/api/AuthleteApiImplV3';
+import { AuthleteApiVersion } from '../conf/AuthleteApiVersion';
+import { AuthleteConfiguration } from '../conf/AuthleteConfiguration';
+import { AuthletePropertiesConfiguration } from '../conf/AuthletePropertiesConfiguration';
+import { AuthleteApi } from './AuthleteApi';
 
-export default class AuthleteApiFactory {
+export class AuthleteApiFactory {
   private static sDefaultApi: AuthleteApi | null = null;
 
   private constructor() {}

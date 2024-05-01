@@ -1,12 +1,11 @@
-// import { AuthleteApi, AuthleteApiException } from 'authlete';
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import AuthorizationRequest from '../au3te-ts-common/dto/AuthorizationRequest';
-import AuthorizationResponse from '../au3te-ts-common/dto/AuthorizationResponse';
-import PushedAuthReqRequest from '../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import URLCoder from '../au3te-ts-common/web/URLCoder';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { AuthorizationRequest } from '../au3te-ts-common/dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import { URLCoder } from '../au3te-ts-common/web/URLCoder';
 
-export default class AuthleteApiCaller {
+export class AuthleteApiCaller {
   private readonly mApi: AuthleteApi;
 
   constructor(api: AuthleteApi) {

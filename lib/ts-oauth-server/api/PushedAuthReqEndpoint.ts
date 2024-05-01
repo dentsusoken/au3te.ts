@@ -1,6 +1,6 @@
-import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
-import AuthleteApiFactory from '../../au3te-ts-common/api/AuthleteApiFactory';
-import BasePushedAuthReqEndpoint from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
+import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
+import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory';
+import { BasePushedAuthReqEndpoint } from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
 
 /**
@@ -9,7 +9,7 @@ import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
  * @see <a href="https://tools.ietf.org/html/draft-lodderstedt-oauth-par"
  *      >OAuth 2.0 Pushed Authorization Requests</a>
  */
-export default class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
+export class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
   readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
   readonly MEDIA_TYPE_URLENCODED = 'application/x-www-form-urlencoded';
 

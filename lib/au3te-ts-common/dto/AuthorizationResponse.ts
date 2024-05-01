@@ -1,9 +1,9 @@
-import Prompt from '../types/Prompt';
-import AuthzDetails from './AuthzDetails';
-import Client from './Client';
+import { Prompt } from '../types/Prompt';
+import { AuthzDetails } from './AuthzDetails';
+import { Client } from './Client';
 import { DynamicScope } from './DynamicScope';
-import Scope from './Scope';
-import Service from './Service';
+import { Scope } from './Scope';
+import { Service } from './Service';
 
 class AuthorizationResponse {
   private action?: AuthorizationResponse.Action;
@@ -164,4 +164,4 @@ namespace AuthorizationResponse {
   }
 }
 
-export default AuthorizationResponse;
+export { AuthorizationResponse };

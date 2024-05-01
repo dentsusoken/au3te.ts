@@ -1,5 +1,5 @@
-import BaseEndpoint from './BaseEndpoint';
+import { BaseEndpoint } from './BaseEndpoint';
 // TODO Authorization Endpoint
-export default class BaseAuthorizationDecisionEndpoint extends BaseEndpoint {
+export class BaseAuthorizationDecisionEndpoint extends BaseEndpoint {
   handle() {}
 }

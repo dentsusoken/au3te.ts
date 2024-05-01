@@ -1,6 +1,6 @@
-import SubjectType from '../types/SubjectType';
+import { SubjectType } from '../types/SubjectType';
 
-export default class Client {
+export class Client {
   private clientName?: string;
   private logoUri?: URL;
   private clientUri?: URL;

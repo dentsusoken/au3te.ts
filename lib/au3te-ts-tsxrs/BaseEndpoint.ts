@@ -1,9 +1,9 @@
-import ClientCertificateExtractor from './ClientCertificateExtractor';
-import HeaderClientCertificateClientCertExtractor from './HeaderClientCertificateClientCertExtractor';
-import HeaderClientCertificateXSslExtractor from './HeaderClientCertificateXSslExtractor';
-import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertificateExtractor';
+import { ClientCertificateExtractor } from './ClientCertificateExtractor';
+import { HeaderClientCertificateClientCertExtractor } from './HeaderClientCertificateClientCertExtractor';
+import { HeaderClientCertificateXSslExtractor } from './HeaderClientCertificateXSslExtractor';
+import { HttpsRequestClientCertificateExtractor } from './HttpsRequestClientCertificateExtractor';
 
-export default class BaseEndpoint {
+export class BaseEndpoint {
   private clientCertificateExtractors: ClientCertificateExtractor[] = [
     new HttpsRequestClientCertificateExtractor(),
     new HeaderClientCertificateXSslExtractor(),

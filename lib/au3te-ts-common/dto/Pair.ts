@@ -1,4 +1,4 @@
-export default class Pair {
+export class Pair {
   private key?: string;
   private value?: string;
   constructor(key?: string, value?: string) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import HeaderClientCertificateXSslExtractor from './HeaderClientCertificateXSslExtractor';
+import { HeaderClientCertificateXSslExtractor } from './HeaderClientCertificateXSslExtractor';
 
 describe('HeaderClientCertificateXSslExtractor', () => {
   it('getClientCertificateChainHeaders returns the correct headers', () => {

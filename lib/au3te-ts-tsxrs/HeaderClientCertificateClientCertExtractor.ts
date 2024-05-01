@@ -1,5 +1,5 @@
-import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
-export default class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
+import { HeaderClientCertificateExtractor } from './HeaderClientCertificateExtractor';
+export class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
   constructor() {
     super(['Client-Cert', 'Client-Cert-Chain']);
   }

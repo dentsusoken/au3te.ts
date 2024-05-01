@@ -1,12 +1,12 @@
-import AuthorizationResponse from '../au3te-ts-common/dto/AuthorizationResponse';
-import AuthzDetails from '../au3te-ts-common/dto/AuthzDetails';
-import Client from '../au3te-ts-common/dto/Client';
-import Pair from '../au3te-ts-common/dto/Pair';
-import Scope from '../au3te-ts-common/dto/Scope';
-import User from '../au3te-ts-common/types/User';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { AuthzDetails } from '../au3te-ts-common/dto/AuthzDetails';
+import { Client } from '../au3te-ts-common/dto/Client';
+import { Pair } from '../au3te-ts-common/dto/Pair';
+import { Scope } from '../au3te-ts-common/dto/Scope';
+import { User } from '../au3te-ts-common/types/User';
 
 // TODO Authorization Endpoint
-export default class AuthorizationPageModel {
+export class AuthorizationPageModel {
   private serviceName?: string;
   private clientName?: string;
   private description?: string;

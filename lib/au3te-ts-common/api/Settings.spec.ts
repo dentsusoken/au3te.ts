@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import Settings from './Settings';
+import { Settings } from './Settings';
 
 describe('Settings', () => {
   let settings: Settings;

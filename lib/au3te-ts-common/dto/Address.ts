@@ -1,2 +1,2 @@
 // TODO Authorization Endpoint
-export default class Address {}
+export class Address {}

@@ -1,6 +1,6 @@
-import ClientCertificateExtractor from './ClientCertificateExtractor';
+import { ClientCertificateExtractor } from './ClientCertificateExtractor';
 
-export default class HeaderClientCertificateExtractor
+export class HeaderClientCertificateExtractor
   implements ClientCertificateExtractor
 {
   private clientCertificateChainHeaders: string[] = [];

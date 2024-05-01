@@ -1,6 +1,6 @@
-import TypedProperties from './TypedProperties';
+import { TypedProperties } from './TypedProperties';
 
-export default abstract class StringBasedTypedProperties extends TypedProperties {
+export abstract class StringBasedTypedProperties extends TypedProperties {
   protected constructor() {
     super();
   }

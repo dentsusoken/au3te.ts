@@ -1,4 +1,4 @@
 // TODO Authorization Endpoint
-export default class AuthzPageModel {
+export class AuthzPageModel {
   constructor() {}
 }

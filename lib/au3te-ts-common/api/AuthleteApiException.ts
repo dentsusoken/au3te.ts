@@ -1,6 +1,6 @@
-type ResponseHeaders = Record<string,unknown>
+type ResponseHeaders = Record<string, unknown>;
 
-export default class AuthleteApiException extends Error {
+export class AuthleteApiException extends Error {
   private mStatusCode: number;
   private mStatusMessage: string | null;
   private mResponseBody: string | null;

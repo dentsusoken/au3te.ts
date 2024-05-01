@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import ApiResponse from './ApiResponse';
+import { ApiResponse } from './ApiResponse';
 
 describe('ApiResponse', () => {
   let apiResponse: ApiResponse;

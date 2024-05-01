@@ -1,7 +1,7 @@
-import AuthorizationDecisionHandlerSpi from './AuthorizationDecisionHandlerSpi';
+import { AuthorizationDecisionHandlerSpi } from './AuthorizationDecisionHandlerSpi';
 
 // TODO Authorization Endpoint
-export default class AuthorizationDecisionHandlerSpiAdapter
+export class AuthorizationDecisionHandlerSpiAdapter
   implements AuthorizationDecisionHandlerSpi
 {
   getScopes() {}

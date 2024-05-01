@@ -1,5 +1,5 @@
 // TODO Authorization Endpoint
-export default class FederationManager {
+export class FederationManager {
   constructor() {}
   getInstance() {}
   getConfigurations() {}

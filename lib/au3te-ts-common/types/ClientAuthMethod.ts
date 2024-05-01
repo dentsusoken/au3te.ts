@@ -29,4 +29,4 @@ const ClientAuthMethod: Record<string, ClientAuthMethodProperty> = {
   ],
 } as const;
 
-export default ClientAuthMethod;
+export { ClientAuthMethod };

@@ -14,7 +14,7 @@ const base64 = {
   },
 };
 
-export default class HttpsRequestClientCertificateExtractor
+export class HttpsRequestClientCertificateExtractor
   implements ClientCertificateExtractor
 {
   async extractClientCertificateChain(

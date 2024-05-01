@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import AuthletePropertiesConfiguration from './AuthletePropertiesConfiguration';
+import { AuthletePropertiesConfiguration } from './AuthletePropertiesConfiguration';
 
 describe('AuthletePropertiesConfiguration', () => {
   let properties: AuthletePropertiesConfiguration;

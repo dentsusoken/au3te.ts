@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import BasicCredentials from './BasicCredentials';
+import { BasicCredentials } from './BasicCredentials';
 describe('BasicCredentials', () => {
   it('getUserId', () => {
     const credentials = new BasicCredentials('user123', 'password123');

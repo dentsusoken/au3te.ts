@@ -1,4 +1,4 @@
-export default interface ClientCertificateExtractor {
+export interface ClientCertificateExtractor {
   /**
    * Search the given request for a client's certificate and return it as a string
    * of certificates in PEM format.

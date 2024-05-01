@@ -1,8 +1,8 @@
-import Utils from '../util/Utils';
-import AuthzDetails from './AuthzDetails';
-import Property from './Property';
+import { Utils } from '../util/Utils';
+import { AuthzDetails } from './AuthzDetails';
+import { Property } from './Property';
 
-export default class AuthorizationIssueRequest {
+export class AuthorizationIssueRequest {
   private ticket?: string;
   private subject?: string;
   private sub?: string;

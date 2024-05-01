@@ -1,7 +1,7 @@
 import { describe, expect, it, vitest } from 'vitest';
-import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import URLCoder from '../au3te-ts-common/web/URLCoder';
-import AuthleteApiCaller from './AuthleteApiCaller';
+import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import { URLCoder } from '../au3te-ts-common/web/URLCoder';
+import { AuthleteApiCaller } from './AuthleteApiCaller';
 
 describe('AuthleteApiCaller', () => {
   describe('callPushedAuthReq', () => {

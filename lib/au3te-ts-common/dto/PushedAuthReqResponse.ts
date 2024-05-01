@@ -1,5 +1,5 @@
 import { ClientAuthMethodProperty } from '../types/ClientAuthMethod';
-import ApiResponse from './ApiResponse';
+import { ApiResponse } from './ApiResponse';
 
 export enum Action {
   CREATED = 'CREATED',
@@ -10,7 +10,7 @@ export enum Action {
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 }
 
-export default class PushedAuthReqResponse extends ApiResponse {
+export class PushedAuthReqResponse extends ApiResponse {
   private action?: Action;
   private responseContent?: string;
   private clientAuthMethod?: ClientAuthMethodProperty;

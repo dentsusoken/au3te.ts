@@ -1,15 +1,15 @@
-import AuthleteApiVersion from '../../au3te-ts-common/conf/AuthleteApiVersion';
-import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
-import AuthorizationIssueRequest from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
-import AuthorizationIssueResponse from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
-import AuthorizationRequest from '../../au3te-ts-common/dto/AuthorizationRequest';
-import AuthorizationResponse from '../../au3te-ts-common/dto/AuthorizationResponse';
-import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
-import ClientAuthMethod from '../../au3te-ts-common/types/ClientAuthMethod';
-import AuthleteApiJaxrsImpl, { AuthleteApiCall } from './AuthleteApiJaxrsImpl';
+import { AuthleteApiVersion } from '../../au3te-ts-common/conf/AuthleteApiVersion';
+import { AuthleteConfiguration } from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
+import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { ClientAuthMethod } from '../../au3te-ts-common/types/ClientAuthMethod';
+import { AuthleteApiCall, AuthleteApiJaxrsImpl } from './AuthleteApiJaxrsImpl';
 
-export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
+export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   private static readonly AUTH_AUTHORIZATION_API_PATH: string =
     '/api/%d/auth/authorization';
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =

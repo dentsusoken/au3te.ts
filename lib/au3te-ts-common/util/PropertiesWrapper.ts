@@ -1,7 +1,7 @@
-import StringBasedTypedProperties from './StringBasedTypedProperties';
+import { StringBasedTypedProperties } from './StringBasedTypedProperties';
 import { Properties } from './TypedProperties';
 
-export default class PropertiesWrapper extends StringBasedTypedProperties {
+export class PropertiesWrapper extends StringBasedTypedProperties {
   private properties: Properties;
 
   constructor(properties: Properties) {

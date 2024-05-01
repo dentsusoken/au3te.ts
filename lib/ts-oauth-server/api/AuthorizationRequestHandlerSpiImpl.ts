@@ -1,5 +1,5 @@
 // TODO Authorization Endpoint
-export default class AuthorizationRequestHandlerSpiImpl {
+export class AuthorizationRequestHandlerSpiImpl {
   constructor() {}
   generateAuthorizationPage() {}
   clearCurrentUserInfoInSessionIfNecessary() {}

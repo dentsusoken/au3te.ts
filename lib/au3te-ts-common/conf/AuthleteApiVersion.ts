@@ -27,4 +27,4 @@ namespace AuthleteApiVersion {
   }
 }
 
-export default AuthleteApiVersion;
+export { AuthleteApiVersion };

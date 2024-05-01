@@ -1,14 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { getProperties } from 'properties-file';
-import PropertiesWrapper from './PropertiesWrapper';
-import TypedProperties, { Properties } from './TypedProperties';
+import { PropertiesWrapper } from './PropertiesWrapper';
+import { Properties, TypedProperties } from './TypedProperties';
 
 enum FileLocation {
   FILESYSTEM,
   CLASSPATH,
 }
 
-export default class PropertiesLoader {
+export class PropertiesLoader {
   static load(
     file: string,
     locations?: FileLocation[] | FileLocation

@@ -1,4 +1,4 @@
-export default class Service {
+export class Service {
   private serviceName?: string;
   getServiceName(): string | undefined {
     return this.serviceName;

@@ -1,5 +1,5 @@
 // TODO Authorization Endpoint
-export default class VerifiedClaimsCollector {
+export class VerifiedClaimsCollector {
   constructor() {}
   collect() {}
   extractVerifiedClaimsRequest() {}

@@ -1,11 +1,11 @@
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import AuthorizationResponse from '../au3te-ts-common/dto/AuthorizationResponse';
-import BaseHandler from './BaseHandler';
-import ResponseUtil from './ResponseUtil';
-import AuthorizationRequestHandlerSpi from './spi/AuthorizationRequestHandlerSpi';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { BaseHandler } from './BaseHandler';
+import { ResponseUtil } from './ResponseUtil';
+import { AuthorizationRequestHandlerSpi } from './spi/AuthorizationRequestHandlerSpi';
 
 // TODO Authorization Endpoint
-export default class AuthorizationRequestHandler extends BaseHandler {
+export class AuthorizationRequestHandler extends BaseHandler {
   private readonly mSpi: AuthorizationRequestHandlerSpi;
   constructor(api: AuthleteApi, spi: AuthorizationRequestHandlerSpi) {
     super(api);

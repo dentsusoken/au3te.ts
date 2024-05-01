@@ -1,4 +1,4 @@
-export default class BasicCredentials {
+export class BasicCredentials {
   private static readonly CHALLENGE_PATTERN = /^Basic *([^ ]+) *$/i;
 
   private readonly mUserId: string;

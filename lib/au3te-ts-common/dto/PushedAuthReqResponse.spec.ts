@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import ClientAuthMethod from '../types/ClientAuthMethod';
-import PushedAuthReqResponse from './PushedAuthReqResponse';
+import { ClientAuthMethod } from '../types/ClientAuthMethod';
+import { PushedAuthReqResponse } from './PushedAuthReqResponse';
 
 describe('PushedAuthReqResponse', () => {
   it('getResponseContent', () => {

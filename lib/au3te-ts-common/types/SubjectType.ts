@@ -2,4 +2,4 @@
 enum SubjectType {
   PAIRWISE = 'pairwise',
 }
-export default SubjectType;
+export { SubjectType };

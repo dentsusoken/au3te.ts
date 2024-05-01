@@ -1,4 +1,4 @@
-export default class ApiResponse {
+export class ApiResponse {
   private resultCode?: string;
   private resultMessage?: string;
 

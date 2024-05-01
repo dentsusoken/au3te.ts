@@ -1,6 +1,6 @@
 import path from 'path';
 import { describe, expect, it } from 'vitest';
-import PropertiesLoader from './PropertiesLoader';
+import { PropertiesLoader } from './PropertiesLoader';
 
 describe('PropertiesLoader', () => {
   describe('load', () => {

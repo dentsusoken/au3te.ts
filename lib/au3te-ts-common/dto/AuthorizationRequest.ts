@@ -1,4 +1,4 @@
-export default class AuthorizationRequest {
+export class AuthorizationRequest {
   private parameters?: string;
 
   public getParameters(): string | undefined {

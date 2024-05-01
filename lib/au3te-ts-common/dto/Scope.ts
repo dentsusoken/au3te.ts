@@ -1,4 +1,4 @@
-export default class Scope {
+export class Scope {
   private name?: string;
   public getName(): string | undefined {
     return this.name;

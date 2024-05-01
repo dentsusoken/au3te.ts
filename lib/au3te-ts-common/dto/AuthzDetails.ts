@@ -1,6 +1,6 @@
-import AuthzDetailsElement from './AuthzDetailsElement';
+import { AuthzDetailsElement } from './AuthzDetailsElement';
 
-export default class AuthzDetails {
+export class AuthzDetails {
   private elements?: AuthzDetailsElement[];
 
   public getElements(): AuthzDetailsElement[] | undefined {

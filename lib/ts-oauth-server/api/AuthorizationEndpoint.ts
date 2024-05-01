@@ -1,7 +1,7 @@
 import App from '../webapp/App';
 import page from '../webapp/index';
 
-export default class AuthorizationEndpoint {
+export class AuthorizationEndpoint {
   get() {
     // const a = page();
     const aaa = App({ text: 'This is App !!' });

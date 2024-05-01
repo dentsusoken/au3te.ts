@@ -1,11 +1,9 @@
 import path from 'node:path';
 import * as process from 'node:process';
-import PropertiesLoader from '../util/PropertiesLoader';
-import AuthleteConfiguration from './AuthleteConfiguration';
+import { PropertiesLoader } from '../util/PropertiesLoader';
+import { AuthleteConfiguration } from './AuthleteConfiguration';
 
-export default class AuthletePropertiesConfiguration
-  implements AuthleteConfiguration
-{
+export class AuthletePropertiesConfiguration implements AuthleteConfiguration {
   public static readonly ALGORITHM: string = 'aes-256-cbc';
   public static readonly DEFAULT_KEY: string =
     'a281ac2de1195e8c91ea383d38d05d1c';

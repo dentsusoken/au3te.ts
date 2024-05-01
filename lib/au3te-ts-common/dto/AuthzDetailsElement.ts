@@ -1,4 +1,4 @@
-export default class AuthzDetailsElement {
+export class AuthzDetailsElement {
   private type?: string;
   private locations?: string[];
   private actions?: string[];

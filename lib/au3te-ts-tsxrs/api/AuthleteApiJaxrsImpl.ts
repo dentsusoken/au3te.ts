@@ -1,13 +1,13 @@
-import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
-import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
-import AuthorizationIssueRequest from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
-import AuthorizationIssueResponse from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
-import AuthorizationRequest from '../../au3te-ts-common/dto/AuthorizationRequest';
-import AuthorizationResponse from '../../au3te-ts-common/dto/AuthorizationResponse';
-import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
+import { AuthleteConfiguration } from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
+import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 
-export default abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
+export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   private static readonly JSON_UTF8_TYPE = 'application/json;charset=UTF-8';
 
   private readonly mBaseUrl: string;

@@ -29,4 +29,4 @@ namespace AuthorizationIssueResponse {
     FORM,
   }
 }
-export default AuthorizationIssueResponse;
+export { AuthorizationIssueResponse };

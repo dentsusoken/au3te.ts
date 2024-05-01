@@ -1,8 +1,9 @@
 import { describe, expect, it, vitest } from 'vitest';
-import PushedAuthReqResponse, {
+import {
   Action,
+  PushedAuthReqResponse,
 } from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
+import { Params, PushedAuthReqHandler } from './PushedAuthReqHandler';
 
 describe('PushedAuthReqHandler', () => {
   it('should handle a PAR request', async () => {

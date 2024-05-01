@@ -1,4 +1,4 @@
-export default class UserDao {
+export class UserDao {
   SearchCondition() {}
   get() {}
   getByCredentials() {}
