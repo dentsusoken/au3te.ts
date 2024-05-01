@@ -1,5 +1,9 @@
 import AuthleteApi from '../../au3te-ts-common/api/AuthleteApi';
 import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import AuthorizationIssueRequest from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
+import AuthorizationIssueResponse from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
+import AuthorizationRequest from '../../au3te-ts-common/dto/AuthorizationRequest';
+import AuthorizationResponse from '../../au3te-ts-common/dto/AuthorizationResponse';
 import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 
@@ -17,6 +21,14 @@ export default abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
     this.mBaseUrl = configuration.getBaseUrl();
     // this.mSettings = new Settings();
   }
+
+  abstract authorization(
+    request: AuthorizationRequest
+  ): Promise<AuthorizationResponse>;
+
+  abstract authorizationIssue(
+    request: AuthorizationIssueRequest
+  ): Promise<AuthorizationIssueResponse>;
 
   abstract pushAuthorizationRequest(
     request: PushedAuthReqRequest

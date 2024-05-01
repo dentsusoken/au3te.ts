@@ -1,5 +1,7 @@
 // import { AuthleteApi, AuthleteApiException } from 'authlete';
 import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
+import AuthorizationRequest from '../au3te-ts-common/dto/AuthorizationRequest';
+import AuthorizationResponse from '../au3te-ts-common/dto/AuthorizationResponse';
 import PushedAuthReqRequest from '../au3te-ts-common/dto/PushedAuthReqRequest';
 import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
 import URLCoder from '../au3te-ts-common/web/URLCoder';
@@ -28,6 +30,47 @@ export default class AuthleteApiCaller {
     // 500 Internal Server Error
     return new Error(message);
   }
+  /**
+   * Call Authlete's {@code /api/auth/authorization} API.
+   */
+  // TODO Authorization Endpoint
+  public async callAuthorization(
+    parameters: Record<string, string>
+  ): Promise<AuthorizationResponse> {
+    const params = URLCoder.formUrlEncode(parameters);
+    return this.callAuthorizationInternal(params);
+  }
+
+  private async callAuthorizationInternal(
+    parameters?: string
+  ): Promise<AuthorizationResponse> {
+    if (!parameters) {
+      parameters = '';
+    }
+    const request: AuthorizationRequest =
+      new AuthorizationRequest().setParameters(parameters);
+    try {
+      return await this.mApi.authorization(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/auth/authorization', e);
+    }
+  }
+
+  /**
+   * Call Authlete's {@code /api/auth/authorization/issue} API.
+   */
+  // TODO Authorization Endpoint
+  private async callAuthorizationIssue() {
+    // return this.mApi.authorizationIssue(new AuthorizationIssueRequest());
+  }
+
+  /**
+   * Issue an authorization code, an ID token and/or an access token.
+   * This method calls Authlete's {@code /api/auth/authorization/issue} API.
+   */
+  // TODO Authorization Endpoint
+  public async authorizationIssue() {}
 
   /**
    * Call Authlete's `/api/pushed_auth_req` API.
@@ -87,7 +130,6 @@ export default class AuthleteApiCaller {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       // the API call failed
-      // TODO Confirm does this work?
       throw this.apiFailure('/api/pushed_auth_req', e);
     }
   }

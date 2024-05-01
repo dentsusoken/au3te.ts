@@ -68,8 +68,8 @@ export default class HeaderClientCertificateExtractor
 
   public setClientCertificateChainHeaders(
     clientCertificateChainHeaders: string[]
-  ): void {
+  ): HeaderClientCertificateExtractor {
     this.clientCertificateChainHeaders = clientCertificateChainHeaders;
-    throw new Error('Unsupported operation');
+    return this;
   }
 }

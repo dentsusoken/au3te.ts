@@ -9,7 +9,7 @@ export default defineConfig({
         global: 'build',
         process: 'build',
       },
-      exclude:["fs"]
+      exclude: ['fs', 'crypto'],
     }),
   ],
 });

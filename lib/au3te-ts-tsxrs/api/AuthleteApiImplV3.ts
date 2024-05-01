@@ -1,11 +1,17 @@
 import AuthleteApiVersion from '../../au3te-ts-common/conf/AuthleteApiVersion';
 import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import AuthorizationIssueRequest from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
+import AuthorizationIssueResponse from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
+import AuthorizationRequest from '../../au3te-ts-common/dto/AuthorizationRequest';
+import AuthorizationResponse from '../../au3te-ts-common/dto/AuthorizationResponse';
 import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 import ClientAuthMethod from '../../au3te-ts-common/types/ClientAuthMethod';
 import AuthleteApiJaxrsImpl, { AuthleteApiCall } from './AuthleteApiJaxrsImpl';
 
 export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
+  private static readonly AUTH_AUTHORIZATION_API_PATH: string =
+    '/api/%d/auth/authorization';
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =
     '/api/%d/pushed_auth_req';
 
@@ -86,6 +92,51 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     request: unknown
   ): Promise<Response> {
     return await super.callPostApi(this.mAuth, path, request);
+  }
+
+  // TODO Authorization Endpoint
+  public async authorization(
+    request: AuthorizationRequest
+  ): Promise<AuthorizationResponse> {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_AUTHORIZATION_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+
+    const authResponse = new AuthorizationResponse();
+    authResponse
+      .setAcrs(params.acrs)
+      .setAction(params.action)
+      .setAuthorizationDetails(params.authorizationDetails)
+      .setClaims(params.claims)
+      .setClaimsAtUserInfo(params.claimsAtUserInfo)
+      .setClient(params.client)
+      .setDynamicScopes(params.dynamicScopes)
+      .setIdTokenClaims(params.idTokenClaims)
+      .setLoginHint(params.loginHint)
+      .setMaxAge(params.maxAge)
+      .setPrompts(params.prompts)
+      .setPurpose(params.purpose)
+      .setResponseContent(params.responseContent)
+      .setScopes(params.scopes)
+      .setService(params.service)
+      .setSubject(params.subject);
+
+    return authResponse;
+  }
+
+  // TODO Authorization Endpoint
+  public async authorizationIssue(
+    request: AuthorizationIssueRequest
+  ): Promise<AuthorizationIssueResponse> {
+    console.log('request :>> ', request);
+    return new AuthorizationIssueResponse();
   }
 
   public async pushAuthorizationRequest(

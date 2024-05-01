@@ -25,4 +25,6 @@ export default class BaseEndpoint {
 
     return null;
   }
+  // TODO Authorization Endpoint
+  public BaseEndpoint() {}
 }

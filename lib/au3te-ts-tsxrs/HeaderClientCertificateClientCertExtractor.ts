@@ -1,5 +1,4 @@
 import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
-// TODO Implement this class
 export default class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
   constructor() {
     super(['Client-Cert', 'Client-Cert-Chain']);
@@ -22,7 +21,6 @@ export default class HeaderClientCertificateClientCertExtractor extends HeaderCl
     return this.decodeByteBufferCerts(listCert);
   }
 
-  // TODO Confirm if this operates correctly or not
   private decodeByteBufferCerts(sequenceItems: string[]): string[] {
     const certs: string[] = [];
     for (const sequenceItem of sequenceItems) {
@@ -39,8 +37,7 @@ export default class HeaderClientCertificateClientCertExtractor extends HeaderCl
   public override setClientCertificateChainHeaders(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _: string[]
-    // clientCertificateChainHeaders: string[]
-  ): void {
+  ): HeaderClientCertificateExtractor {
     throw new Error('Unsupported operation');
   }
 }

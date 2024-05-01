@@ -22,7 +22,6 @@ export default class AuthletePropertiesConfiguration
   private static readonly PROPERTY_KEY_API_VERSION: string = 'api_version';
   private static readonly BASE_URL_DEFAULT: string = 'https://api.authlete.com';
 
-  // TODO Confirm if this is correct
   private mBaseUrl: string;
   private mServiceApiKey: string = '';
   private mServiceAccessToken: string = '';
