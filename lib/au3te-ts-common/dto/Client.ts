@@ -1,5 +1,6 @@
 import { SubjectType } from '../types/SubjectType';
 
+// TODO à¿ì°é¿ëïçœÇ›
 export class Client {
   private clientName?: string;
   private logoUri?: URL;
@@ -8,6 +9,7 @@ export class Client {
   private tosUri?: URL;
   private description?: string;
   private subjectType?: SubjectType;
+  private derivedSectorIdentifier?: string;
 
   public getClientName(): string | undefined {
     return this.clientName;
@@ -29,5 +31,8 @@ export class Client {
   }
   public getSubjectType(): SubjectType | undefined {
     return this.subjectType;
+  }
+  public getDerivedSectorIdentifier(): string | undefined {
+    return this.derivedSectorIdentifier;
   }
 }
