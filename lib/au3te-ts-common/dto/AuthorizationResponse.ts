@@ -4,6 +4,7 @@ import { Client } from './Client';
 import { DynamicScope } from './DynamicScope';
 import { Scope } from './Scope';
 import { Service } from './Service';
+import { StringArray } from './StringArray';
 
 class AuthorizationResponse {
   private action?: AuthorizationResponse.Action;
@@ -23,6 +24,10 @@ class AuthorizationResponse {
   private authorizationDetails?: AuthzDetails;
   private purpose?: string;
   private userInfoClaims?: string;
+  private ticket?: string;
+  private claimsLocales?: string[];
+  private requestedClaimsForTx?: string[];
+  private requestedVerifiedClaimsForTx?: StringArray[];
 
   public getAction(): AuthorizationResponse.Action | undefined {
     return this.action;
@@ -149,6 +154,41 @@ class AuthorizationResponse {
   }
   public setResponseContent(responseContent: string): AuthorizationResponse {
     this.responseContent = responseContent;
+    return this;
+  }
+  public getTicket(): string | undefined {
+    return this.ticket;
+  }
+  public setTicket(ticket: string): AuthorizationResponse {
+    this.ticket = ticket;
+    return this;
+  }
+  public getClaimsLocales(): string[] | undefined {
+    return this.claimsLocales;
+  }
+
+  public setClaimsLocales(claimLocales: string[]): AuthorizationResponse {
+    this.claimsLocales = claimLocales;
+    return this;
+  }
+
+  public getRequestedClaimsForTx(): string[] | undefined {
+    return this.requestedClaimsForTx;
+  }
+
+  public setRequestedClaimsForTx(claims: string[]): AuthorizationResponse {
+    this.requestedClaimsForTx = claims;
+    return this;
+  }
+
+  public getRequestedVerifiedClaimsForTx(): StringArray[] | undefined {
+    return this.requestedVerifiedClaimsForTx;
+  }
+
+  public setRequestedVerifiedClaimsForTx(
+    claims: StringArray[]
+  ): AuthorizationResponse {
+    this.requestedVerifiedClaimsForTx = claims;
     return this;
   }
 }

@@ -4,19 +4,19 @@ import { BaseEndpoint } from './BaseEndpoint';
 import { AuthorizationRequestHandlerSpi } from './spi/AuthorizationRequestHandlerSpi';
 // TODO Authorization Endpoint
 export class BaseAuthorizationEndpoint extends BaseEndpoint {
-  handle(
+  async handleInternal(
     api: AuthleteApi,
     spi: AuthorizationRequestHandlerSpi,
     parameters: Record<string, string>
-  ) {
+  ): Promise<Response> {
     try {
       const handler: AuthorizationRequestHandler =
         new AuthorizationRequestHandler(api, spi);
-      return handler.handle(parameters);
+      return await handler.handle(parameters);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       this.onError(e);
-      return e.message;
+      return new Response(e.message, { status: 500 });
     }
   }
 }

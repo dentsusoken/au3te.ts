@@ -5,7 +5,7 @@ type PageProps = {
   children: React.ReactNode;
 };
 
-export default ({ children }: PageProps) => `
+export const Viewable = ({ children }: PageProps) => `
   <!DOCTYPE html>
   <html lang="ja">
   <head>

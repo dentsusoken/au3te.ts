@@ -1,9 +1,14 @@
 import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { Reason } from '../au3te-ts-common/dto/AuthorizationFailRequest';
+import { AuthorizationIssueRequest } from '../au3te-ts-common/dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { Property } from '../au3te-ts-common/dto/Property';
 import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
 import { URLCoder } from '../au3te-ts-common/web/URLCoder';
+import { ResponseUtil } from './ResponseUtil';
 
 export class AuthleteApiCaller {
   private readonly mApi: AuthleteApi;
@@ -43,6 +48,7 @@ export class AuthleteApiCaller {
   private async callAuthorizationInternal(
     parameters?: string
   ): Promise<AuthorizationResponse> {
+    // set.has()
     if (!parameters) {
       parameters = '';
     }
@@ -56,12 +62,45 @@ export class AuthleteApiCaller {
     }
   }
 
+  // TODO Authorization Endpoint
+  public async authorizationFail(ticket: string, reason: Reason) {}
+
   /**
    * Call Authlete's {@code /api/auth/authorization/issue} API.
    */
   // TODO Authorization Endpoint
-  private async callAuthorizationIssue() {
-    // return this.mApi.authorizationIssue(new AuthorizationIssueRequest());
+  private async callAuthorizationIssue(
+    ticket: string,
+    subject: string,
+    authTime: number,
+    acr: string,
+    claims: Record<string, unknown>,
+    properties: Property[],
+    scopes: string[],
+    sub: string,
+    claimsForTx?: Record<string, unknown>,
+    verifiedClaimsForTx?: Record<string, unknown>[]
+  ) {
+    const request: AuthorizationIssueRequest = new AuthorizationIssueRequest()
+      .setTicket(ticket)
+      .setSubject(subject)
+      .setAuthTime(authTime)
+      .setAcr(acr)
+      .setProperties(properties)
+      .setScopes(scopes)
+      .setSub(sub)
+      .setClaimsForTx(claimsForTx)
+      .setVerifiedClaimsForTx({ list: verifiedClaimsForTx });
+
+    if (!claims && Object.keys(claims).length > 0) {
+      request.setClaims(claims);
+    }
+    try {
+      return await this.mApi.authorizationIssue(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/auth/authorization/issue', e);
+    }
   }
 
   /**
@@ -69,7 +108,49 @@ export class AuthleteApiCaller {
    * This method calls Authlete's {@code /api/auth/authorization/issue} API.
    */
   // TODO Authorization Endpoint
-  public async authorizationIssue() {}
+  public async authorizationIssue(
+    ticket: string,
+    subject: string,
+    authTime: number,
+    acr: string,
+    claims: Record<string, unknown>,
+    properties: Property[],
+    scopes: string[],
+    sub: string,
+    claimsForTx?: Record<string, unknown>,
+    verifiedClaimsForTx?: Record<string, unknown>[]
+  ) {
+    const response: AuthorizationIssueResponse =
+      await this.callAuthorizationIssue(
+        ticket,
+        subject,
+        authTime,
+        acr,
+        claims,
+        properties,
+        scopes,
+        sub,
+        claimsForTx,
+        verifiedClaimsForTx
+      );
+
+    const action: AuthorizationIssueResponse.Action | undefined =
+      response.getAction();
+    const content: string | undefined = response.getResponseContent();
+
+    switch (action) {
+      case AuthorizationIssueResponse.Action.INTERNAL_SERVER_ERROR:
+        return ResponseUtil.internalServerError(content);
+      case AuthorizationIssueResponse.Action.BAD_REQUEST:
+        return ResponseUtil.badRequest(content);
+      case AuthorizationIssueResponse.Action.LOCATION:
+        return ResponseUtil.location(content);
+      case AuthorizationIssueResponse.Action.FORM:
+        return ResponseUtil.form(content);
+      default:
+        throw this.unknownAction('/api/auth/authorization/issue', action);
+    }
+  }
 
   /**
    * Call Authlete's `/api/pushed_auth_req` API.

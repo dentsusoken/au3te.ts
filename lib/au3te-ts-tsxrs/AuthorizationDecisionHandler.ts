@@ -1,7 +1,15 @@
 import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { VerifiedClaims } from '../au3te-ts-common/assurance/constraint/VerifiedClaims';
+import { VerifiedClaimsConstraint } from '../au3te-ts-common/assurance/constraint/VerifiedClaimsConstraint';
+import { VerifiedClaimsContainerConstraint } from '../au3te-ts-common/assurance/constraint/VerifiedClaimsContainerConstraint';
+import { Reason } from '../au3te-ts-common/dto/AuthorizationFailRequest';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { Property } from '../au3te-ts-common/dto/Property';
+import { StringArray } from '../au3te-ts-common/dto/StringArray';
 import { BaseHandler } from './BaseHandler';
+import { VerifiedClaimsCollector } from './VerifiedClaimsCollector';
 import { AuthorizationDecisionHandlerSpi } from './spi/AuthorizationDecisionHandlerSpi';
-// TODO à¿ì°é¿ëïçœÇ›
+// TODO Authorization Endpoint
 class AuthorizationDecisionHandler extends BaseHandler {
   private readonly mSpi: AuthorizationDecisionHandlerSpi;
   constructor(api: AuthleteApi, spi: AuthorizationDecisionHandlerSpi) {
@@ -22,62 +30,97 @@ class AuthorizationDecisionHandler extends BaseHandler {
 
   public process(params: Params) {
     if (this.mSpi.isClientAuthorized() === false) {
-      return this.fail(params.getTicket(), Reason.DENIED);
+      return this.fail(params.getTicket() || '', Reason.DENIED);
     }
     const subject: string = this.mSpi.getUserSubject();
     if (subject === null || subject.length === 0) {
-      return this.fail(params.getTicket(), Reason.NOT_AUTHENTICATED);
+      return this.fail(params.getTicket() || '', Reason.NOT_AUTHENTICATED);
     }
     const sub: string = this.mSpi.getSub();
     const authTime: number = this.mSpi.getUserAuthenticatedAt();
     const acr: string = this.mSpi.getAcr();
-    let claims: Record<string, unknown> | undefined = this.collectClaims(subject, params.getClaimNames(), params.getClaimLocales());
-    const claimsForTx: Record<string, unknown> | undefined = this.collectClaims(subject, params.getRequestedClaimsForTx(), params.getRequestedClaimsForTx());
+    let claims: Record<string, unknown> | undefined = this.collectClaims(
+      subject,
+      params.getClaimNames(),
+      params.getClaimLocales()
+    );
+    const claimsForTx: Record<string, unknown> | undefined = this.collectClaims(
+      subject,
+      params.getRequestedClaimsForTx(),
+      params.getRequestedClaimsForTx()
+    );
 
-    let verifiedClaimsForTx: Record<string, unknown> | undefined = undefined;
+    let verifiedClaimsForTx: Record<string, unknown>[] | undefined = undefined;
     if (params.isOldIdaFormatUsed()) {
-      claims = this.collectVerifiedClaims_Old(claims, subject, params.getIdTokenClaims());
+      claims = this.collectVerifiedClaims_Old(
+        claims,
+        subject,
+        params.getIdTokenClaims()
+      );
     } else {
-      claims = this.collectVerifiedClaims(claims, subject, params.getIdTokenClaims());
-      verifiedClaimsForTx = this.collectVerifiedClaimsForTx(subject, params.getIdTokenClaims(), params.getRequestedVerifiedClaimsForTx());
+      claims = this.collectVerifiedClaims(
+        claims,
+        subject,
+        params.getIdTokenClaims()
+      );
+      verifiedClaimsForTx = this.collectVerifiedClaimsForTx(
+        subject,
+        params.getIdTokenClaims(),
+        params.getRequestedVerifiedClaimsForTx() || []
+      );
     }
 
     const properties: Property[] = this.mSpi.getProperties();
     const scopes: string[] = this.mSpi.getScopes();
 
-    return this.authorize(params.getTicket(), subject, authTime, acr, claims,
-      properties, scopes, sub, claimsForTx, verifiedClaimsForTx);
+    return this.authorize(
+      params.getTicket() || '',
+      subject,
+      authTime,
+      acr,
+      claims,
+      properties,
+      scopes,
+      sub,
+      claimsForTx,
+      verifiedClaimsForTx
+    );
   }
 
-  public collectClaims(subject: string, claimNames?: string[], claimLocales?: string[]): Record<string, unknown> | undefined {
+  public collectClaims(
+    subject: string,
+    claimNames?: string[],
+    claimLocales?: string[]
+  ): Record<string, unknown> | undefined {
     if (!claimNames || claimNames.length === 0) {
       return;
     }
     claimLocales = this.normalizeClaimLocales(claimLocales);
 
-    let claims: Record<string, unknown> = {}
+    let claims: Record<string, unknown> = {};
 
     for (let claimName of claimNames) {
       if (claimName === null || claimName.length === 0) {
         continue;
       }
 
-      const elements: string[] = claimName.split("#", 2);
+      const elements: string[] = claimName.split('#', 2);
       const name: string = elements[0];
-      const tag: string | undefined = (elements.length === 2) ? elements[1] : undefined;
+      const tag: string | undefined =
+        elements.length === 2 ? elements[1] : undefined;
       const value: unknown = this.getClaim(name, tag, claimLocales);
 
       if (value === undefined) {
         continue;
       }
       if (tag === undefined) {
-        claimName = name
+        claimName = name;
       }
       claims = { claimName: value };
     }
     if (claims.length === 0) {
       return;
-    };
+    }
     return claims;
   }
 
@@ -109,9 +152,13 @@ class AuthorizationDecisionHandler extends BaseHandler {
     return list;
   }
 
-  public getClaim(name: string, tag?: string, claimLocales?: string[]): unknown {
+  public getClaim(
+    name: string,
+    tag?: string,
+    claimLocales?: string[]
+  ): unknown {
     if (tag !== undefined && tag.length !== 0) {
-      return this.mSpi.getUserClaim(name, tag)
+      return this.mSpi.getUserClaim(name, tag);
     }
     if (!claimLocales || claimLocales.length === 0) {
       return this.mSpi.getUserClaim(name, undefined);
@@ -123,20 +170,33 @@ class AuthorizationDecisionHandler extends BaseHandler {
     return this.mSpi.getUserClaim(name, undefined);
   }
 
-  public collectVerifiedClaims_Old(claims?: Record<string, unknown>, subject?: string, idTokenClaims?: string) {
+  public collectVerifiedClaims_Old(
+    claims?: Record<string, unknown>,
+    subject?: string,
+    idTokenClaims?: string
+  ) {
     if (!idTokenClaims || idTokenClaims.length === 0) {
       return claims;
     }
-    const constraint: VerifiedClaimsConstraint = VerifiedClaimsContainerConstraint(idTokenClaims).getVerifiedClaims();
+    const constraint: VerifiedClaimsConstraint =
+      VerifiedClaimsContainerConstraint.fromJson(
+        idTokenClaims
+      ).getVerifiedClaims();
 
     if (!constraint || constraint === null) {
       return claims;
     }
-    const verifiedClaims: VerifiedClaims[] = this.mSpi.getVerifiedClaims(subject, constraint);
+    const verifiedClaims: VerifiedClaims[] = this.mSpi.getVerifiedClaims(
+      subject,
+      constraint
+    );
     return this.embedVerifiedClaims(claims, verifiedClaims);
   }
 
-  public embedVerifiedClaims(claims?: Record<string, unknown>, verifiedClaims?: verifiedClaims[]): Record<string, unknown> | undefined {
+  public embedVerifiedClaims(
+    claims?: Record<string, unknown>,
+    verifiedClaims?: verifiedClaims[]
+  ): Record<string, unknown> | undefined {
     if (!verifiedClaims || verifiedClaims.length === 0) {
       return claims;
     }
@@ -144,41 +204,84 @@ class AuthorizationDecisionHandler extends BaseHandler {
       claims = {};
     }
     if (verifiedClaims.length === 1) {
-      claims = { "verified_claims": verifiedClaims[0] };
+      claims = { verified_claims: verifiedClaims[0] };
     } else {
-      claims = { "verified_claims": verifiedClaims };
+      claims = { verified_claims: verifiedClaims };
     }
     return claims;
   }
 
-  public collectVerifiedClaims(calims?: Record<string, unknown>, subject?: string, claimsRequest?: string): Record<string, unknown> | undefined {
-    return this.createVerifiedClaimsCollector().collectForTx(subject, subject, claimsRequest);
+  public collectVerifiedClaims(
+    calims?: Record<string, unknown>,
+    subject?: string,
+    claimsRequest?: string
+  ): Record<string, unknown> | undefined {
+    if (!calims || !subject || !claimsRequest) {
+      return;
+    }
+    return this.createVerifiedClaimsCollector().collectForTx(
+      calims,
+      subject,
+      claimsRequest
+    );
   }
 
-  public collectVerifiedClaimsForTx(subject: string, claimsRequest?: string, requestedVerifiedClaimsForTx?: string[]) {
-    return this.createVerifiedClaimsCollector().collectForTx(subject, claimsRequest, requestedVerifiedClaimsForTx);
+  public collectVerifiedClaimsForTx(
+    subject: string,
+    claimsRequest: string,
+    requestedVerifiedClaimsForTx: StringArray[]
+  ) {
+    return this.createVerifiedClaimsCollector().collectForTx(
+      subject,
+      claimsRequest,
+      requestedVerifiedClaimsForTx
+    );
   }
 
   public createVerifiedClaimsCollector(): VerifiedClaimsCollector {
-    return new VerifiedClaimsCollector((sub: string, req: unknown) => this.mSpi.getVerifiedClaims(sub, req));
+    return new VerifiedClaimsCollector((sub: string, req: unknown) =>
+      this.mSpi.getVerifiedClaims(sub, req)
+    );
   }
 
-  public authorize(ticket?: string, subject?: string, authTime?: number, acr?: string,
-    claims?: Record<string, unknown>, properties?: Property[], scopes?: string[], sub?: string,
-    claimsForTx?: Record<string, unknown>, verifiedClaimsForTx?: Record<string, unknown>) {
+  public authorize(
+    ticket: string,
+    subject: string,
+    authTime: number,
+    acr: string,
+    claims: Record<string, unknown>,
+    properties: Property[],
+    scopes: string[],
+    sub: string,
+    claimsForTx?: Record<string, unknown>,
+    verifiedClaimsForTx?: Record<string, unknown>[]
+  ) {
     try {
-      return this.getApiCaller().authorizationIssue(ticket, subject, authTime, acr, claims, properties,
-        scopes, sub, claimsForTx, verifiedClaimsForTx);
+      return this.getApiCaller().authorizationIssue(
+        ticket,
+        subject,
+        authTime,
+        acr,
+        claims,
+        properties,
+        scopes,
+        sub,
+        claimsForTx,
+        verifiedClaimsForTx
+      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      return e.getResponse();
+      throw new Error(e.messsage);
     }
   }
 
-  public fail(ticket?: string, reason: Reason) {
+  public fail(ticket: string, reason: Reason) {
     try {
-      return getApiCaller().authorizationFail(ticket, reason).getResponse();
+      return this.getApiCaller().authorizationFail(ticket, reason);
+      // .getResponse();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      return e.getResponse();
+      throw new Error(e.messsage);
     }
   }
 }
@@ -190,13 +293,13 @@ export class Params {
   private requestedClaimsForTx?: string[];
   private oldIdaFormatUsed?: boolean;
   private idTokenClaims?: string;
-  private requestedVerifiedClaimsForTx?: string[]
+  private requestedVerifiedClaimsForTx?: StringArray[];
 
   public getTicket(): string | undefined {
     return this.ticket;
   }
   public setTicket(ticket: string) {
-    this.ticket = ticket
+    this.ticket = ticket;
     return this;
   }
   public getClaimNames(): string[] | undefined {
@@ -227,25 +330,26 @@ export class Params {
     this.requestedClaimsForTx = claims;
     return this;
   }
-  public getRequestedVerifiedClaimsForTx(): string[] | undefined {
+  public getRequestedVerifiedClaimsForTx(): StringArray[] | undefined {
     return this.requestedVerifiedClaimsForTx;
   }
-  public setRequestedVerifiedClaimsForTx(claims: string[]) {
+  public setRequestedVerifiedClaimsForTx(claims: StringArray[]) {
     this.requestedVerifiedClaimsForTx = claims;
     return this;
   }
   public isOldIdaFormatUsed(): boolean | undefined {
     return this.oldIdaFormatUsed;
   }
-  public from(response: AuthorizationResponse) {
+  public static from(response: AuthorizationResponse) {
     return new Params()
-      .setTicket(response.getTicket())
-      .setClaimNames(response.getClaims())
-      .setClaimLocales(response.getClaimsLocales())
-      .setIdTokenClaims(response.getIdTokenClaims())
-      .setRequestedClaimsForTx(response.getRequestedClaimsForTx())
-      .setRequestedVerifiedClaimsForTx(response.getRequestedVerifiedClaimsForTx())
-      ;
+      .setTicket(response.getTicket() || '')
+      .setClaimNames(response.getClaims() || [])
+      .setClaimLocales(response.getClaimsLocales() || [])
+      .setIdTokenClaims(response.getIdTokenClaims() || '')
+      .setRequestedClaimsForTx(response.getRequestedClaimsForTx() || [])
+      .setRequestedVerifiedClaimsForTx(
+        response.getRequestedVerifiedClaimsForTx() || []
+      );
   }
 }
 

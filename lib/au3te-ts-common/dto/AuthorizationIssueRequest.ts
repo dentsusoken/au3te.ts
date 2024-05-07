@@ -108,12 +108,12 @@ export class AuthorizationIssueRequest {
     return this.claims;
   }
 
-  public setClaimsForTx(claims: string): AuthorizationIssueRequest;
+  public setClaimsForTx(claims?: string): AuthorizationIssueRequest;
   public setClaimsForTx(
-    claims: Record<string, object>
+    claims?: Record<string, unknown>
   ): AuthorizationIssueRequest;
   public setClaimsForTx(
-    claims: Record<string, object> | string
+    claims?: Record<string, unknown> | string
   ): AuthorizationIssueRequest {
     if (!claims) {
       return this.setClaimsForTx('');
@@ -134,14 +134,14 @@ export class AuthorizationIssueRequest {
     claims: string[];
   }): AuthorizationIssueRequest;
   public setVerifiedClaimsForTx(args: {
-    list: Record<string, object>[];
+    list?: Record<string, unknown>[];
   }): AuthorizationIssueRequest;
   public setVerifiedClaimsForTx({
     claims,
     list,
   }: {
     claims: string[];
-    list: Record<string, object>[];
+    list?: Record<string, unknown>[];
   }): AuthorizationIssueRequest {
     if (claims) {
       this.verifiedClaimsForTx = claims;
@@ -149,7 +149,7 @@ export class AuthorizationIssueRequest {
     }
 
     if (list == null || list.length == 0) {
-      this.setVerifiedClaimsForTx({ claims: [] });
+      return this.setVerifiedClaimsForTx({ claims: [] });
     }
 
     const array = Array.from(list).map((v) => Utils.toJson(v));

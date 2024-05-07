@@ -14,6 +14,8 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     '/api/%d/auth/authorization';
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =
     '/api/%d/pushed_auth_req';
+  private static readonly AUTH_AUTHORIZATION_ISSUE_API_PATH: string =
+    '/api/%d/auth/authorization/issue';
 
   private readonly mAuth: string;
   private readonly mServiceId: number | null;
@@ -110,6 +112,7 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     const params = await response.json();
 
     const authResponse = new AuthorizationResponse();
+    // TODO Authorization Endpoint Check if this is correct
     authResponse
       .setAcrs(params.acrs)
       .setAction(params.action)
@@ -126,7 +129,12 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
       .setResponseContent(params.responseContent)
       .setScopes(params.scopes)
       .setService(params.service)
-      .setSubject(params.subject);
+      .setSubject(params.subject)
+      .setTicket(params.ticket)
+      .setUserInfoClaims(params.userInfoClaims)
+      .setClaimsLocales(params.claimLocales)
+      .setRequestedClaimsForTx(params.requestedClaimsForTx)
+      .setRequestedVerifiedClaimsForTx(params.requestedVerifiedClaimsForTx);
 
     return authResponse;
   }
@@ -135,8 +143,22 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   public async authorizationIssue(
     request: AuthorizationIssueRequest
   ): Promise<AuthorizationIssueResponse> {
-    console.log('request :>> ', request);
-    return new AuthorizationIssueResponse();
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_AUTHORIZATION_ISSUE_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+
+    const authIssueResponse = new AuthorizationIssueResponse()
+      .setAction(params.action)
+      .setResponseContent(params.responseContent);
+
+    return authIssueResponse;
   }
 
   public async pushAuthorizationRequest(
@@ -155,12 +177,14 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     const params = await response.json();
 
     const parResonse = new PushedAuthReqResponse();
+    // TODO Comfirm is this correct
+    const clientAuthMethod = ClientAuthMethod.parse(params.clientAuthMethod);
     parResonse.setAction(params.action);
     parResonse.setDpopNonce(params.dpopNonce);
     parResonse.setResponseContent(params.responseContent);
     parResonse.setResultCode(response.status.toString());
     parResonse.setResultMessage(response.statusText);
-    parResonse.setClientAuthMethod(ClientAuthMethod[params.clientAuthMethod]);
+    clientAuthMethod && parResonse.setClientAuthMethod(clientAuthMethod);
     parResonse.setRequestUri(new URL(params.requestUri));
 
     return parResonse;

@@ -31,6 +31,7 @@ export class AuthorizationPageModel {
 
   constructor();
   constructor(info: AuthorizationResponse, user: User);
+  constructor(info: AuthorizationResponse, user?: User);
   constructor(info?: AuthorizationResponse, user?: User) {
     if (info && user) {
       const client: Client | undefined = info.getClient();

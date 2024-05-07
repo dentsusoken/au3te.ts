@@ -40,9 +40,9 @@ export class AuthorizationRequestHandler extends BaseHandler {
         return ResponseUtil.form(content);
       case AuthorizationResponse.Action.INTERACTION:
         return this.handleInteraction(response);
+      // TODO Implement Authorization fail
       // case AuthorizationResponse.Action.NO_INTERACTION:
       //   return handleNoInteraction(response);
-      // return ResponseUtil.createResponse(action, content);
       default:
         throw new Error('Unknown action: ' + action);
     }

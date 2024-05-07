@@ -1,3 +1,4 @@
+import { Session } from '../util/session';
 import { ClientCertificateExtractor } from './ClientCertificateExtractor';
 import { HeaderClientCertificateClientCertExtractor } from './HeaderClientCertificateClientCertExtractor';
 import { HeaderClientCertificateXSslExtractor } from './HeaderClientCertificateXSslExtractor';
@@ -26,5 +27,9 @@ export class BaseEndpoint {
     return null;
   }
   // TODO Authorization Endpoint
-  public BaseEndpoint() {}
+  public async takeAttribute(session: Session, key: string) {
+    const value = await session.get(key);
+    await session.delete(key);
+    return value;
+  }
 }

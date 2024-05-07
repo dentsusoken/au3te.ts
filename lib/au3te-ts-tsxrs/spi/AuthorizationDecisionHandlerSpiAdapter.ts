@@ -4,5 +4,7 @@ import { AuthorizationDecisionHandlerSpi } from './AuthorizationDecisionHandlerS
 export class AuthorizationDecisionHandlerSpiAdapter
   implements AuthorizationDecisionHandlerSpi
 {
-  getScopes() {}
+  getScopes(): string[] | undefined {
+    return;
+  }
 }
