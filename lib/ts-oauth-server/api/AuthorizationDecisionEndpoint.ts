@@ -13,7 +13,10 @@ export class AuthorizationDecisionEndpoint extends BaseAuthorizationDecisionEndp
       return new Response('Method not allowed', { status: 405 });
     }
 
-    const parameters = await request.json();
+    const parameters: Record<string, string> = {};
+    new URLSearchParams(await request.text()).forEach((value, key) => {
+      parameters[key] = value;
+    });
 
     const params = Object.assign(
       new Params(),

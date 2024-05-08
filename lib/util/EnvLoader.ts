@@ -1,3 +1,4 @@
+import * as process from 'node:process';
 const ENV_IDENTIFERS = [
   'API_BASE_URL',
   'API_VERSION',
