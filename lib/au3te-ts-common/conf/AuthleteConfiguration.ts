@@ -1,7 +1,7 @@
 /**
  * Authlete configuration.
  */
-export default interface AuthleteConfiguration {
+export interface AuthleteConfiguration {
   /**
    * Get the Authlete API version.
    *

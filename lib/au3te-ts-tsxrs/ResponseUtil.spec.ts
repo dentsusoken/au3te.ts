@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import ResponseUtil from './ResponseUtil';
+import { ResponseUtil } from './ResponseUtil';
 
 describe('ResponseUtil', () => {
   it('ok', async () => {

@@ -11,7 +11,7 @@ enum Status {
   INTERNAL_SERVER_ERROR = 500,
 }
 
-export default class ResponseUtil {
+export class ResponseUtil {
   static readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
   static readonly MEDIA_TYPE_HTML = 'text/html;charset=UTF-8';
   // Unused
@@ -32,7 +32,7 @@ export default class ResponseUtil {
     return this.build(Status.OK, entity, this.MEDIA_TYPE_JSON, headers);
   }
 
-  public static form(entity: string): Response {
+  public static form(entity?: string): Response {
     return this.build(Status.OK, entity, this.MEDIA_TYPE_HTML);
   }
 
@@ -56,9 +56,9 @@ export default class ResponseUtil {
     return this.build(Status.NO_CONTENT, undefined, undefined, headers);
   }
 
-  public static location(location: string): Response {
+  public static location(location?: string): Response {
     const response = this.build(Status.FOUND);
-    response.headers.set('Location', location);
+    location && response.headers.set('Location', location);
     return response;
   }
 

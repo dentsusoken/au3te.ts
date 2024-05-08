@@ -1,15 +1,16 @@
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import PushedAuthReqResponse, {
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import {
   Action,
+  PushedAuthReqResponse,
 } from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import BasicCredentials from '../au3te-ts-common/web/BasicCredentials';
-import BaseHandler from './BaseHandler';
-import ResponseUtil from './ResponseUtil';
+import { BasicCredentials } from '../au3te-ts-common/web/BasicCredentials';
+import { BaseHandler } from './BaseHandler';
+import { ResponseUtil } from './ResponseUtil';
 
 /**
  * Handler for pushed authorization request endpoint requests.
  */
-export default class PushedAuthReqHandler extends BaseHandler {
+export class PushedAuthReqHandler extends BaseHandler {
   /**
    * Constructor with an implementation of `AuthleteApi` interface.
    */

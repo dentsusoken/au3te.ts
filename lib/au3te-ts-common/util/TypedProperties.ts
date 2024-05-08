@@ -1,6 +1,6 @@
 export type Properties = { [key: string]: string };
 
-export default abstract class TypedProperties {
+export abstract class TypedProperties {
   protected constructor() {}
 
   public getString(key: string): string;

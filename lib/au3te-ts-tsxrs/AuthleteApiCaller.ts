@@ -1,10 +1,15 @@
-// import { AuthleteApi, AuthleteApiException } from 'authlete';
-import AuthleteApi from '../au3te-ts-common/api/AuthleteApi';
-import PushedAuthReqRequest from '../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import URLCoder from '../au3te-ts-common/web/URLCoder';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
+import { AuthorizationIssueRequest } from '../au3te-ts-common/dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
+import { AuthorizationRequest } from '../au3te-ts-common/dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { Property } from '../au3te-ts-common/dto/Property';
+import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import { URLCoder } from '../au3te-ts-common/web/URLCoder';
+import { ResponseUtil } from './ResponseUtil';
 
-export default class AuthleteApiCaller {
+export class AuthleteApiCaller {
   private readonly mApi: AuthleteApi;
 
   constructor(api: AuthleteApi) {
@@ -27,6 +32,133 @@ export default class AuthleteApiCaller {
 
     // 500 Internal Server Error
     return new Error(message);
+  }
+  /**
+   * Call Authlete's {@code /api/auth/authorization} API.
+   */
+  public async callAuthorization(
+    parameters: Record<string, string>
+  ): Promise<AuthorizationResponse> {
+    const params = URLCoder.formUrlEncode(parameters);
+    return this.callAuthorizationInternal(params);
+  }
+
+  private async callAuthorizationInternal(
+    parameters?: string
+  ): Promise<AuthorizationResponse> {
+    // set.has()
+    if (!parameters) {
+      parameters = '';
+    }
+    const request: AuthorizationRequest =
+      new AuthorizationRequest().setParameters(parameters);
+    try {
+      return await this.mApi.authorization(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/auth/authorization', e);
+    }
+  }
+
+  // TODO Implement authorizationFail
+  // public async authorizationFail(
+  //   ticket: string,
+  //   reason: AuthorizationFailRequest.Reason
+  // ) {
+  //   const request = new AuthorizationFailRequest()
+  //     .setTicket(ticket)
+  //     .setReason(reason);
+  //   try {
+  //     return await this.mApi.authorizationFail(request);
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   } catch (e: any) {
+  //     throw this.apiFailure('/api/auth/authorization/fail', e);
+  //   }
+  // }
+
+  /**
+   * Call Authlete's {@code /api/auth/authorization/issue} API.
+   */
+  private async callAuthorizationIssue(
+    ticket: string,
+    subject: string,
+    authTime: number,
+    acr: string,
+    claims: Record<string, unknown>,
+    properties: Property[],
+    scopes: string[],
+    sub: string,
+    claimsForTx?: Record<string, unknown>,
+    verifiedClaimsForTx?: Record<string, unknown>[]
+  ): Promise<AuthorizationIssueResponse> {
+    const request: AuthorizationIssueRequest = new AuthorizationIssueRequest()
+      .setTicket(ticket)
+      .setSubject(subject)
+      .setAuthTime(authTime)
+      .setAcr(acr)
+      .setProperties(properties)
+      .setScopes(scopes)
+      .setSub(sub)
+      .setClaimsForTx(claimsForTx)
+      .setVerifiedClaimsForTx({ list: verifiedClaimsForTx });
+
+    if (!claims && Object.keys(claims).length > 0) {
+      request.setClaims(claims);
+    }
+    try {
+      return await this.mApi.authorizationIssue(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/auth/authorization/issue', e);
+    }
+  }
+
+  /**
+   * Issue an authorization code, an ID token and/or an access token.
+   * This method calls Authlete's {@code /api/auth/authorization/issue} API.
+   */
+  public async authorizationIssue(
+    ticket: string,
+    subject: string,
+    authTime: number,
+    acr: string,
+    claims: Record<string, unknown>,
+    properties: Property[],
+    scopes: string[],
+    sub: string,
+    claimsForTx?: Record<string, unknown>,
+    verifiedClaimsForTx?: Record<string, unknown>[]
+  ): Promise<Response> {
+    const response: AuthorizationIssueResponse =
+      await this.callAuthorizationIssue(
+        ticket,
+        subject,
+        authTime,
+        acr,
+        claims,
+        properties,
+        scopes,
+        sub,
+        claimsForTx,
+        verifiedClaimsForTx
+      );
+
+    const action: AuthorizationIssueResponse.Action | undefined =
+      response.getAction();
+    const content: string | undefined = response.getResponseContent();
+
+    switch (action) {
+      case AuthorizationIssueResponse.Action.INTERNAL_SERVER_ERROR:
+        return ResponseUtil.internalServerError(content);
+      case AuthorizationIssueResponse.Action.BAD_REQUEST:
+        return ResponseUtil.badRequest(content);
+      case AuthorizationIssueResponse.Action.LOCATION:
+        return ResponseUtil.location(content);
+      case AuthorizationIssueResponse.Action.FORM:
+        return ResponseUtil.form(content);
+      default:
+        throw this.unknownAction('/api/auth/authorization/issue', action);
+    }
   }
 
   /**
@@ -87,7 +219,6 @@ export default class AuthleteApiCaller {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       // the API call failed
-      // TODO Confirm does this work?
       throw this.apiFailure('/api/pushed_auth_req', e);
     }
   }

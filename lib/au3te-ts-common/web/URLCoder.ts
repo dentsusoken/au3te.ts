@@ -1,6 +1,6 @@
 // import { stringify } from 'node:querystring';
 
-export default class URLCoder {
+export class URLCoder {
   static encode(input: string): string {
     try {
       return encodeURIComponent(input).replace(/[!'()*]/g, function (c) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
+import { HeaderClientCertificateExtractor } from './HeaderClientCertificateExtractor';
 
 describe('HeaderClientCertificateExtractor', () => {
   it('extractClientCertificateChain returns null when header is missing', async () => {

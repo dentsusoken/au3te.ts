@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import HeaderClientCertificateClientCertExtractor from './HeaderClientCertificateClientCertExtractor';
+import { HeaderClientCertificateClientCertExtractor } from './HeaderClientCertificateClientCertExtractor';
 
 describe('HeaderClientCertificateClientCertExtractor', () => {
   describe('extractClientCertificateChain', () => {

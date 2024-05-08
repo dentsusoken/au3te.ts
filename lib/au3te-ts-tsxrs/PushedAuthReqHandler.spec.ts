@@ -1,8 +1,11 @@
 import { describe, expect, it, vitest } from 'vitest';
-import PushedAuthReqResponse, {
+import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
+import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import {
   Action,
+  PushedAuthReqResponse,
 } from '../au3te-ts-common/dto/PushedAuthReqResponse';
-import PushedAuthReqHandler, { Params } from './PushedAuthReqHandler';
+import { Params, PushedAuthReqHandler } from './PushedAuthReqHandler';
 
 describe('PushedAuthReqHandler', () => {
   it('should handle a PAR request', async () => {
@@ -11,6 +14,10 @@ describe('PushedAuthReqHandler', () => {
       pushAuthorizationRequest: vitest
         .fn()
         .mockReturnValue(new PushedAuthReqResponse().setAction(Action.CREATED)),
+      authorization: vitest.fn().mockResolvedValue(new AuthorizationResponse()),
+      authorizationIssue: vitest
+        .fn()
+        .mockResolvedValue(new AuthorizationIssueResponse()),
     };
 
     // Create an instance of PushedAuthReqHandler
@@ -31,6 +38,10 @@ describe('PushedAuthReqHandler', () => {
       pushAuthorizationRequest: vitest
         .fn()
         .mockRejectedValue(new Error('Unexpected error')),
+      authorization: vitest.fn().mockResolvedValue(new AuthorizationResponse()),
+      authorizationIssue: vitest
+        .fn()
+        .mockResolvedValue(new AuthorizationIssueResponse()),
     };
 
     // Create an instance of PushedAuthReqHandler

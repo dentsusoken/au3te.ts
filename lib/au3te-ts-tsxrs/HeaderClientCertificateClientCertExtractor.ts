@@ -1,13 +1,12 @@
-import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
-// TODO Implement this class
-export default class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
+import { HeaderClientCertificateExtractor } from './HeaderClientCertificateExtractor';
+export class HeaderClientCertificateClientCertExtractor extends HeaderClientCertificateExtractor {
   constructor() {
     super(['Client-Cert', 'Client-Cert-Chain']);
   }
 
   public override async extractClientCertificateChain(
     request: Request
-  ): Promise<string[] | null> {
+  ): Promise<string[] | undefined> {
     const listCert: string[] = [];
 
     for (const headerName of this.getClientCertificateChainHeaders()) {
@@ -17,12 +16,11 @@ export default class HeaderClientCertificateClientCertExtractor extends HeaderCl
       }
     }
     if (listCert.length === 0) {
-      return null;
+      return undefined;
     }
     return this.decodeByteBufferCerts(listCert);
   }
 
-  // TODO Confirm if this operates correctly or not
   private decodeByteBufferCerts(sequenceItems: string[]): string[] {
     const certs: string[] = [];
     for (const sequenceItem of sequenceItems) {
@@ -39,8 +37,7 @@ export default class HeaderClientCertificateClientCertExtractor extends HeaderCl
   public override setClientCertificateChainHeaders(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _: string[]
-    // clientCertificateChainHeaders: string[]
-  ): void {
+  ): HeaderClientCertificateExtractor {
     throw new Error('Unsupported operation');
   }
 }

@@ -1,9 +1,10 @@
-import ClientCertificateExtractor from './ClientCertificateExtractor';
-import HeaderClientCertificateClientCertExtractor from './HeaderClientCertificateClientCertExtractor';
-import HeaderClientCertificateXSslExtractor from './HeaderClientCertificateXSslExtractor';
-import HttpsRequestClientCertificateExtractor from './HttpsRequestClientCertificateExtractor';
+import { Session } from '../util/session';
+import { ClientCertificateExtractor } from './ClientCertificateExtractor';
+import { HeaderClientCertificateClientCertExtractor } from './HeaderClientCertificateClientCertExtractor';
+import { HeaderClientCertificateXSslExtractor } from './HeaderClientCertificateXSslExtractor';
+import { HttpsRequestClientCertificateExtractor } from './HttpsRequestClientCertificateExtractor';
 
-export default class BaseEndpoint {
+export class BaseEndpoint {
   private clientCertificateExtractors: ClientCertificateExtractor[] = [
     new HttpsRequestClientCertificateExtractor(),
     new HeaderClientCertificateXSslExtractor(),
@@ -24,5 +25,11 @@ export default class BaseEndpoint {
     }
 
     return null;
+  }
+
+  public async takeAttribute(session: Session, key: string) {
+    const value = await session.get(key);
+    await session.delete(key);
+    return value;
   }
 }

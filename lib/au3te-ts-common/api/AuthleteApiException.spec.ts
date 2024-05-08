@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import AuthleteApiException from './AuthleteApiException';
+import { AuthleteApiException } from './AuthleteApiException';
 
 test('AuthleteApiException', () => {
   const statusCode = 500;

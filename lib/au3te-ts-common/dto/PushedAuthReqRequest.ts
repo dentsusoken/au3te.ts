@@ -1,7 +1,7 @@
 /**
  * Request to Authlete's /api/pushed_auth_req API.
  */
-export default class PushedAuthReqRequest {
+export class PushedAuthReqRequest {
   /**
    * Request parameters that the pushed authorization request endpoint of the
    * authorization server implementation received from the client application.

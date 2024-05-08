@@ -1,16 +1,28 @@
-import AuthleteApiVersion from '../../au3te-ts-common/conf/AuthleteApiVersion';
-import AuthleteConfiguration from '../../au3te-ts-common/conf/AuthleteConfiguration';
-import PushedAuthReqRequest from '../../au3te-ts-common/dto/PushedAuthReqRequest';
-import PushedAuthReqResponse from '../../au3te-ts-common/dto/PushedAuthReqResponse';
-import ClientAuthMethod from '../../au3te-ts-common/types/ClientAuthMethod';
-import AuthleteApiJaxrsImpl, { AuthleteApiCall } from './AuthleteApiJaxrsImpl';
+import { AuthleteApiVersion } from '../../au3te-ts-common/conf/AuthleteApiVersion';
+import { AuthleteConfiguration } from '../../au3te-ts-common/conf/AuthleteConfiguration';
+import { AuthorizationFailRequest } from '../../au3te-ts-common/dto/AuthorizationFailRequest';
+import { AuthorizationFailResponse } from '../../au3te-ts-common/dto/AuthorizationFailResponse';
+import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
+import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
+import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
+import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
+import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { ClientAuthMethod } from '../../au3te-ts-common/types/ClientAuthMethod';
+import { AuthleteApiCall, AuthleteApiJaxrsImpl } from './AuthleteApiJaxrsImpl';
 
-export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
+export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
+  private static readonly AUTH_AUTHORIZATION_API_PATH: string =
+    '/api/%d/auth/authorization';
+  private static readonly AUTH_AUTHORIZATION_FAIL_API_PATH: string =
+    '/api/%d/auth/authorization/fail';
   private static readonly PUSHED_AUTH_REQ_API_PATH: string =
     '/api/%d/pushed_auth_req';
+  private static readonly AUTH_AUTHORIZATION_ISSUE_API_PATH: string =
+    '/api/%d/auth/authorization/issue';
 
   private readonly mAuth: string;
-  private readonly mServiceId: number | null;
+  private readonly mServiceId: number | undefined;
   /**
    * The constructor with an instance of {@link AuthleteConfiguration}.
    *
@@ -25,7 +37,7 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     super(configuration);
 
     // Authlete API version specified by the configuration.
-    const version: AuthleteApiVersion | null = AuthleteApiVersion.parse(
+    const version: AuthleteApiVersion | undefined = AuthleteApiVersion.parse(
       configuration.getApiVersion()
     );
 
@@ -36,10 +48,10 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     }
 
     this.mAuth = this.createCredentials(configuration);
-    if (configuration.getServiceApiKey() !== null) {
+    if (configuration.getServiceApiKey() !== undefined) {
       this.mServiceId = parseInt(configuration.getServiceApiKey());
     } else {
-      this.mServiceId = null;
+      this.mServiceId = undefined;
     }
   }
 
@@ -47,7 +59,7 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
    * Create an authorization header for the access token.
    */
   private createCredentials(configuration: AuthleteConfiguration): string {
-    if (configuration.getServiceAccessToken() !== null) {
+    if (configuration.getServiceAccessToken() !== undefined) {
       // TODO implement DPoP
       // if (this.isDpopEnabled()) {
       //   return 'DPoP ' + configuration.getServiceAccessToken();
@@ -88,6 +100,89 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return await super.callPostApi(this.mAuth, path, request);
   }
 
+  public async authorization(
+    request: AuthorizationRequest
+  ): Promise<AuthorizationResponse> {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_AUTHORIZATION_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+
+    const authResponse = new AuthorizationResponse();
+    authResponse
+      .setAcrs(params.acrs)
+      .setAction(params.action as AuthorizationResponse.Action)
+      .setAuthorizationDetails(params.authorizationDetails)
+      .setClaims(params.claims)
+      .setClaimsAtUserInfo(params.claimsAtUserInfo)
+      .setClient(params.client)
+      .setDynamicScopes(params.dynamicScopes)
+      .setIdTokenClaims(params.idTokenClaims)
+      .setLoginHint(params.loginHint)
+      .setMaxAge(params.maxAge)
+      .setPrompts(params.prompts)
+      .setPurpose(params.purpose)
+      .setResponseContent(params.responseContent)
+      .setScopes(params.scopes)
+      .setService(params.service)
+      .setSubject(params.subject)
+      .setTicket(params.ticket)
+      .setUserInfoClaims(params.userInfoClaims)
+      .setClaimsLocales(params.claimLocales)
+      .setRequestedClaimsForTx(params.requestedClaimsForTx)
+      .setRequestedVerifiedClaimsForTx(params.requestedVerifiedClaimsForTx);
+
+    return authResponse;
+  }
+
+  public async authorizationFail(
+    request: AuthorizationFailRequest
+  ): Promise<AuthorizationFailResponse> {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_AUTHORIZATION_FAIL_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+
+    const authFailResponse = new AuthorizationFailResponse()
+      .setAction(params.action)
+      .setResponseContent(params.responseContent);
+
+    return authFailResponse;
+  }
+
+  public async authorizationIssue(
+    request: AuthorizationIssueRequest
+  ): Promise<AuthorizationIssueResponse> {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_AUTHORIZATION_ISSUE_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+
+    const authIssueResponse = new AuthorizationIssueResponse()
+      .setAction(params.action)
+      .setResponseContent(params.responseContent);
+
+    return authIssueResponse;
+  }
+
   public async pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse> {
@@ -104,12 +199,14 @@ export default class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     const params = await response.json();
 
     const parResonse = new PushedAuthReqResponse();
+    // TODO Comfirm is this correct
+    const clientAuthMethod = ClientAuthMethod.parse(params.clientAuthMethod);
     parResonse.setAction(params.action);
     parResonse.setDpopNonce(params.dpopNonce);
     parResonse.setResponseContent(params.responseContent);
     parResonse.setResultCode(response.status.toString());
     parResonse.setResultMessage(response.statusText);
-    parResonse.setClientAuthMethod(ClientAuthMethod[params.clientAuthMethod]);
+    clientAuthMethod && parResonse.setClientAuthMethod(clientAuthMethod);
     parResonse.setRequestUri(new URL(params.requestUri));
 
     return parResonse;

@@ -1,14 +1,14 @@
-export default class BasicCredentials {
+export class BasicCredentials {
   private static readonly CHALLENGE_PATTERN = /^Basic *([^ ]+) *$/i;
 
   private readonly mUserId: string;
   private readonly mPassword: string;
-  private mFormatted: string | null;
+  private mFormatted: string | undefined;
 
   constructor(userId: string, password: string) {
     this.mUserId = userId;
     this.mPassword = password;
-    this.mFormatted = null;
+    this.mFormatted = undefined;
   }
 
   getUserId(): string {
@@ -19,9 +19,9 @@ export default class BasicCredentials {
     return this.mPassword;
   }
 
-  static parse(input: string): BasicCredentials | null {
-    if (input === null) {
-      return null;
+  static parse(input: string): BasicCredentials | undefined {
+    if (input === undefined) {
+      return undefined;
     }
 
     const matcher = input.match(BasicCredentials.CHALLENGE_PATTERN);
@@ -33,8 +33,8 @@ export default class BasicCredentials {
     const encoded = matcher[1];
     const decoded = Buffer.from(encoded, 'base64').toString('utf-8');
     const credentials = decoded.split(':', 2);
-    let userId: string | null = null;
-    let password: string | null = null;
+    let userId: string | undefined = undefined;
+    let password: string | undefined = undefined;
 
     // switch (credentials.length) {
     //   case 2:
@@ -53,7 +53,7 @@ export default class BasicCredentials {
   // }
 
   format(): string {
-    if (this.mFormatted !== null) {
+    if (this.mFormatted !== undefined) {
       return this.mFormatted;
     }
 

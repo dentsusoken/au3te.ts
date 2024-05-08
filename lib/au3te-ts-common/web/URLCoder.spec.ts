@@ -1,12 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import URLCoder from './URLCoder';
+import { URLCoder } from './URLCoder';
 
 describe('URLCoder', () => {
   it('encode', () => {
     const input = 'Hello World!';
     const encoded = URLCoder.encode(input);
-    console.log('encoded :>> ', encoded);
-
     expect(encoded).toEqual('Hello%20World%21');
   });
 

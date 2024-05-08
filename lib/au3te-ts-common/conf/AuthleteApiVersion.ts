@@ -6,9 +6,9 @@ enum AuthleteApiVersion {
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace AuthleteApiVersion {
-  export function parse(version: string): AuthleteApiVersion | null {
-    if (version === null) {
-      return null;
+  export function parse(version: string): AuthleteApiVersion | undefined {
+    if (version === undefined) {
+      return undefined;
     }
 
     try {
@@ -18,13 +18,13 @@ namespace AuthleteApiVersion {
       return (
         (AuthleteApiVersion[
           version as keyof typeof AuthleteApiVersion
-        ] as AuthleteApiVersion) || null
+        ] as AuthleteApiVersion) || undefined
       );
     } catch (e) {
       // The given string did not match any known version.
-      return null;
+      return undefined;
     }
   }
 }
 
-export default AuthleteApiVersion;
+export { AuthleteApiVersion };

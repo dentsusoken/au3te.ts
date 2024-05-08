@@ -1,6 +1,6 @@
-import HeaderClientCertificateExtractor from './HeaderClientCertificateExtractor';
+import { HeaderClientCertificateExtractor } from './HeaderClientCertificateExtractor';
 
-export default class HeaderClientCertificateXSslExtractor extends HeaderClientCertificateExtractor {
+export class HeaderClientCertificateXSslExtractor extends HeaderClientCertificateExtractor {
   constructor() {
     super([
       'X-Ssl-Cert', // the client's certificate

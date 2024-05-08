@@ -1,6 +1,6 @@
-import ClientCertificateExtractor from './ClientCertificateExtractor';
+import { ClientCertificateExtractor } from './ClientCertificateExtractor';
 
-export default class HeaderClientCertificateExtractor
+export class HeaderClientCertificateExtractor
   implements ClientCertificateExtractor
 {
   private clientCertificateChainHeaders: string[] = [];
@@ -11,13 +11,13 @@ export default class HeaderClientCertificateExtractor
 
   public async extractClientCertificateChain(
     request: Request
-  ): Promise<string[] | null> {
+  ): Promise<string[] | undefined> {
     const headerCerts = new Array<string>();
 
     for (const headerName of this.getClientCertificateChainHeaders()) {
       const header = request.headers.get(headerName);
       if (!header) {
-        return null;
+        return undefined;
       }
       const cert = HeaderClientCertificateExtractor.normalizeCert(header);
       if (cert) {
@@ -26,22 +26,22 @@ export default class HeaderClientCertificateExtractor
     }
 
     if (headerCerts.length < 1) {
-      return null;
+      return undefined;
     }
 
     return headerCerts;
   }
 
-  private static normalizeCert(cert: string): string | null {
+  private static normalizeCert(cert: string): string | undefined {
     if (!cert) {
-      return null;
+      return undefined;
     }
 
-    // "(null)" is a value that misconfigured Apache servers will send
+    // "(undefined)" is a value that misconfigured Apache servers will send
     // instead of a missing header. This happens when "SSLOptions" does
     // not include "+ExportCertData".
-    if (cert === '(null)' || cert === 'null') {
-      return null;
+    if (cert === '(undefined)' || cert === 'undefined') {
+      return undefined;
     }
 
     // Nginx's $ssl_client_escaped_cert holds a "urlencoded" client
@@ -68,8 +68,8 @@ export default class HeaderClientCertificateExtractor
 
   public setClientCertificateChainHeaders(
     clientCertificateChainHeaders: string[]
-  ): void {
+  ): HeaderClientCertificateExtractor {
     this.clientCertificateChainHeaders = clientCertificateChainHeaders;
-    throw new Error('Unsupported operation');
+    return this;
   }
 }

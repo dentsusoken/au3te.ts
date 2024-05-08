@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import PushedAuthReqRequest from './PushedAuthReqRequest';
+import { PushedAuthReqRequest } from './PushedAuthReqRequest';
 
 describe('PushedAuthReqRequest', () => {
   const request = new PushedAuthReqRequest();

@@ -2,7 +2,9 @@ interface X509Certificate {
   getEncoded(): Uint8Array;
 }
 interface ClientCertificateExtractor {
-  extractClientCertificateChain(request: Request): Promise<string[] | null>;
+  extractClientCertificateChain(
+    request: Request
+  ): Promise<string[] | undefined>;
 }
 
 // TODO move to  util?
@@ -14,19 +16,19 @@ const base64 = {
   },
 };
 
-export default class HttpsRequestClientCertificateExtractor
+export class HttpsRequestClientCertificateExtractor
   implements ClientCertificateExtractor
 {
   async extractClientCertificateChain(
     request: Request
-  ): Promise<string[] | null> {
+  ): Promise<string[] | undefined> {
     // TODO comfirm is this correct
     const certs = (await request.json())[
       'javax.servlet.request.X509Certificate'
-    ] as X509Certificate[] | null;
+    ] as X509Certificate[] | undefined;
 
     if (!certs || certs.length === 0) {
-      return null;
+      return undefined;
     }
 
     const pemEncoded: string[] = [];
@@ -36,7 +38,7 @@ export default class HttpsRequestClientCertificateExtractor
         pemEncoded[i] = this.toPEM(certs[i]);
       }
     } catch (e) {
-      return null;
+      return undefined;
     }
 
     return pemEncoded;

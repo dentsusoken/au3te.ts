@@ -1,5 +1,5 @@
-import { ClientAuthMethodProperty } from '../types/ClientAuthMethod';
-import ApiResponse from './ApiResponse';
+import { ClientAuthMethod } from '../types/ClientAuthMethod';
+import { ApiResponse } from './ApiResponse';
 
 export enum Action {
   CREATED = 'CREATED',
@@ -10,10 +10,10 @@ export enum Action {
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 }
 
-export default class PushedAuthReqResponse extends ApiResponse {
+export class PushedAuthReqResponse extends ApiResponse {
   private action?: Action;
   private responseContent?: string;
-  private clientAuthMethod?: ClientAuthMethodProperty;
+  private clientAuthMethod?: ClientAuthMethod;
   private requestUri?: URL;
   private dpopNonce?: string;
 
@@ -37,12 +37,12 @@ export default class PushedAuthReqResponse extends ApiResponse {
     return this;
   }
 
-  public getClientAuthMethod(): ClientAuthMethodProperty | undefined {
+  public getClientAuthMethod(): ClientAuthMethod | undefined {
     return this.clientAuthMethod;
   }
 
   public setClientAuthMethod(
-    clientAuthMethod: ClientAuthMethodProperty
+    clientAuthMethod: ClientAuthMethod
   ): PushedAuthReqResponse {
     this.clientAuthMethod = clientAuthMethod;
     return this;

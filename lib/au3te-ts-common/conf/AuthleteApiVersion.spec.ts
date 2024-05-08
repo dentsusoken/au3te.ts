@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import AuthleteApiVersion from './AuthleteApiVersion';
+import { AuthleteApiVersion } from './AuthleteApiVersion';
 
 describe('AuthleteApiVersion', () => {
   it('parse - valid version', () => {
@@ -11,9 +11,7 @@ describe('AuthleteApiVersion', () => {
   it('parse - invalid version', () => {
     const version = 'v3';
     const result = AuthleteApiVersion.parse(version);
-    console.log(result);
-
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('parse - null version', () => {
