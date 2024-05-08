@@ -115,7 +115,7 @@ export class AuthorizationIssueRequest {
   public setClaimsForTx(
     claims?: Record<string, unknown> | string
   ): AuthorizationIssueRequest {
-    if (!claims) {
+    if (!claims && typeof claims !== 'string') {
       return this.setClaimsForTx('');
     }
     if (typeof claims === 'string') {

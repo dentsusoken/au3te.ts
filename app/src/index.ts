@@ -1,5 +1,5 @@
 import { KVNamespace } from '@cloudflare/workers-types';
-import { PushedAuthReqEndpoint, loadEnv } from 'au3te';
+import { AuthorizationEndpoint, PushedAuthReqEndpoint, loadEnv } from 'au3te';
 import { Hono } from 'hono';
 import { KVSession } from './util/session';
 
@@ -30,6 +30,24 @@ app.get('/session/get', async (c) => {
   const value = await session.get('params');
   console.log('value :>> ', value);
   return c.text(typeof value === 'string' ? value : JSON.stringify(value));
+});
+
+app.get('/api/authorization', async (c) => {
+  const session = await KVSession(c);
+  const endpoint = new AuthorizationEndpoint();
+  return endpoint.get(c.req.raw, session);
+});
+
+app.post('/api/authorization', async (c) => {
+  const session = await KVSession(c);
+  const endpoint = new AuthorizationEndpoint();
+  return endpoint.post(c.req.raw, session);
+});
+
+app.post('/api/decision', async (c) => {
+  const session = await KVSession(c);
+  const endpoint = new AuthorizationEndpoint();
+  return endpoint.post(c.req.raw, session);
 });
 
 app.post('/api/par', (c) => {

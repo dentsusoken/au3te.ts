@@ -16,6 +16,20 @@ interface AuthleteApi {
    *         Response from the API.
    */
   authorization(request: AuthorizationRequest): Promise<AuthorizationResponse>;
+
+  /**
+   * Call Authlete's {@code /auth/authorization/fail} API.
+   *
+   * @param request
+   *         Request parameters passed to the API.
+   *
+   * @return
+   *         Response from the API.
+   */
+  // authorizationFail(
+  //   request: AuthorizationFailRequest
+  // ): Promise<AuthorizationFailResponse>;
+
   /**
    * Call Authlete's {@code /auth/authorization/issue} API.
    *

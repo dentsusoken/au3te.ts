@@ -3,16 +3,16 @@ import { loadEnv } from './EnvLoader';
 
 test('loadEnv', () => {
   const env = {
-    VAR1: 'value1',
-    VAR2: 123,
-    VAR3: null,
-    VAR4: undefined,
+    API_BASE_URL: 'value1',
+    API_VERSION: 123,
+    API_KEY: null,
+    ACCESS_TOKEN: undefined,
   };
 
   loadEnv(env);
 
-  expect(process.env.VAR1).toEqual('value1');
-  expect(process.env.VAR2).toEqual('123');
-  expect(process.env.VAR3).toBeUndefined();
-  expect(process.env.VAR4).toBeUndefined();
+  expect(process.env.API_BASE_URL).toEqual('value1');
+  expect(process.env.API_VERSION).toEqual('123');
+  expect(process.env.API_KEY).toBeUndefined();
+  expect(process.env.ACCESS_TOKEN).toBeUndefined();
 });

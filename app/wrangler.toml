@@ -6,8 +6,13 @@ compatibility_flags = [ "nodejs_compat" ]
 # MY_VAR = "my-variable"
 
 # [[kv_namespaces]]
-# binding = "MY_KV_NAMESPACE"
-# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# binding = "MY_KV"
+# id = "462dd4a8b36543fcaecab1ffa81d3135"
+# preview_id = "d59ec1b11bf0414390cd2a7b6dc18cc3"
+[[kv_namespaces]]
+binding = "_Session"
+id = "280b8aa6cefc409d9617cf5b40a87c0c"
+preview_id = "9665edc832e94786ab8a6cafeabd2789"
 
 # [[r2_buckets]]
 # binding = "MY_BUCKET"
@@ -20,3 +25,6 @@ compatibility_flags = [ "nodejs_compat" ]
 
 # [ai]
 # binding = "AI"
+
+# [triggers]
+# crons = ["0 */1 * * *","59 23 LW * *","*/3 * * * *"]

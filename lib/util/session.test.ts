@@ -32,7 +32,6 @@ describe('SessionUtils', () => {
       minute: 30,
       second: 0,
     });
-    console.log('expireTime :>> ', expireTime);
     expect(typeof expireTime).toEqual('number');
     expect(expireTime).toBeGreaterThan(0);
   });

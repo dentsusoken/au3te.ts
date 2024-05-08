@@ -1,5 +1,4 @@
 import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
-import { Reason } from '../au3te-ts-common/dto/AuthorizationFailRequest';
 import { AuthorizationIssueRequest } from '../au3te-ts-common/dto/AuthorizationIssueRequest';
 import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../au3te-ts-common/dto/AuthorizationRequest';
@@ -37,7 +36,6 @@ export class AuthleteApiCaller {
   /**
    * Call Authlete's {@code /api/auth/authorization} API.
    */
-  // TODO Authorization Endpoint
   public async callAuthorization(
     parameters: Record<string, string>
   ): Promise<AuthorizationResponse> {
@@ -62,13 +60,25 @@ export class AuthleteApiCaller {
     }
   }
 
-  // TODO Authorization Endpoint
-  public async authorizationFail(ticket: string, reason: Reason) {}
+  // TODO Implement authorizationFail
+  // public async authorizationFail(
+  //   ticket: string,
+  //   reason: AuthorizationFailRequest.Reason
+  // ) {
+  //   const request = new AuthorizationFailRequest()
+  //     .setTicket(ticket)
+  //     .setReason(reason);
+  //   try {
+  //     return await this.mApi.authorizationFail(request);
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   } catch (e: any) {
+  //     throw this.apiFailure('/api/auth/authorization/fail', e);
+  //   }
+  // }
 
   /**
    * Call Authlete's {@code /api/auth/authorization/issue} API.
    */
-  // TODO Authorization Endpoint
   private async callAuthorizationIssue(
     ticket: string,
     subject: string,
@@ -80,7 +90,7 @@ export class AuthleteApiCaller {
     sub: string,
     claimsForTx?: Record<string, unknown>,
     verifiedClaimsForTx?: Record<string, unknown>[]
-  ) {
+  ): Promise<AuthorizationIssueResponse> {
     const request: AuthorizationIssueRequest = new AuthorizationIssueRequest()
       .setTicket(ticket)
       .setSubject(subject)
@@ -107,7 +117,6 @@ export class AuthleteApiCaller {
    * Issue an authorization code, an ID token and/or an access token.
    * This method calls Authlete's {@code /api/auth/authorization/issue} API.
    */
-  // TODO Authorization Endpoint
   public async authorizationIssue(
     ticket: string,
     subject: string,
@@ -119,7 +128,7 @@ export class AuthleteApiCaller {
     sub: string,
     claimsForTx?: Record<string, unknown>,
     verifiedClaimsForTx?: Record<string, unknown>[]
-  ) {
+  ): Promise<Response> {
     const response: AuthorizationIssueResponse =
       await this.callAuthorizationIssue(
         ticket,

@@ -15,40 +15,44 @@ const params = {
   client_id: process.env.CLIENT_ID || '',
 };
 
-describe('PushedAuthReqEndpoint', async () => {
-  it('should post application/json', async () => {
-    const endpoint = new PushedAuthReqEndpoint();
-    const request = new Request('https://example.com', {
-      headers: [['Content-Type', 'application/json;charset=UTF-8']],
-      body: JSON.stringify(params),
-      method: 'POST',
+describe(
+  'PushedAuthReqEndpoint',
+  async () => {
+    it('should post application/json', async () => {
+      const endpoint = new PushedAuthReqEndpoint();
+      const request = new Request('https://example.com', {
+        headers: [['Content-Type', 'application/json;charset=UTF-8']],
+        body: JSON.stringify(params),
+        method: 'POST',
+      });
+
+      const response = await endpoint.post(request);
+      const body = await response.json();
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      expect(body.expires_in).toBeDefined();
+      expect(body.request_uri).toBeDefined();
     });
 
-    const response = await endpoint.post(request);
-    const body = await response.json();
-    expect(response).toBeDefined();
-    expect(response.status).toBe(201);
-    expect(body.expires_in).toBeDefined();
-    expect(body.request_uri).toBeDefined();
-  });
+    it('should post application/x-www-form-urlencoded', async () => {
+      const endpoint = new PushedAuthReqEndpoint();
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        searchParams.append(key, value);
+      });
+      const request = new Request('https://example.com', {
+        headers: [['Content-Type', 'application/x-www-form-urlencoded']],
+        body: searchParams.toString(),
+        method: 'POST',
+      });
 
-  it('should post application/x-www-form-urlencoded', async () => {
-    const endpoint = new PushedAuthReqEndpoint();
-    const searchParams = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      searchParams.append(key, value);
+      const response = await endpoint.post(request);
+      const body = await response.json();
+      expect(response).toBeDefined();
+      expect(response.status).toBe(201);
+      expect(body.expires_in).toBeDefined();
+      expect(body.request_uri).toBeDefined();
     });
-    const request = new Request('https://example.com', {
-      headers: [['Content-Type', 'application/x-www-form-urlencoded']],
-      body: searchParams.toString(),
-      method: 'POST',
-    });
-
-    const response = await endpoint.post(request);
-    const body = await response.json();
-    expect(response).toBeDefined();
-    expect(response.status).toBe(201);
-    expect(body.expires_in).toBeDefined();
-    expect(body.request_uri).toBeDefined();
-  });
-});
+  },
+  { timeout: 100000 }
+);

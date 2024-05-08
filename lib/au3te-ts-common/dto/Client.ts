@@ -1,6 +1,5 @@
 import { SubjectType } from '../types/SubjectType';
 
-// TODO à¿ì°é¿ëïçœÇ›
 export class Client {
   private clientName?: string;
   private logoUri?: URL;

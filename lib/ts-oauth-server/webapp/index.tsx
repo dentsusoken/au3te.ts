@@ -1,4 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+import './css/index.css';
 
 // const App = () => <div>Use React !!</div>;
 type PageProps = {

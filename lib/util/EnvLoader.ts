@@ -32,12 +32,4 @@ export function loadEnv(env?: Record<string, unknown>) {
       process.env[key] = value.toString();
     }
   });
-  // Object.entries(env).forEach(([key, value]) => {
-  //   if (!value) return;
-  //   process.env[key] = value as string;
-  // });
-  // console.log('process.env :>> ', process.env);
-  // (process.env._Session as unknown as KVNamespace)
-  //   .get('test')
-  //   .then((value) => console.log('value :>> ', value));
 }

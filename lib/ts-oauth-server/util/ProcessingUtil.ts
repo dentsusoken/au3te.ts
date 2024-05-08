@@ -1,4 +1,26 @@
-// TODO Authorization Endpoint
+import { User } from '../../au3te-ts-common/types/User';
+import { Session } from '../../util/session';
+import { UserDao } from '../db/UserDao';
+
 export class ProcessingUtil {
-  getUser() {}
+  static async getUser(
+    session: Session,
+    parameters: Record<string, string>
+  ): Promise<User> {
+    const sessionUser = (await session.get('user')) as User;
+    if (sessionUser) {
+      return sessionUser;
+    }
+
+    const loginUser = UserDao.getByCredentials(
+      parameters['loginId'],
+      parameters['password']
+    );
+
+    if (loginUser) {
+      session.set('user', loginUser);
+      session.set('authTime', Date.now());
+    }
+    return loginUser;
+  }
 }

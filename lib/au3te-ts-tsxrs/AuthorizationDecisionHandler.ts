@@ -1,15 +1,11 @@
 import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
-import { VerifiedClaims } from '../au3te-ts-common/assurance/constraint/VerifiedClaims';
-import { VerifiedClaimsConstraint } from '../au3te-ts-common/assurance/constraint/VerifiedClaimsConstraint';
-import { VerifiedClaimsContainerConstraint } from '../au3te-ts-common/assurance/constraint/VerifiedClaimsContainerConstraint';
-import { Reason } from '../au3te-ts-common/dto/AuthorizationFailRequest';
 import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
 import { Property } from '../au3te-ts-common/dto/Property';
 import { StringArray } from '../au3te-ts-common/dto/StringArray';
 import { BaseHandler } from './BaseHandler';
 import { VerifiedClaimsCollector } from './VerifiedClaimsCollector';
 import { AuthorizationDecisionHandlerSpi } from './spi/AuthorizationDecisionHandlerSpi';
-// TODO Authorization Endpoint
+
 class AuthorizationDecisionHandler extends BaseHandler {
   private readonly mSpi: AuthorizationDecisionHandlerSpi;
   constructor(api: AuthleteApi, spi: AuthorizationDecisionHandlerSpi) {
@@ -17,7 +13,7 @@ class AuthorizationDecisionHandler extends BaseHandler {
     this.mSpi = spi;
   }
 
-  public handle(params: Params) {
+  public async handle(params: Params): Promise<Response> {
     try {
       return this.process(params);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,35 +24,39 @@ class AuthorizationDecisionHandler extends BaseHandler {
     }
   }
 
-  public process(params: Params) {
+  public async process(params: Params): Promise<Response> {
     if (this.mSpi.isClientAuthorized() === false) {
-      return this.fail(params.getTicket() || '', Reason.DENIED);
+      // TODO Implement Authorization failed
+      throw new Error('Not implemented yet');
     }
-    const subject: string = this.mSpi.getUserSubject();
-    if (subject === null || subject.length === 0) {
-      return this.fail(params.getTicket() || '', Reason.NOT_AUTHENTICATED);
+
+    const subject = this.mSpi.getUserSubject();
+
+    if (!subject || subject.length === 0) {
+      // TODO Implement Authorization failed
+      throw new Error('Not implemented yet');
     }
-    const sub: string = this.mSpi.getSub();
-    const authTime: number = this.mSpi.getUserAuthenticatedAt();
-    const acr: string = this.mSpi.getAcr();
-    let claims: Record<string, unknown> | undefined = this.collectClaims(
-      subject,
+
+    const sub = this.mSpi.getSub();
+    const authTime = this.mSpi.getUserAuthenticatedAt();
+    const acr = this.mSpi.getAcr();
+    let claims = this.collectClaims(
       params.getClaimNames(),
       params.getClaimLocales()
     );
-    const claimsForTx: Record<string, unknown> | undefined = this.collectClaims(
-      subject,
+    const claimsForTx = this.collectClaims(
       params.getRequestedClaimsForTx(),
-      params.getRequestedClaimsForTx()
+      params.getClaimLocales()
     );
+    let verifiedClaimsForTx;
 
-    let verifiedClaimsForTx: Record<string, unknown>[] | undefined = undefined;
     if (params.isOldIdaFormatUsed()) {
-      claims = this.collectVerifiedClaims_Old(
-        claims,
-        subject,
-        params.getIdTokenClaims()
-      );
+      // claims = this.collectVerifiedClaims_Old(
+      //   claims,
+      //   subject,
+      //   params.getIdTokenClaims()
+      // );
+      throw new Error('Not implemented yet');
     } else {
       claims = this.collectVerifiedClaims(
         claims,
@@ -65,30 +65,29 @@ class AuthorizationDecisionHandler extends BaseHandler {
       );
       verifiedClaimsForTx = this.collectVerifiedClaimsForTx(
         subject,
-        params.getIdTokenClaims(),
+        params.getIdTokenClaims() || '',
         params.getRequestedVerifiedClaimsForTx() || []
       );
     }
-
-    const properties: Property[] = this.mSpi.getProperties();
-    const scopes: string[] = this.mSpi.getScopes();
+    const properties: Property[] = this.mSpi.getProperties() || [];
+    const scopes: string[] = this.mSpi.getScopes() || [];
 
     return this.authorize(
       params.getTicket() || '',
       subject,
-      authTime,
-      acr,
-      claims,
+      authTime || 0,
+      acr || '',
+      claims || {},
       properties,
       scopes,
-      sub,
+      sub || '',
       claimsForTx,
       verifiedClaimsForTx
     );
   }
 
   public collectClaims(
-    subject: string,
+    // subject: string,
     claimNames?: string[],
     claimLocales?: string[]
   ): Record<string, unknown> | undefined {
@@ -170,46 +169,46 @@ class AuthorizationDecisionHandler extends BaseHandler {
     return this.mSpi.getUserClaim(name, undefined);
   }
 
-  public collectVerifiedClaims_Old(
-    claims?: Record<string, unknown>,
-    subject?: string,
-    idTokenClaims?: string
-  ) {
-    if (!idTokenClaims || idTokenClaims.length === 0) {
-      return claims;
-    }
-    const constraint: VerifiedClaimsConstraint =
-      VerifiedClaimsContainerConstraint.fromJson(
-        idTokenClaims
-      ).getVerifiedClaims();
+  // public collectVerifiedClaims_Old(
+  //   claims?: Record<string, unknown>,
+  //   subject?: string,
+  //   idTokenClaims?: string
+  // ) {
+  //   if (!idTokenClaims || idTokenClaims.length === 0) {
+  //     return claims;
+  //   }
+  //   const constraint: VerifiedClaimsConstraint =
+  //     VerifiedClaimsContainerConstraint.fromJson(
+  //       idTokenClaims
+  //     ).getVerifiedClaims();
 
-    if (!constraint || constraint === null) {
-      return claims;
-    }
-    const verifiedClaims: VerifiedClaims[] = this.mSpi.getVerifiedClaims(
-      subject,
-      constraint
-    );
-    return this.embedVerifiedClaims(claims, verifiedClaims);
-  }
+  //   if (!constraint || constraint === null) {
+  //     return claims;
+  //   }
+  //   const verifiedClaims: VerifiedClaims[] = this.mSpi.getVerifiedClaims(
+  //     subject,
+  //     constraint
+  //   );
+  //   return this.embedVerifiedClaims(claims, verifiedClaims);
+  // }
 
-  public embedVerifiedClaims(
-    claims?: Record<string, unknown>,
-    verifiedClaims?: verifiedClaims[]
-  ): Record<string, unknown> | undefined {
-    if (!verifiedClaims || verifiedClaims.length === 0) {
-      return claims;
-    }
-    if (!claims) {
-      claims = {};
-    }
-    if (verifiedClaims.length === 1) {
-      claims = { verified_claims: verifiedClaims[0] };
-    } else {
-      claims = { verified_claims: verifiedClaims };
-    }
-    return claims;
-  }
+  // public embedVerifiedClaims(
+  //   claims?: Record<string, unknown>,
+  //   verifiedClaims?: VerifiedClaims[]
+  // ): Record<string, unknown> | undefined {
+  //   if (!verifiedClaims || verifiedClaims.length === 0) {
+  //     return claims;
+  //   }
+  //   if (!claims) {
+  //     claims = {};
+  //   }
+  //   if (verifiedClaims.length === 1) {
+  //     claims = { verified_claims: verifiedClaims[0] };
+  //   } else {
+  //     claims = { verified_claims: verifiedClaims };
+  //   }
+  //   return claims;
+  // }
 
   public collectVerifiedClaims(
     calims?: Record<string, unknown>,
@@ -219,7 +218,7 @@ class AuthorizationDecisionHandler extends BaseHandler {
     if (!calims || !subject || !claimsRequest) {
       return;
     }
-    return this.createVerifiedClaimsCollector().collectForTx(
+    return this.createVerifiedClaimsCollector().collect(
       calims,
       subject,
       claimsRequest
@@ -269,16 +268,6 @@ class AuthorizationDecisionHandler extends BaseHandler {
         claimsForTx,
         verifiedClaimsForTx
       );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      throw new Error(e.messsage);
-    }
-  }
-
-  public fail(ticket: string, reason: Reason) {
-    try {
-      return this.getApiCaller().authorizationFail(ticket, reason);
-      // .getResponse();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       throw new Error(e.messsage);

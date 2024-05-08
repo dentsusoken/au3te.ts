@@ -2,9 +2,9 @@ type ResponseHeaders = Record<string, unknown>;
 
 export class AuthleteApiException extends Error {
   private mStatusCode: number;
-  private mStatusMessage: string | null;
-  private mResponseBody: string | null;
-  private mResponseHeaders: ResponseHeaders | null;
+  private mStatusMessage: string | undefined;
+  private mResponseBody: string | undefined;
+  private mResponseHeaders: ResponseHeaders | undefined;
 
   constructor(
     message?: string,
@@ -15,24 +15,24 @@ export class AuthleteApiException extends Error {
   ) {
     super(message);
     this.mStatusCode = statusCode || 0;
-    this.mStatusMessage = statusMessage || null;
-    this.mResponseBody = responseBody || null;
-    this.mResponseHeaders = responseHeaders || null;
+    this.mStatusMessage = statusMessage || undefined;
+    this.mResponseBody = responseBody || undefined;
+    this.mResponseHeaders = responseHeaders || undefined;
   }
 
   getStatusCode(): number {
     return this.mStatusCode;
   }
 
-  getStatusMessage(): string | null {
+  getStatusMessage(): string | undefined {
     return this.mStatusMessage;
   }
 
-  getResponseBody(): string | null {
+  getResponseBody(): string | undefined {
     return this.mResponseBody;
   }
 
-  getResponseHeaders(): ResponseHeaders | null {
+  getResponseHeaders(): ResponseHeaders | undefined {
     return this.mResponseHeaders;
   }
 }

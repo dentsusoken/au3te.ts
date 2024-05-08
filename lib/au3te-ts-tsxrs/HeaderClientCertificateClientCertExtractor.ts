@@ -6,7 +6,7 @@ export class HeaderClientCertificateClientCertExtractor extends HeaderClientCert
 
   public override async extractClientCertificateChain(
     request: Request
-  ): Promise<string[] | null> {
+  ): Promise<string[] | undefined> {
     const listCert: string[] = [];
 
     for (const headerName of this.getClientCertificateChainHeaders()) {
@@ -16,7 +16,7 @@ export class HeaderClientCertificateClientCertExtractor extends HeaderClientCert
       }
     }
     if (listCert.length === 0) {
-      return null;
+      return undefined;
     }
     return this.decodeByteBufferCerts(listCert);
   }

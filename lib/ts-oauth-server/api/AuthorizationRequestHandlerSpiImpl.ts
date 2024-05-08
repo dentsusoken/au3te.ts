@@ -1,5 +1,4 @@
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
-import { Client } from '../../au3te-ts-common/dto/Client';
 import { Prompt } from '../../au3te-ts-common/types/Prompt';
 import { User } from '../../au3te-ts-common/types/User';
 import { Params } from '../../au3te-ts-tsxrs/AuthorizationDecisionHandler';
@@ -11,15 +10,14 @@ import { Viewable } from '../webapp';
 import { AuthorizationView } from '../webapp/template/Authorization';
 import { AuthzPageModel } from './AuthzPageModel';
 
-// TODO Authorization Endpoint
 export class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHandlerSpiAdapter {
-  private mRequest: Request;
+  // private mRequest: Request;
   private session: Session;
-  private mClient?: Client;
+  // private mClient?: Client;
 
-  constructor(request: Request, session: Session) {
+  constructor(_request: Request, session: Session) {
     super();
-    this.mRequest = request;
+    // this.mRequest = request;
     this.session = session;
   }
 
@@ -30,7 +28,7 @@ export class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHand
     await this.session.set('acrs', info.getAcrs());
     await this.session.set('client', info.getClient());
 
-    this.mClient = info.getClient();
+    // this.mClient = info.getClient();
 
     this.clearCurrentUserInfoInSessionIfNecessary(info);
 

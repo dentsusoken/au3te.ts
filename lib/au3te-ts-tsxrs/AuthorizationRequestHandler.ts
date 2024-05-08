@@ -4,7 +4,6 @@ import { BaseHandler } from './BaseHandler';
 import { ResponseUtil } from './ResponseUtil';
 import { AuthorizationRequestHandlerSpi } from './spi/AuthorizationRequestHandlerSpi';
 
-// TODO Authorization Endpoint
 export class AuthorizationRequestHandler extends BaseHandler {
   private readonly mSpi: AuthorizationRequestHandlerSpi;
   constructor(api: AuthleteApi, spi: AuthorizationRequestHandlerSpi) {
@@ -42,13 +41,29 @@ export class AuthorizationRequestHandler extends BaseHandler {
         return this.handleInteraction(response);
       // TODO Implement Authorization fail
       // case AuthorizationResponse.Action.NO_INTERACTION:
-      //   return handleNoInteraction(response);
+      //   return this.handleNoInteraction(response);
       default:
         throw new Error('Unknown action: ' + action);
     }
   }
 
-  handleInteraction(response: AuthorizationResponse) {
+  private handleInteraction(response: AuthorizationResponse) {
     return this.mSpi.generateAuthorizationPage(response);
   }
+
+  // TODO Implement Authorization fail
+  //   private handleNoInteraction(response: AuthorizationResponse) {
+  //     this.noInteractionCheckAuthentication(response);
+  //   }
+
+  //   private noInteractionCheckAuthentication(response: AuthorizationResponse) {
+  //     if (this.mSpi.isUserAuthenticated()) {
+  //       return;
+  //     }
+  //     this.getApiCaller().authorizationFail(
+  //       response.getTicket() || '',
+  //       AuthorizationFailRequest.Reason.NOT_LOGGED_IN
+  //     );
+  //   }
+  // }
 }

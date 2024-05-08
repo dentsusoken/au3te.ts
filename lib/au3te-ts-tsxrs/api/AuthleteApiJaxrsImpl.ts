@@ -21,7 +21,6 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
     this.mBaseUrl = configuration.getBaseUrl();
     // this.mSettings = new Settings();
   }
-
   abstract authorization(
     request: AuthorizationRequest
   ): Promise<AuthorizationResponse>;

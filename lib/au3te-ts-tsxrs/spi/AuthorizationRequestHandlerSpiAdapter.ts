@@ -2,7 +2,6 @@ import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationRe
 import { Property } from '../../au3te-ts-common/dto/Property';
 import { AuthorizationRequestHandlerSpi } from './AuthorizationRequestHandlerSpi';
 
-// TODO Authorization Endpoint
 export class AuthorizationRequestHandlerSpiAdapter
   implements AuthorizationRequestHandlerSpi
 {

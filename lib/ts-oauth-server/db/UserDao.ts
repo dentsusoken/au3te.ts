@@ -1,4 +1,5 @@
 import { Address } from '../../au3te-ts-common/dto/Address';
+import { User } from '../../au3te-ts-common/types/User';
 import { MDLClaimNames } from '../../cbor/mdoc/constants/MDLClaimNames';
 import { MDLConstants } from '../../cbor/mdoc/constants/MDLConstants';
 import { UserEntity } from './UserEntity';
@@ -82,7 +83,7 @@ export class UserDao {
           .setCountry('USA')
           .setLocality('Shoshone')
           .setStreetAddress('114 0ld State Hwy 127')
-          .setPostaCode('CA 92384'),
+          .setPostalCode('CA 92384'),
         undefined,
         undefined,
         'Inga',
@@ -128,10 +129,10 @@ export class UserDao {
   private static get(condition: SearchCondition) {
     return Object.values(this.sUserDB).filter((ue) => {
       return condition.check(ue);
-    });
+    })[0];
   }
 
-  public static getByCredentials(loginId: string, password: string) {
+  public static getByCredentials(loginId: string, password: string): User {
     return this.get({
       check: (ue) => {
         return ue.getLoginId() === loginId && ue.getPassword() === password;

@@ -5,28 +5,28 @@ import {
 } from './AuthorizationDecisionHandler';
 import { BaseEndpoint } from './BaseEndpoint';
 import { AuthorizationDecisionHandlerSpi } from './spi/AuthorizationDecisionHandlerSpi';
-// TODO Authorization Endpoint
+
 export class BaseAuthorizationDecisionEndpoint extends BaseEndpoint {
+  // public async handle(
+  //   api: AuthleteApi,
+  //   spi: AuthorizationDecisionHandlerSpi,
+  //   ticket: string,
+  //   claimNames: string[],
+  //   claimLocales: string[]
+  // ) {
+  //   const params: Params = new Params()
+  //     .setTicket(ticket)
+  //     .setClaimNames(claimNames)
+  //     .setClaimLocales(claimLocales);
+
+  //   return await this.handleInternal(api, spi, params);
+  // }
+
   public async handle(
     api: AuthleteApi,
     spi: AuthorizationDecisionHandlerSpi,
-    ticket: string,
-    claimNames: string[],
-    claimLocales: string[]
-  ) {
-    const params: Params = new Params()
-      .setTicket(ticket)
-      .setClaimNames(claimNames)
-      .setClaimLocales(claimLocales);
-
-    return await this.handleInternal(api, spi, params);
-  }
-
-  public async handleInternal(
-    api: AuthleteApi,
-    spi: AuthorizationDecisionHandlerSpi,
     params: Params
-  ) {
+  ): Promise<Response> {
     try {
       const handler = new AuthorizationDecisionHandler(api, spi);
 

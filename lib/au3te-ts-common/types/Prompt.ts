@@ -1,4 +1,3 @@
-// TODO Authorization Endpoint
 export class Prompt {
   private static readonly _values: Prompt[] = [];
 

@@ -26,7 +26,7 @@ export class BaseEndpoint {
 
     return null;
   }
-  // TODO Authorization Endpoint
+
   public async takeAttribute(session: Session, key: string) {
     const value = await session.get(key);
     await session.delete(key);

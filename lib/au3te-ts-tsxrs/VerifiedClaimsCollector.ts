@@ -1,5 +1,3 @@
-// TODO Authorization Endpoint
-
 import { StringArray } from '../au3te-ts-common/dto/StringArray';
 import { Utils } from '../au3te-ts-common/util/Utils';
 import { BiFunction } from '../util/javaTypes';

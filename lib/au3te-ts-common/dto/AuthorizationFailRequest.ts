@@ -1,22 +1,6 @@
-export enum Reason {
-  UNKNOWN,
-  NOT_LOGGED_IN,
-  MAX_AGE_NOT_SUPPORTED,
-  EXCEEDS_MAX_AGE,
-  DIFFERENT_SUBJECT,
-  ACR_NOT_SATISFIED,
-  DENIED,
-  SERVER_ERROR,
-  NOT_AUTHENTICATED,
-  ACCOUNT_SELECTION_REQUIRED,
-  CONSENT_REQUIRED,
-  INTERACTION_REQUIRED,
-  INVALID_TARGET,
-}
-
-export class AuthorizationFailRequest {
+class AuthorizationFailRequest {
   public ticket?: string;
-  public reason?: Reason;
+  public reason?: AuthorizationFailRequest.Reason;
   public description?: string;
 
   public getTicket(): string | undefined {
@@ -28,11 +12,11 @@ export class AuthorizationFailRequest {
     return this;
   }
 
-  public getReason(): Reason | undefined {
+  public getReason(): AuthorizationFailRequest.Reason | undefined {
     return this.reason;
   }
 
-  public setReason(reason: Reason) {
+  public setReason(reason: AuthorizationFailRequest.Reason) {
     this.reason = reason;
     return this;
   }
@@ -46,3 +30,24 @@ export class AuthorizationFailRequest {
     return this;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+namespace AuthorizationFailRequest {
+  export enum Reason {
+    UNKNOWN,
+    NOT_LOGGED_IN,
+    MAX_AGE_NOT_SUPPORTED,
+    EXCEEDS_MAX_AGE,
+    DIFFERENT_SUBJECT,
+    ACR_NOT_SATISFIED,
+    DENIED,
+    SERVER_ERROR,
+    NOT_AUTHENTICATED,
+    ACCOUNT_SELECTION_REQUIRED,
+    CONSENT_REQUIRED,
+    INTERACTION_REQUIRED,
+    INVALID_TARGET,
+  }
+}
+
+export { AuthorizationFailRequest };

@@ -3,17 +3,17 @@ import { User } from '../../au3te-ts-common/types/User';
 import { AuthorizationPageModel } from '../../au3te-ts-tsxrs/AuthorizationPageModel';
 import { FederationConfig } from '../federation/FederationConfig';
 
-// TODO Authorization Endpoint
 export class AuthzPageModel extends AuthorizationPageModel {
-  private federations?: FederationConfig[];
-  private federationMessage?: string;
+  // private federations?: FederationConfig[];
+  // private federationMessage?: string;
 
   constructor(
     info: AuthorizationResponse,
     user?: User,
-    federations?: FederationConfig[]
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _federations?: FederationConfig[]
   ) {
     super(info, user);
-    this.federations = federations;
+    // this.federations = federations;
   }
 }

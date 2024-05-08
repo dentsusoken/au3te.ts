@@ -5,40 +5,40 @@ import { AuthletePropertiesConfiguration } from '../conf/AuthletePropertiesConfi
 import { AuthleteApi } from './AuthleteApi';
 
 export class AuthleteApiFactory {
-  private static sDefaultApi: AuthleteApi | null = null;
+  private static sDefaultApi: AuthleteApi | undefined = undefined;
 
   private constructor() {}
 
   public static async create(
     configuration: AuthleteConfiguration
-  ): Promise<AuthleteApi | null> {
+  ): Promise<AuthleteApi | undefined> {
     const version = AuthleteApiVersion.parse(configuration.getApiVersion());
 
     if (version === AuthleteApiVersion.V3) {
       return await AuthleteApiFactory.createImpl(configuration);
     } else {
       // must be V3
-      return null;
+      return undefined;
     }
   }
 
   private static async createImpl(
     configuration: AuthleteConfiguration
-  ): Promise<AuthleteApi | null> {
+  ): Promise<AuthleteApi | undefined> {
     try {
       return await AuthleteApiFactory.createInstance(configuration);
     } catch (e) {
       // Ignore.
     }
 
-    return null;
+    return undefined;
   }
 
   public static async createInstance(
     configuration: AuthleteConfiguration
   ): Promise<AuthleteApi> {
     if (!configuration) {
-      throw new Error('configuration is null.');
+      throw new Error('configuration is undefined.');
     }
 
     return new AuthleteApiImplV3(configuration);

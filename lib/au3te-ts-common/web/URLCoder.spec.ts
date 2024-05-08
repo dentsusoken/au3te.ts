@@ -5,8 +5,6 @@ describe('URLCoder', () => {
   it('encode', () => {
     const input = 'Hello World!';
     const encoded = URLCoder.encode(input);
-    console.log('encoded :>> ', encoded);
-
     expect(encoded).toEqual('Hello%20World%21');
   });
 

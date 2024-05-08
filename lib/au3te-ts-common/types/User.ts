@@ -1,6 +1,8 @@
-// TODO Authorization Endpoint
 export interface User {
+  getLoginId(): string;
+  getPassword(): string;
   getSubject(): string;
   getClaim(claimName: string, languageTag: string): unknown;
-  getAttrinute(attributeName: string): unknown;
+  getAttribute(attributeName: string): unknown;
+  setAttribute(attributeName: string, attributeValue: unknown): User;
 }

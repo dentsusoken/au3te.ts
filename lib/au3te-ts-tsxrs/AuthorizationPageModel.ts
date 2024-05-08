@@ -5,7 +5,6 @@ import { Pair } from '../au3te-ts-common/dto/Pair';
 import { Scope } from '../au3te-ts-common/dto/Scope';
 import { User } from '../au3te-ts-common/types/User';
 
-// TODO Authorization Endpoint
 export class AuthorizationPageModel {
   private serviceName?: string;
   private clientName?: string;
@@ -62,6 +61,68 @@ export class AuthorizationPageModel {
       this.claimsForUserInfo = info.getClaimsAtUserInfo();
     }
   }
+
+  getServiceName(): string | undefined {
+    return this.serviceName;
+  }
+  getClientName(): string | undefined {
+    return this.clientName;
+  }
+  getDescription(): string | undefined {
+    return this.description;
+  }
+  getLogoUri(): string | undefined {
+    return this.logoUri;
+  }
+  getClientUri(): string | undefined {
+    return this.clientUri;
+  }
+  getPolicyUri(): string | undefined {
+    return this.policyUri;
+  }
+  getTosUri(): string | undefined {
+    return this.tosUri;
+  }
+  getScopes(): Scope[] | undefined {
+    return this.scopes;
+  }
+  getLoginId(): string | undefined {
+    return this.loginId;
+  }
+  getLoginIdReadOnly(): string | undefined {
+    return this.loginIdReadOnly;
+  }
+  getUser(): User | undefined {
+    return this.user;
+  }
+  getAuthorizationDetails(): string | undefined {
+    return this.authorizationDetails;
+  }
+  getPurpose(): string | undefined {
+    return this.purpose;
+  }
+  getVerifiedClaimsForIdToken(): Pair[] | undefined {
+    return this.verifiedClaimsForIdToken;
+  }
+  getAllVerifiedClaimsForIdTokenRequested(): boolean | undefined {
+    return this.allVerifiedClaimsForIdTokenRequested;
+  }
+  getVerifiedClaimsForUserInfo(): Pair[] | undefined {
+    return this.verifiedClaimsForUserInfo;
+  }
+  getAllVerifiedClaimsForUserInfoRequested(): boolean | undefined {
+    return this.allVerifiedClaimsForUserInfoRequested;
+  }
+  getIdentityAssuranceRequired(): boolean | undefined {
+    return this.identityAssuranceRequired;
+  }
+  getClaimsForIdToken(): string[] | undefined {
+    return this.claimsForIdToken;
+  }
+  getClaimsForUserInfo(): string[] | undefined {
+    return this.claimsForUserInfo;
+  }
+
   isOldIdaFormatUsed() {
     return this.oldIdaFormatUsed;
   }
@@ -113,7 +174,7 @@ export class AuthorizationPageModel {
     this.purpose = info.getPurpose();
     this.setupVerifiedClaimsForIdToken(info);
     this.setupVerifiedClaimsForIdToken(info);
-    this.identityAssuranceRequired = this.computeIdentityAssuranceRequired();
+    // this.identityAssuranceRequired = this.computeIdentityAssuranceRequired();
   }
   setupVerifiedClaimsForIdToken(info: AuthorizationResponse): void {
     if (this.isOldIdaFormatUsed()) {
@@ -146,14 +207,18 @@ export class AuthorizationPageModel {
     if (!claimsString) {
       return;
     }
-    const claims = JSON.parse(claimsString);
-    const verifiedClaims = claims['verified_claims'];
-    if (Array.isArray(verifiedClaims)) {
-      return this.extractRequestedClaimsFromList(verifiedClaims);
-    } else if (typeof verifiedClaims === 'object') {
-      return this.extractRequestedClaimsFromMap(verifiedClaims);
+    try {
+      const claims = JSON.parse(claimsString);
+      const verifiedClaims = claims['verified_claims'];
+      if (Array.isArray(verifiedClaims)) {
+        return this.extractRequestedClaimsFromList(verifiedClaims);
+      } else if (typeof verifiedClaims === 'object') {
+        return this.extractRequestedClaimsFromMap(verifiedClaims);
+      }
+      return;
+    } catch (_) {
+      return;
     }
-    return;
   }
   extractRequestedClaimsFromList(list: unknown[]) {
     const pairList = new Array<Pair>();

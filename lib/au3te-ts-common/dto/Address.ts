@@ -1,4 +1,3 @@
-// TODO Authorization Endpoint
 export class Address {
   private formatted?: string;
   private street_address?: string;
@@ -7,24 +6,46 @@ export class Address {
   private postal_code?: string;
   private country?: string;
 
-  public setCountry(country: string): Address {
-    this.country = country;
+  public getFormatted(): string | undefined {
+    return this.formatted;
+  }
+  public setFormatted(formatted: string) {
+    this.formatted = formatted;
     return this;
   }
-  public setLocality(locality: string): Address {
+  public getStreetAddress(): string | undefined {
+    return this.street_address;
+  }
+  public setStreetAddress(street_address: string) {
+    this.street_address = street_address;
+    return this;
+  }
+  public getLocality(): string | undefined {
+    return this.locality;
+  }
+  public setLocality(locality: string) {
     this.locality = locality;
     return this;
   }
-  public setStreetAddress(streetAddress: string): Address {
-    this.street_address = streetAddress;
-    return this;
+  public getRegion(): string | undefined {
+    return this.region;
   }
-  public setPostaCode(postalCode: string): Address {
-    this.postal_code = postalCode;
-    return this;
-  }
-  public setRegion(region: string): Address {
+  public setRegion(region: string) {
     this.region = region;
+    return this;
+  }
+  public getPostalCode(): string | undefined {
+    return this.postal_code;
+  }
+  public setPostalCode(postal_code: string) {
+    this.postal_code = postal_code;
+    return this;
+  }
+  public getCountry(): string | undefined {
+    return this.country;
+  }
+  public setCountry(country: string) {
+    this.country = country;
     return this;
   }
 }

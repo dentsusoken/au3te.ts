@@ -5,15 +5,6 @@ import { Session } from '../../util/session';
 import { AuthorizationRequestHandlerSpiImpl } from './AuthorizationRequestHandlerSpiImpl';
 
 export class AuthorizationEndpoint extends BaseAuthorizationEndpoint {
-  // get() {
-  //   // const a = page();
-  //   const aaa = App({ text: 'This is App !!' });
-  //   return new Response(page({ children: aaa }), {
-  //     headers: {
-  //       'Content-Type': 'text/html',
-  //     },
-  //   });
-  // }
   public async get(request: Request, session: Session): Promise<Response> {
     const parameters = getQueryParams(request.url);
     return await this.handle(request, session, parameters);
@@ -29,7 +20,6 @@ export class AuthorizationEndpoint extends BaseAuthorizationEndpoint {
     session: Session,
     parameters: Record<string, string>
   ): Promise<Response> {
-    // return this.get(request);
     return super.handleInternal(
       await AuthleteApiFactory.getDefaultApi(),
       new AuthorizationRequestHandlerSpiImpl(request, session),

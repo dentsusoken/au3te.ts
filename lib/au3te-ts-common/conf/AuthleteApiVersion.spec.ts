@@ -11,9 +11,7 @@ describe('AuthleteApiVersion', () => {
   it('parse - invalid version', () => {
     const version = 'v3';
     const result = AuthleteApiVersion.parse(version);
-    console.log(result);
-
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('parse - null version', () => {

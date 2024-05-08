@@ -12,13 +12,13 @@ export class PropertiesLoader {
   static load(
     file: string,
     locations?: FileLocation[] | FileLocation
-  ): TypedProperties | null {
+  ): TypedProperties | undefined {
     if (typeof locations === 'undefined') {
       return this.load(file, [FileLocation.FILESYSTEM, FileLocation.CLASSPATH]);
     }
 
     if (Array.isArray(locations)) {
-      let properties: TypedProperties | null = null;
+      let properties: TypedProperties | undefined = undefined;
       for (const location of locations) {
         properties = this.load(file, location);
 
@@ -28,11 +28,11 @@ export class PropertiesLoader {
       }
       return properties;
     } else {
-      let inStream: Buffer | null = null;
+      let inStream: Buffer | undefined = undefined;
       try {
         inStream = this.open(file, locations);
-        if (inStream == null) {
-          return null;
+        if (inStream == undefined) {
+          return undefined;
         }
         const properties = this.loadProperties(inStream);
         return new PropertiesWrapper(properties);
@@ -40,17 +40,20 @@ export class PropertiesLoader {
         // Just ignore.
       }
     }
-    return null;
+    return undefined;
   }
 
-  private static open(file: string, location: FileLocation): Buffer | null {
+  private static open(
+    file: string,
+    location: FileLocation
+  ): Buffer | undefined {
     switch (location) {
       case FileLocation.FILESYSTEM:
         return this.openFileSystem(file);
       // TODO Confirm wheather openClasspath is needed or not in TypeScript.
       case FileLocation.CLASSPATH:
       default:
-        return null;
+        return undefined;
     }
   }
 
