@@ -183,6 +183,9 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return authIssueResponse;
   }
 
+  // TODO Token Endpoint
+  public async token() {}
+
   public async pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse> {

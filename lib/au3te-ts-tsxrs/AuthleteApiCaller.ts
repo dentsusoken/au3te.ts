@@ -161,6 +161,12 @@ export class AuthleteApiCaller {
     }
   }
 
+  // Token Endpoint
+  public async callToken() {}
+
+  // Token Endpoint
+  public async callTokenInternal() {}
+
   /**
    * Call Authlete's `/api/pushed_auth_req` API.
    */
