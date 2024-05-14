@@ -1,4 +1,5 @@
 import { describe, expect, it, vitest } from 'vitest';
+import { AuthleteApi } from '../au3te-ts-common/api/AuthleteApi';
 import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
 import {
@@ -9,8 +10,8 @@ import { Params, PushedAuthReqHandler } from './PushedAuthReqHandler';
 
 describe('PushedAuthReqHandler', () => {
   it('should handle a PAR request', async () => {
-    // Create a mock instance of AuthleteApi
-    const apiMock = {
+    // @ts-expect-error Mocking
+    const apiMock: AuthleteApi = {
       pushAuthorizationRequest: vitest
         .fn()
         .mockReturnValue(new PushedAuthReqResponse().setAction(Action.CREATED)),
@@ -33,8 +34,8 @@ describe('PushedAuthReqHandler', () => {
   });
 
   it('should throw an error when an unexpected error occurs', async () => {
-    // Create a mock instance of AuthleteApi
-    const apiMock = {
+    // @ts-expect-error Mocking
+    const apiMock: AuthleteApi = {
       pushAuthorizationRequest: vitest
         .fn()
         .mockRejectedValue(new Error('Unexpected error')),

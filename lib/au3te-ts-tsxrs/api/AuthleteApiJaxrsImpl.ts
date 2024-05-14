@@ -6,6 +6,8 @@ import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationReq
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
+import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 
 export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   private static readonly JSON_UTF8_TYPE = 'application/json;charset=UTF-8';
@@ -28,6 +30,9 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   abstract authorizationIssue(
     request: AuthorizationIssueRequest
   ): Promise<AuthorizationIssueResponse>;
+
+  abstract token(request: TokenRequest): Promise<TokenResponse>;
+  abstract tokenDelete(token: string): void;
 
   abstract pushAuthorizationRequest(
     request: PushedAuthReqRequest

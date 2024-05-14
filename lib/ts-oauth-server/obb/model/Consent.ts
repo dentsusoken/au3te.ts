@@ -18,6 +18,10 @@ export class Consent {
     return this.expirationDateTime;
   }
 
+  getStatusUpdateDateTime(): string {
+    return this.statusUpdateDateTime;
+  }
+
   setStatusUpdateDateTime(statusUpdateDateTime: string): Consent {
     this.statusUpdateDateTime = statusUpdateDateTime;
     return this;

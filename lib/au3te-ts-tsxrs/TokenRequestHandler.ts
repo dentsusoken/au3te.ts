@@ -13,13 +13,13 @@ export class TokenRequestHandler extends BaseHandler {
     super(api);
     this.mSpi = spi;
   }
-  handle(params: Params) {
+  async handle(params: Params): Promise<Response> {
     const credentials = BasicCredentials.parse(params.getAuthorization() || '');
     const clientId = credentials ? credentials.getUserId() : '';
     const clientSecret = credentials ? credentials.getPassword() : '';
 
     try {
-      return this.process(
+      return await this.process(
         params.getParameters(),
         clientId,
         clientSecret,
@@ -37,7 +37,7 @@ export class TokenRequestHandler extends BaseHandler {
       }
     }
   }
-  async process(
+  private async process(
     parameters?: Record<string, string>,
     clientId?: string,
     clientSecret?: string,
@@ -45,7 +45,7 @@ export class TokenRequestHandler extends BaseHandler {
     dpop?: string,
     htm?: string,
     htu?: string
-  ) {
+  ): Promise<Response> {
     const properties = this.mSpi.getProperties();
     let clientCertificate = '';
     if (clientCertificatePath && clientCertificatePath.length > 0) {
@@ -119,7 +119,8 @@ export class TokenRequestHandler extends BaseHandler {
         throw this.getApiCaller().unknownAction('/api/auth/token', action);
     }
   }
-  prepareHeaders(response: TokenResponse): Record<string, unknown> {
+
+  private prepareHeaders(response: TokenResponse): Record<string, unknown> {
     const headers: Record<string, unknown> = {};
 
     const dpopNonce = response.getDpopNonce();

@@ -44,9 +44,9 @@ export class TokenEndpoint extends BaseTokenEndpoint {
       .setParameters(parameters)
       .setAuthorization(request.headers.get('Authorization') || '');
 
-    params.setClientCertificatePath(
-      (await this.extractClientCertificateChain(request)) || []
-    );
+    // params.setClientCertificatePath(
+    //   (await this.extractClientCertificateChain(request)) || []
+    // );
 
     params.setDpop(request.headers.get('DPoP') || '').setHtm('POST');
 

@@ -4,10 +4,14 @@ import { Params, TokenRequestHandler } from './TokenRequestHandler';
 import { TokenRequestHandlerSpi } from './spi/TokenRequestHandlerSpi';
 
 export class BaseTokenEndpoint extends BaseEndpoint {
-  handle(api: AuthleteApi, spi: TokenRequestHandlerSpi, params: Params) {
+  async handle(
+    api: AuthleteApi,
+    spi: TokenRequestHandlerSpi,
+    params: Params
+  ): Promise<Response> {
     try {
       const handler = new TokenRequestHandler(api, spi);
-      return handler.handle(params);
+      return await handler.handle(params);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       // An error occurred in the handler.

@@ -9,7 +9,7 @@ import { AuthleteApiCaller } from './AuthleteApiCaller';
 describe('AuthleteApiCaller', () => {
   describe('callPushedAuthReq', () => {
     it('should call pushAuthorizationRequest with correct parameters', async () => {
-      // Arrange
+      // @ts-expect-error Mocking
       const mockApi: AuthleteApi = {
         pushAuthorizationRequest: vitest
           .fn()
@@ -79,7 +79,8 @@ describe('AuthleteApiCaller', () => {
     it('should throw an error if pushAuthorizationRequest throws an error', async () => {
       // Arrange
       const mockError = new Error('API call failed');
-      const mockApi = {
+      // @ts-expect-error Mocking
+      const mockApi: AuthleteApi = {
         pushAuthorizationRequest: vitest.fn().mockRejectedValue(mockError),
         authorization: vitest
           .fn()

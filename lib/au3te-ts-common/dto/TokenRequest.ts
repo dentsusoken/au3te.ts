@@ -1,4 +1,5 @@
 import { Property } from './Property';
+
 export class TokenRequest {
   private parameters?: string;
   private clientId?: string;

@@ -4,12 +4,12 @@ import { AuthorizationFailRequest } from '../../au3te-ts-common/dto/Authorizatio
 import { AuthorizationFailResponse } from '../../au3te-ts-common/dto/AuthorizationFailResponse';
 import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/AuthorizationIssueRequest';
 import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
-import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
-import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
+import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 import { ClientAuthMethod } from '../../au3te-ts-common/types/ClientAuthMethod';
 import { AuthleteApiCall, AuthleteApiJaxrsImpl } from './AuthleteApiJaxrsImpl';
 
@@ -22,8 +22,7 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     '/api/%d/pushed_auth_req';
   private static readonly AUTH_AUTHORIZATION_ISSUE_API_PATH: string =
     '/api/%d/auth/authorization/issue';
-  private static readonly AUTH_TOKEN_API_PATH: string =
-    '/api/%d/auth/token';
+  private static readonly AUTH_TOKEN_API_PATH: string = '/api/%d/auth/token';
 
   private readonly mAuth: string;
   private readonly mServiceId: number | undefined;
@@ -187,10 +186,7 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return authIssueResponse;
   }
 
-  // TODO 安藤実装済み
-  public async token(
-    request: TokenRequest
-  ): Promise<TokenResponse> {
+  public async token(request: TokenRequest): Promise<TokenResponse> {
     const response = await this.executeApiCall(
       new this.PostApiCaller(
         this,
@@ -209,6 +205,9 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
 
     return tokenRes;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public tokenDelete(_token: string): void {}
 
   public async pushAuthorizationRequest(
     request: PushedAuthReqRequest
