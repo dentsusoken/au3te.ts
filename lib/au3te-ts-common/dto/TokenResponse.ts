@@ -1,5 +1,3 @@
-// TODO 安藤実装済み
-// それぞれsetも書く
 export class TokenResponse {
   private action?: Action;
   private responseContent?: string;
@@ -8,27 +6,21 @@ export class TokenResponse {
   public getAction(): Action | undefined {
     return this.action;
   }
-  public setAction(
-    action: Action
-  ): TokenResponse {
+  public setAction(action: Action): TokenResponse {
     this.action = action;
     return this;
   }
   public getResponseContent(): string | undefined {
     return this.responseContent;
   }
-  public setResponseContent(
-    responseContent: string
-  ): TokenResponse {
+  public setResponseContent(responseContent: string): TokenResponse {
     this.responseContent = responseContent;
     return this;
   }
   public getDpopNonce(): string | undefined {
     return this.dpopNonce;
   }
-  public setDpopNonce(
-    dpopNonce: string
-  ): TokenResponse {
+  public setDpopNonce(dpopNonce: string): TokenResponse {
     this.dpopNonce = dpopNonce;
     return this;
   }

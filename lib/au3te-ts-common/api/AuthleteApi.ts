@@ -4,6 +4,8 @@ import { AuthorizationIssueRequest } from '../dto/AuthorizationIssueRequest';
 import { AuthorizationIssueResponse } from '../dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../dto/AuthorizationResponse';
+import { TokenRequest } from '../dto/TokenRequest';
+import { TokenResponse } from '../dto/TokenResponse';
 
 interface AuthleteApi {
   /**
@@ -42,6 +44,10 @@ interface AuthleteApi {
   authorizationIssue(
     request: AuthorizationIssueRequest
   ): Promise<AuthorizationIssueResponse>;
+
+  token(request: TokenRequest): Promise<TokenResponse>;
+
+  tokenDelete(token: string): void;
   /**
    * Call Authlete's `/api/pushed_auth_req` API.
    * @param request Request parameters passed to the API.

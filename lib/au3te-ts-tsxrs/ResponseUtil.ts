@@ -26,7 +26,7 @@ export class ResponseUtil {
   static readonly CACHE_CONTROL = 'no-store';
 
   public static ok(
-    entity: string,
+    entity?: string,
     headers?: Record<string, unknown>
   ): Response {
     return this.build(Status.OK, entity, this.MEDIA_TYPE_JSON, headers);
