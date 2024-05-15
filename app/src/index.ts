@@ -64,8 +64,7 @@ app.post('/api/authorization/decision', async (c) => {
 
 app.post('/api/token', async (c) => {
   const endpoint = new TokenEndpoint();
-  const res = await endpoint.post(c.req.raw);
-  return res;
+  return endpoint.post(c.req.raw);
 });
 
 app.post('/api/par', (c) => {

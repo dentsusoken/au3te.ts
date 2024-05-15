@@ -19,7 +19,7 @@ export class TokenEndpoint extends BaseTokenEndpoint {
       parameters
     );
 
-    this.doTasks(authleteApi, request, parameters, response);
+    this.doTasks(authleteApi, request, parameters, response.clone());
 
     return response;
   }
