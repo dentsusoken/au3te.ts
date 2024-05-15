@@ -22,7 +22,8 @@ export class HttpsRequestClientCertificateExtractor
   async extractClientCertificateChain(
     request: Request
   ): Promise<string[] | undefined> {
-    // TODO comfirm is this correct
+    // TODO request body functions can be run only once:
+    // must be replaced not to use request body functinos
     const certs = (await request.json())[
       'javax.servlet.request.X509Certificate'
     ] as X509Certificate[] | undefined;

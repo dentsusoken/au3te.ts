@@ -6,7 +6,7 @@ import { AuthorizationRequestHandlerSpiImpl } from './AuthorizationRequestHandle
 
 export class AuthorizationEndpoint extends BaseAuthorizationEndpoint {
   public async get(request: Request, session: Session): Promise<Response> {
-    const parameters = getQueryParams(request.url);
+    const parameters = await getQueryParams(request);
     return await this.handle(request, session, parameters);
   }
 

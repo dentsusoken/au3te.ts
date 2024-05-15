@@ -44,19 +44,20 @@ describe('AuthorizationEndpoint', () => {
       new Request(`https://example.com?${params.toString()}`),
       session
     );
+
+    const decisionParams = new URLSearchParams({
+      loginId: 'inga',
+      password: 'inga',
+      authorized: 'authorized',
+    });
     const request = new Request(`https://example.com`, {
       method: 'POST',
-      body: JSON.stringify({
-        loginId: 'inga',
-        password: 'inga',
-        authorized: 'Authorize',
-      }),
+      body: decisionParams.toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     });
     const response = await dicisionEndpoint.post(request, session);
-    expect(response.headers.get('Location')).not.toBe(undefined);
+    expect(response.headers.get('Location')).toBeDefined();
   });
-
-  //   it('handle', () => {
-  //     // return this.get(request);
-  //   });
 });

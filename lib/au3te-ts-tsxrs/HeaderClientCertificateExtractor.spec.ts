@@ -8,7 +8,7 @@ describe('HeaderClientCertificateExtractor', () => {
       headers: new Headers(),
     });
     const result = await extractor.extractClientCertificateChain(request);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('extractClientCertificateChain returns null when header value is "(null)"', async () => {
@@ -17,7 +17,7 @@ describe('HeaderClientCertificateExtractor', () => {
       headers: { header1: '(null)' },
     });
     const result = await extractor.extractClientCertificateChain(request);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('extractClientCertificateChain returns null when header value is "null"', async () => {
@@ -26,7 +26,7 @@ describe('HeaderClientCertificateExtractor', () => {
       headers: { header1: 'null' },
     });
     const result = await extractor.extractClientCertificateChain(request);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   // TODO pass this test (normalizeCert is private and cannot be accessed from the test)

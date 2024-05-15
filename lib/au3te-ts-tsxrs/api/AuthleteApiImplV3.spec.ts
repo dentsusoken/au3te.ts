@@ -4,6 +4,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { AuthletePropertiesConfiguration } from '../../au3te-ts-common/conf/AuthletePropertiesConfiguration';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
+import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 import { URLCoder } from '../../au3te-ts-common/web/URLCoder';
 import { AuthleteApiImplV3 } from './AuthleteApiImplV3';
 
@@ -29,7 +31,7 @@ describe('AuthleteApiImplV3', () => {
   describe('constructor', () => {
     it('should create an instance', () => {
       const impl = new AuthleteApiImplV3(properties);
-      expect(impl).not.toBeNull();
+      expect(impl).not.toBeUndefined();
     });
 
     it('should throw an error if configuration is not set to V3', () => {
@@ -48,6 +50,15 @@ describe('AuthleteApiImplV3', () => {
       request.setParameters(URLCoder.formUrlEncode(params)!);
       const response = await impl.pushAuthorizationRequest(request);
       expect(response instanceof PushedAuthReqResponse).toBe(true);
+    });
+  });
+  describe('token', () => {
+    it('should return a TokenRequest instance', async () => {
+      const impl = new AuthleteApiImplV3(properties);
+      const request = new TokenRequest();
+      request.setParameters(URLCoder.formUrlEncode(params)!);
+      const response = await impl.token(request);
+      expect(response instanceof TokenResponse).toBe(true);
     });
   });
 });

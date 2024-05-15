@@ -6,6 +6,8 @@ import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationRespo
 import { Property } from '../au3te-ts-common/dto/Property';
 import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import { TokenRequest } from '../au3te-ts-common/dto/TokenRequest';
+import { TokenResponse } from '../au3te-ts-common/dto/TokenResponse';
 import { URLCoder } from '../au3te-ts-common/web/URLCoder';
 import { ResponseUtil } from './ResponseUtil';
 
@@ -158,6 +160,63 @@ export class AuthleteApiCaller {
         return ResponseUtil.form(content);
       default:
         throw this.unknownAction('/api/auth/authorization/issue', action);
+    }
+  }
+
+  public async callToken(
+    parameters: Record<string, string>,
+    clientId: string,
+    clientSecret: string,
+    properties: Property[],
+    clientCertificate: string,
+    clientCertificatePath: string[],
+    dpop: string,
+    htm: string,
+    htu: string
+  ): Promise<TokenResponse> {
+    const params = URLCoder.formUrlEncode(parameters);
+    return await this.callTokenInternal(
+      params,
+      clientId,
+      clientSecret,
+      properties,
+      clientCertificate,
+      clientCertificatePath,
+      dpop,
+      htm,
+      htu
+    );
+  }
+
+  public async callTokenInternal(
+    parameters: string | undefined,
+    clientId: string,
+    clientSecret: string,
+    properties: Property[],
+    clientCertificate: string,
+    clientCertificatePath: string[],
+    dpop: string,
+    htm: string,
+    htu: string
+  ): Promise<TokenResponse> {
+    if (!parameters) {
+      parameters = '';
+    }
+    const request = new TokenRequest()
+      .setParameters(parameters)
+      .setClientId(clientId)
+      .setClientSecret(clientSecret)
+      .setProperties(properties)
+      .setClientCertificate(clientCertificate)
+      .setClientCertificatePath(clientCertificatePath)
+      .setDpop(dpop)
+      .setHtm(htm)
+      .setHtu(htu);
+    try {
+      return await this.mApi.token(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/auth/token', e);
     }
   }
 

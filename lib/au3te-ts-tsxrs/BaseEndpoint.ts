@@ -16,15 +16,17 @@ export class BaseEndpoint {
     // The default implementation does nothing.
   }
 
-  protected async extractClientCertificateChain(request: Request) {
+  protected async extractClientCertificateChain(
+    request: Request
+  ): Promise<string[] | undefined> {
     for (const extractor of this.clientCertificateExtractors) {
       const chain = await extractor.extractClientCertificateChain(request);
-      if (chain != null && chain.length > 0) {
+      if (chain && chain.length > 0) {
         return chain;
       }
     }
 
-    return null;
+    return;
   }
 
   public async takeAttribute(session: Session, key: string) {
