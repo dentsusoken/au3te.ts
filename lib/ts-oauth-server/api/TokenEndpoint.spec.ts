@@ -27,16 +27,6 @@ describe('TokenEndpoint', () => {
     },
   };
 
-  const params = new URLSearchParams({
-    scope: 'org.iso.18013.5.1.mDL openid',
-    code_challenge: '-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs',
-    state: '7342EFBD-3D9F-4895-8445-18F365B8C66C',
-    redirect_uri: process.env.REDIRECT_URI || '',
-    code_challenge_method: 'S256',
-    response_type: 'code',
-    client_id: process.env.CLIENT_ID || '',
-  });
-
   it(
     'post',
     async () => {
@@ -45,9 +35,18 @@ describe('TokenEndpoint', () => {
       const tokenEndpoint = new TokenEndpoint();
 
       // Authorization Request
+      const authParams = new URLSearchParams({
+        scope: 'org.iso.18013.5.1.mDL openid',
+        code_challenge: '-wWUU3X62rCR7Z-zsCrfT7wPxLrticYIzI6mrXSqgzs',
+        state: '7342EFBD-3D9F-4895-8445-18F365B8C66C',
+        redirect_uri: process.env.REDIRECT_URI || '',
+        code_challenge_method: 'plain',
+        response_type: 'code',
+        client_id: process.env.CLIENT_ID || '',
+      });
       session.set('authTime', Date.now());
       await authEndpoint.get(
-        new Request(`https://example.com?${params.toString()}`),
+        new Request(`https://example.com?${authParams.toString()}`),
         session
       );
 
@@ -72,6 +71,10 @@ describe('TokenEndpoint', () => {
       // Token Request
       const redirectUri = new URL(response.headers.get('Location')!);
       const tokenParams = new URLSearchParams(redirectUri.search);
+      tokenParams.set('grant_type', 'authorization_code');
+      tokenParams.set('client_id', process.env.CLIENT_ID || '');
+      tokenParams.set('redirect_uri', process.env.REDIRECT_URI || '');
+      tokenParams.set('code_verifier', authParams.get('code_challenge')!);
       const tokenRequest = new Request(`https://example.com`, {
         method: 'POST',
         body: tokenParams.toString(),
@@ -79,7 +82,8 @@ describe('TokenEndpoint', () => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      tokenEndpoint.post(tokenRequest);
+      const tokenResponse = await tokenEndpoint.post(tokenRequest);
+      console.log('tokenResponse :>> ', tokenResponse);
     },
     { timeout: 1000000000 }
   );

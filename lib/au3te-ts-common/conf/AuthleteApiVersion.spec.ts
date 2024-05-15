@@ -17,6 +17,6 @@ describe('AuthleteApiVersion', () => {
   it('parse - null version', () => {
     const version = null;
     const result = AuthleteApiVersion.parse(version!);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 });

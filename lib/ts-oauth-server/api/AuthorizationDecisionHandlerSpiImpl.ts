@@ -5,7 +5,6 @@ import { User } from '../../au3te-ts-common/types/User';
 import { Utils } from '../../au3te-ts-common/util/Utils';
 import { AuthorizationDecisionHandlerSpiAdapter } from '../../au3te-ts-tsxrs/spi/AuthorizationDecisionHandlerSpiAdapter';
 
-// TODO 安藤実装済み
 export class AuthorizationDecisionHandlerSpiImpl extends AuthorizationDecisionHandlerSpiAdapter {
   private mClientAuthorized?: boolean;
   private mUser?: User;

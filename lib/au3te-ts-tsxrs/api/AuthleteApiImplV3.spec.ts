@@ -31,7 +31,7 @@ describe('AuthleteApiImplV3', () => {
   describe('constructor', () => {
     it('should create an instance', () => {
       const impl = new AuthleteApiImplV3(properties);
-      expect(impl).not.toBeNull();
+      expect(impl).not.toBeUndefined();
     });
 
     it('should throw an error if configuration is not set to V3', () => {

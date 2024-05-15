@@ -11,7 +11,7 @@ describe('HeaderClientCertificateClientCertExtractor', () => {
       // Act
       const result = await extractor.extractClientCertificateChain(request);
       // Assert
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
     });
 
     it('should return the decoded client certificate chain when headers are present', async () => {

@@ -3,9 +3,11 @@ import {
   AuthorizationDecisionEndpoint,
   AuthorizationEndpoint,
   PushedAuthReqEndpoint,
+  TokenEndpoint,
   loadEnv,
 } from 'au3te';
 import { Hono } from 'hono';
+import { StatusCode } from 'hono/utils/http-status';
 import { KVSession } from './util/session';
 
 type Bindings = {
@@ -40,7 +42,12 @@ app.get('/session/get', async (c) => {
 app.get('/api/authorization', async (c) => {
   const session = await KVSession(c);
   const endpoint = new AuthorizationEndpoint();
-  return endpoint.get(c.req.raw, session);
+  const response = await endpoint.get(c.req.raw, session);
+  response.headers.set;
+  response.headers.forEach((value, key) => {
+    c.res.headers.set(key, value);
+  });
+  return c.newResponse(response.body, response.status as StatusCode);
 });
 
 app.post('/api/authorization', async (c) => {
@@ -53,6 +60,12 @@ app.post('/api/authorization/decision', async (c) => {
   const session = await KVSession(c);
   const endpoint = new AuthorizationDecisionEndpoint();
   return endpoint.post(c.req.raw, session);
+});
+
+app.post('/api/token', async (c) => {
+  const endpoint = new TokenEndpoint();
+  const res = await endpoint.post(c.req.raw);
+  return res;
 });
 
 app.post('/api/par', (c) => {

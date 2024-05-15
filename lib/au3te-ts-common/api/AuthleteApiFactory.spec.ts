@@ -19,7 +19,7 @@ describe('AuthleteApiFactory', () => {
 
       const result = await AuthleteApiFactory.create(properties);
 
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
     });
 
     it('should call createImpl for V3 version', async () => {

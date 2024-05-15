@@ -9,7 +9,7 @@ describe('HttpsRequestClientCertificateExtractor', () => {
       body: JSON.stringify({ 'javax.servlet.request.X509Certificate': [] }),
     });
     const result = await extractor.extractClientCertificateChain(request);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('extractClientCertificateChain returns null when certificates are empty', async () => {
@@ -19,7 +19,7 @@ describe('HttpsRequestClientCertificateExtractor', () => {
       'javax.servlet.request.X509Certificate': [],
     });
     const result = await extractor.extractClientCertificateChain(request);
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   // TODO pass this test
