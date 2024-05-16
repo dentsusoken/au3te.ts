@@ -237,6 +237,12 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
 
     return parResonse;
   }
+  // TODO Credential Endpoint
+  public async introspection() {}
+  // TODO Credential Endpoint
+  public async credentialSingleParse() {}
+  // TODO Credential Endpoint
+  public async credentialSingleIssue() {}
 }
 
 abstract class ApiCaller implements AuthleteApiCall {

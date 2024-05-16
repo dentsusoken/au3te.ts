@@ -282,6 +282,8 @@ export class AuthleteApiCaller {
     }
   }
 
+  public callIntrospection() {}
+
   public unknownAction(path: string, action: unknown): Error {
     // Error message.
     const message = `Authlete ${path} API returned an unknown action: ${action}`;
