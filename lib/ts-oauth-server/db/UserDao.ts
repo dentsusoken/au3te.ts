@@ -140,6 +140,9 @@ export class UserDao {
     });
   }
 
+  // TODO Credential Endpoint
+  getBySubject() {}
+
   private static add(entity: UserEntity): void {
     this.sUserDB[entity.getSubject()] = entity;
   }
