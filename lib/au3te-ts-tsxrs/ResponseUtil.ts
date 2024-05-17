@@ -1,3 +1,4 @@
+// TODO integrate this with the Other ResponseUtil.ts under ts-oauth-server/util/ResponseUtil.ts
 enum Status {
   OK = 200,
   CREATED = 201,
@@ -124,6 +125,16 @@ export class ResponseUtil {
     headers?: Record<string, unknown>
   ): Response {
     return this.build(Status.CREATED, entity, this.MEDIA_TYPE_JSON, headers);
+  }
+
+  public static bearerError(
+    status: number,
+    challenge: string,
+    headers?: Record<string, unknown>
+  ): Response {
+    const response = this.build(status, undefined, undefined, headers);
+    response.headers.set('WWW-Authenticate', challenge);
+    return response;
   }
 
   public static tooLarge(

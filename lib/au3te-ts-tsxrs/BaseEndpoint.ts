@@ -29,6 +29,15 @@ export class BaseEndpoint {
     return;
   }
 
+  protected async extractClientCertificate(request: Request) {
+    const certs = await this.extractClientCertificateChain(request);
+    if (certs && certs.length > 0) {
+      return certs[0];
+    } else {
+      return;
+    }
+  }
+
   public async takeAttribute(session: Session, key: string) {
     const value = await session.get(key);
     await session.delete(key);

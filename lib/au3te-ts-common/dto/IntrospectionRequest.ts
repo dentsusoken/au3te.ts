@@ -1,6 +1,8 @@
 // TODO 安藤実装済み
 export class IntrospectionRequest {
   private token?: string;
+  private scopes?: string[];
+  private subject?: string;
   private clientCertificate?: string;
   private dpop?: string;
   private htm?: string;
@@ -11,6 +13,20 @@ export class IntrospectionRequest {
   }
   setToken(token: string): IntrospectionRequest {
     this.token = token;
+    return this;
+  }
+  getScopes(): string[] | undefined {
+    return this.scopes;
+  }
+  setScopes(scopes: string[]): IntrospectionRequest {
+    this.scopes = scopes;
+    return this;
+  }
+  getSubject(): string | undefined {
+    return this.subject;
+  }
+  setSubject(subject: string): IntrospectionRequest {
+    this.subject = subject;
     return this;
   }
   getClientCertificate(): string | undefined {

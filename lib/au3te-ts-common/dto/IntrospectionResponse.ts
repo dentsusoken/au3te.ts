@@ -1,5 +1,11 @@
 // TODO 安藤実装済み
-import { Action } from "./PushedAuthReqResponse";
+export enum Action {
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+  BAD_REQUEST = 'BAD_REQUEST',
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  FORBIDDEN = 'FORBIDDEN',
+  OK = 'OK',
+}
 
 export class IntrospectionResponse {
   private action?: Action;

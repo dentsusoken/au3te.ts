@@ -1,4 +1,33 @@
-export const APPLICATION_JSON_TYPE = 'application/json;charset=UTF-8';
-export const APPLICATION_FORM_URLENCODED = 'application/x-www-form-urlencoded';
-export const TEXT_HTML_TYPE = 'text/html;charset=UTF-8';
-export const TEXT_PLAIN_TYPE = 'text/plain;charset=UTF-8';
+export class MediaType {
+  public static APPLICATION_JSON_TYPE = new MediaType('application/json');
+  public static APPLICATION_FORM_URLENCODED = new MediaType(
+    'application/x-www-form-urlencoded'
+  );
+  public static TEXT_HTML_TYPE = new MediaType('text/html');
+  public static TEXT_PLAIN_TYPE = new MediaType('text/plain');
+  public static APPLICATION_JWT_TYPE = new MediaType('application/jwt');
+
+  private constructor(private readonly type: string) {}
+
+  public value() {
+    return this.type;
+  }
+
+  public isEquals(type: unknown) {
+    if (this.type === type) {
+      return true;
+    }
+
+    const mediaTypeOnly = this.type.split(';')[0];
+
+    if (this.type === mediaTypeOnly) {
+      return true;
+    }
+
+    return false;
+  }
+
+  withCharset(charset: string) {
+    return `${this.type};charset=${charset.toLowerCase()}`;
+  }
+}

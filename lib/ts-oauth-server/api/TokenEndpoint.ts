@@ -2,13 +2,17 @@ import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
 import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory';
 import { BaseTokenEndpoint } from '../../au3te-ts-tsxrs/BaseTokenEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/TokenRequestHandler';
-import { APPLICATION_FORM_URLENCODED } from '../../util/mediaType';
+import { MediaType } from '../../util/MediaType';
 import { getQueryParams } from '../../util/queryParams';
 import { OBBTokenTask } from './OBBTokenTask';
 import { TokenRequestHandlerSpiImpl } from './TokenRequestHandlerSpiImpl';
 export class TokenEndpoint extends BaseTokenEndpoint {
   public async post(request: Request): Promise<Response> {
-    if (request.headers.get('Content-Type') !== APPLICATION_FORM_URLENCODED) {
+    if (
+      MediaType.APPLICATION_FORM_URLENCODED.isEquals(
+        request.headers.get('Content-Type')
+      )
+    ) {
       return new Response(null, { status: 400 });
     }
     const parameters = await getQueryParams(request);

@@ -37,10 +37,10 @@ class AuthorizationFailResponse {
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace AuthorizationFailResponse {
   export enum Action {
-    INTERNAL_SERVER_ERROR,
-    BAD_REQUEST,
-    LOCATION,
-    FORM,
+    INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+    BAD_REQUEST = 'BAD_REQUEST',
+    LOCATION = 'LOCATION',
+    FORM = 'FORM',
   }
 }
 

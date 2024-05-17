@@ -6,6 +6,14 @@ import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/Authorizati
 import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { CredentialIssuerMetadataRequest } from '../../au3te-ts-common/dto/CredentialIssuerMetadataRequest';
+import { CredentialIssuerMetadataResponse } from '../../au3te-ts-common/dto/CredentialIssuerMetadataResponse';
+import { CredentialSingleIssueRequest } from '../../au3te-ts-common/dto/CredentialSingleIssueRequest';
+import { CredentialSingleIssueResponse } from '../../au3te-ts-common/dto/CredentialSingleIssueResponse';
+import { CredentialSingleParseRequest } from '../../au3te-ts-common/dto/CredentialSingleParseRequest';
+import { CredentialSingleParseResponse } from '../../au3te-ts-common/dto/CredentialSingleParseResponse';
+import { IntrospectionRequest } from '../../au3te-ts-common/dto/IntrospectionRequest';
+import { IntrospectionResponse } from '../../au3te-ts-common/dto/IntrospectionResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
@@ -23,6 +31,13 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
   private static readonly AUTH_AUTHORIZATION_ISSUE_API_PATH: string =
     '/api/%d/auth/authorization/issue';
   private static readonly AUTH_TOKEN_API_PATH: string = '/api/%d/auth/token';
+
+  private static readonly AUTH_INTROSPECTION_API_PATH: string =
+    '/api/%d/auth/introspection';
+  private static readonly VCI_SINGLE_PARSE_API_PATH: string =
+    '/api/%d/vci/single/parse';
+  private static readonly VCI_SINGLE_ISSUE_API_PATH: string =
+    '/api/%d/vci/single/issue';
 
   private readonly mAuth: string;
   private readonly mServiceId: number | undefined;
@@ -237,12 +252,84 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
 
     return parResonse;
   }
-  // TODO Credential Endpoint
-  public async introspection() {}
-  // TODO Credential Endpoint
-  public async credentialSingleParse() {}
-  // TODO Credential Endpoint
-  public async credentialSingleIssue() {}
+
+  public async introspection(request: IntrospectionRequest) {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.AUTH_INTROSPECTION_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+    const intrResonse = new IntrospectionResponse();
+    intrResonse.setAction(params.action);
+    intrResonse.setDpopNonce(params.dpopNonce);
+    intrResonse.setIssuableCredentials(params.issuableCredentials);
+    intrResonse.setResponseContent(params.responseContent);
+    intrResonse.setSubject(params.subject);
+
+    return intrResonse;
+  }
+
+  public async credentialSingleParse(request: CredentialSingleParseRequest) {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.VCI_SINGLE_PARSE_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+    const cspResonse = new CredentialSingleParseResponse();
+    cspResonse.setAction(params.action);
+    cspResonse.setInfo(params.info);
+    cspResonse.setResponseContent(params.responseContent);
+
+    return cspResonse;
+  }
+
+  public async credentialSingleIssue(request: CredentialSingleIssueRequest) {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.VCI_SINGLE_ISSUE_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+    const csiResonse = new CredentialSingleIssueResponse();
+    csiResonse.setAction(params.action);
+    csiResonse.setResponseContent(params.responseContent);
+
+    return csiResonse;
+  }
+
+  public async getCredentialIssuerMetadata(
+    request: CredentialIssuerMetadataRequest
+  ) {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.VCI_SINGLE_ISSUE_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+    const csiResonse = new CredentialIssuerMetadataResponse();
+    csiResonse.setAction(params.action);
+    csiResonse.setResponseContent(params.responseContent);
+
+    return csiResonse;
+  }
 }
 
 abstract class ApiCaller implements AuthleteApiCall {

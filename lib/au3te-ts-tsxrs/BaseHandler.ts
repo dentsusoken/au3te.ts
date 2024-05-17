@@ -11,4 +11,11 @@ export abstract class BaseHandler {
   protected getApiCaller(): AuthleteApiCaller {
     return this.mApiCaller;
   }
+
+  protected unexpected(message: string, cause: Error) {
+    if (cause && cause.message) {
+      message = message + ': ' + cause.message;
+    }
+    return new Error(message);
+  }
 }

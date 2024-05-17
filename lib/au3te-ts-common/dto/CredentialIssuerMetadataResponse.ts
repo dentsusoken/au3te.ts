@@ -1,29 +1,26 @@
 export enum Action {
   OK = 'OK',
-  OK_JWT = 'OK_JWT',
-  ACCEPTED = 'ACCEPTED',
-  ACCEPTED_JWT = 'ACCEPTED_JWT',
-  BAD_REQUEST = 'BAD_REQUEST',
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  FORBIDDEN = 'FORBIDDEN',
+  NOT_FOUND = 'NOT_FOUND',
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
-  CALLER_ERROR = 'CALLER_ERROR',
 }
 
-export class CredentialSingleIssueResponse {
+export class CredentialIssuerMetadataResponse {
   private action?: Action;
   private responseContent?: string;
+
   getAction(): Action | undefined {
     return this.action;
   }
-  setAction(action: Action): CredentialSingleIssueResponse {
+  setAction(action: Action): CredentialIssuerMetadataResponse {
     this.action = action;
     return this;
   }
   getResponseContent(): string | undefined {
     return this.responseContent;
   }
-  setResponseContent(responseContent: string): CredentialSingleIssueResponse {
+  setResponseContent(
+    responseContent: string
+  ): CredentialIssuerMetadataResponse {
     this.responseContent = responseContent;
     return this;
   }
