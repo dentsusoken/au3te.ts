@@ -17,7 +17,7 @@ import { AbstractCredentialEndpoint } from './AbstractCredentialEndpoint';
 export class CredentialEndpoint extends AbstractCredentialEndpoint {
   async post(request: Request) {
     if (
-      MediaType.APPLICATION_JSON_TYPE.isEquals(
+      !MediaType.APPLICATION_JSON_TYPE.isEquals(
         request.headers.get('Content-Type')
       )
     ) {
@@ -28,7 +28,7 @@ export class CredentialEndpoint extends AbstractCredentialEndpoint {
 
     const authorization = request.headers.get('Authorization') || '';
     const dpop = request.headers.get('DPoP') || '';
-    const requestContent = await request.text();
+    const requestContent = await request.clone().json();
 
     const api = await AuthleteApiFactory.getDefaultApi();
     const accessToken = this.extractAccessToken(authorization, '');
@@ -44,7 +44,12 @@ export class CredentialEndpoint extends AbstractCredentialEndpoint {
 
     let info: CredentialRequestInfo;
     try {
-      info = await this.parseRequest(api, requestContent, accessToken, headers);
+      info = await this.parseRequest(
+        api,
+        JSON.stringify(requestContent),
+        accessToken,
+        headers
+      );
     } catch (e) {
       if (e instanceof WebApplicationException) return e.getResponse();
       throw e;
@@ -71,7 +76,7 @@ export class CredentialEndpoint extends AbstractCredentialEndpoint {
 
     const response = await api.credentialSingleParse(request);
 
-    const content = response.getResponseContent() || '';
+    const content = response.getResponseContent();
 
     switch (response.getAction()) {
       case ParseAction.BAD_REQUEST:
@@ -88,7 +93,10 @@ export class CredentialEndpoint extends AbstractCredentialEndpoint {
         throw ExceptionUtil.forbiddenExceptionJson(content, headers);
 
       case ParseAction.OK:
-        return response.getInfo() || new CredentialRequestInfo();
+        return (
+          Object.assign(new CredentialRequestInfo(), response.getInfo()) ||
+          new CredentialRequestInfo()
+        );
 
       case ParseAction.INTERNAL_SERVER_ERROR:
       default:

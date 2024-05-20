@@ -9,7 +9,7 @@ import { TokenRequestHandlerSpiImpl } from './TokenRequestHandlerSpiImpl';
 export class TokenEndpoint extends BaseTokenEndpoint {
   public async post(request: Request): Promise<Response> {
     if (
-      MediaType.APPLICATION_FORM_URLENCODED.isEquals(
+      !MediaType.APPLICATION_FORM_URLENCODED.isEquals(
         request.headers.get('Content-Type')
       )
     ) {

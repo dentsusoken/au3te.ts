@@ -9,7 +9,7 @@ export class UserEntity implements User {
   // private email: string;
   // private address: Address;
   // private phoneNumber?: string;
-  // private code?: string;
+  private code?: string;
 
   // private phoneNumberVerified?: boolean;
   // private emailVerified?: boolean;
@@ -43,7 +43,7 @@ export class UserEntity implements User {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _phoneNumber?: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _code?: string,
+    code?: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _givenName?: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -78,7 +78,7 @@ export class UserEntity implements User {
     // this.email = email;
     // this.address = address;
     // this.phoneNumber = phoneNumber;
-    // this.code = code;
+    this.code = code;
     // this.givenName = givenName;
     // this.familyName = familyName;
     // this.middleName = middleName;
@@ -109,8 +109,19 @@ export class UserEntity implements User {
   }
   // TODO Implement this method
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getAttribute(_attributeName: string): unknown {
-    throw new Error('Method not implemented.');
+  public getAttribute(attributeName: string): unknown {
+    if (attributeName == null) {
+      return;
+    }
+
+    switch (attributeName) {
+      case 'code':
+        // The code of the user.
+        return this.code;
+
+      default:
+        return this.attributes ? this.attributes[attributeName] : undefined;
+    }
   }
   public setAttribute(
     attributeName: string,
