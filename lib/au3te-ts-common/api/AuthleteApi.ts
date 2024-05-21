@@ -4,6 +4,14 @@ import { AuthorizationIssueRequest } from '../dto/AuthorizationIssueRequest';
 import { AuthorizationIssueResponse } from '../dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../dto/AuthorizationResponse';
+import { CredentialIssuerMetadataRequest } from '../dto/CredentialIssuerMetadataRequest';
+import { CredentialIssuerMetadataResponse } from '../dto/CredentialIssuerMetadataResponse';
+import { CredentialSingleIssueRequest } from '../dto/CredentialSingleIssueRequest';
+import { CredentialSingleIssueResponse } from '../dto/CredentialSingleIssueResponse';
+import { CredentialSingleParseRequest } from '../dto/CredentialSingleParseRequest';
+import { CredentialSingleParseResponse } from '../dto/CredentialSingleParseResponse';
+import { IntrospectionRequest } from '../dto/IntrospectionRequest';
+import { IntrospectionResponse } from '../dto/IntrospectionResponse';
 import { TokenRequest } from '../dto/TokenRequest';
 import { TokenResponse } from '../dto/TokenResponse';
 
@@ -56,6 +64,17 @@ interface AuthleteApi {
   pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse>;
+
+  introspection(request: IntrospectionRequest): Promise<IntrospectionResponse>;
+  getCredentialIssuerMetadata(
+    request: CredentialIssuerMetadataRequest
+  ): Promise<CredentialIssuerMetadataResponse>;
+  credentialSingleParse(
+    request: CredentialSingleParseRequest
+  ): Promise<CredentialSingleParseResponse>;
+  credentialSingleIssue(
+    request: CredentialSingleIssueRequest
+  ): Promise<CredentialSingleIssueResponse>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

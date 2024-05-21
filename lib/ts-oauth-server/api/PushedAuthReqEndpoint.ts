@@ -2,6 +2,7 @@ import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
 import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory';
 import { BasePushedAuthReqEndpoint } from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
+import { MediaType } from '../../util/MediaType';
 
 /**
  * An implementation of a pushed authorization endpoint.
@@ -10,9 +11,6 @@ import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
  *      >OAuth 2.0 Pushed Authorization Requests</a>
  */
 export class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
-  readonly MEDIA_TYPE_JSON = 'application/json;charset=UTF-8';
-  readonly MEDIA_TYPE_URLENCODED = 'application/x-www-form-urlencoded';
-
   public async post(request: Request): Promise<Response> {
     // Authlete API
     const authleteApi: AuthleteApi = await AuthleteApiFactory.getDefaultApi();
@@ -35,10 +33,16 @@ export class PushedAuthReqEndpoint extends BasePushedAuthReqEndpoint {
 
     // RFC 6749
     // The OAuth 2.0 Authorization Framework
-    if (request.headers.get('Content-Type') === this.MEDIA_TYPE_JSON) {
+    if (
+      MediaType.APPLICATION_JSON_TYPE.isEquals(
+        request.headers.get('Content-Type')
+      )
+    ) {
       params.setParameters(await request.json());
     } else if (
-      request.headers.get('Content-Type') === this.MEDIA_TYPE_URLENCODED
+      MediaType.APPLICATION_FORM_URLENCODED.isEquals(
+        request.headers.get('Content-Type')
+      )
     ) {
       const query = new URLSearchParams(await request.text());
       params.setParameters(Object.fromEntries(query.entries()));

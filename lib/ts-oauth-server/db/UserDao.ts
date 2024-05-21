@@ -140,6 +140,14 @@ export class UserDao {
     });
   }
 
+  public static getBySubject(subject: string) {
+    return this.get({
+      check: (ue) => {
+        return ue.getSubject() === subject;
+      },
+    });
+  }
+
   private static add(entity: UserEntity): void {
     this.sUserDB[entity.getSubject()] = entity;
   }

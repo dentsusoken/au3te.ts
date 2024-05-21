@@ -2,6 +2,7 @@ import { KVNamespace } from '@cloudflare/workers-types';
 import {
   AuthorizationDecisionEndpoint,
   AuthorizationEndpoint,
+  CredentialEndpoint,
   PushedAuthReqEndpoint,
   TokenEndpoint,
   loadEnv,
@@ -69,6 +70,11 @@ app.post('/api/token', async (c) => {
 
 app.post('/api/par', (c) => {
   const endpoint = new PushedAuthReqEndpoint();
+  return endpoint.post(c.req.raw);
+});
+
+app.post('/api/credential', async (c) => {
+  const endpoint = new CredentialEndpoint();
   return endpoint.post(c.req.raw);
 });
 

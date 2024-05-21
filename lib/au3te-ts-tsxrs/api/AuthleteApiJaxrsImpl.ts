@@ -4,13 +4,23 @@ import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/Authorizati
 import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { CredentialIssuerMetadataRequest } from '../../au3te-ts-common/dto/CredentialIssuerMetadataRequest';
+import { CredentialIssuerMetadataResponse } from '../../au3te-ts-common/dto/CredentialIssuerMetadataResponse';
+import { CredentialSingleIssueRequest } from '../../au3te-ts-common/dto/CredentialSingleIssueRequest';
+import { CredentialSingleIssueResponse } from '../../au3te-ts-common/dto/CredentialSingleIssueResponse';
+import { CredentialSingleParseRequest } from '../../au3te-ts-common/dto/CredentialSingleParseRequest';
+import { CredentialSingleParseResponse } from '../../au3te-ts-common/dto/CredentialSingleParseResponse';
+import { IntrospectionRequest } from '../../au3te-ts-common/dto/IntrospectionRequest';
+import { IntrospectionResponse } from '../../au3te-ts-common/dto/IntrospectionResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
 import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
 import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
+import { MediaType } from '../../util/MediaType';
 
 export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
-  private static readonly JSON_UTF8_TYPE = 'application/json;charset=UTF-8';
+  private static readonly JSON_UTF8_TYPE =
+    MediaType.APPLICATION_JSON_TYPE.withCharset('UTF-8');
 
   private readonly mBaseUrl: string;
   // private readonly mSettings: Settings;
@@ -37,6 +47,20 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   abstract pushAuthorizationRequest(
     request: PushedAuthReqRequest
   ): Promise<PushedAuthReqResponse>;
+
+  abstract credentialSingleParse(
+    request: CredentialSingleParseRequest
+  ): Promise<CredentialSingleParseResponse>;
+  abstract credentialSingleIssue(
+    request: CredentialSingleIssueRequest
+  ): Promise<CredentialSingleIssueResponse>;
+  abstract introspection(
+    request: IntrospectionRequest
+  ): Promise<IntrospectionResponse>;
+
+  abstract getCredentialIssuerMetadata(
+    request: CredentialIssuerMetadataRequest
+  ): Promise<CredentialIssuerMetadataResponse>;
 
   protected getTarget(): string {
     return this.mBaseUrl;

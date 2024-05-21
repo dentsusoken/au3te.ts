@@ -3,6 +3,8 @@ import { AuthorizationIssueRequest } from '../au3te-ts-common/dto/AuthorizationI
 import { AuthorizationIssueResponse } from '../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../au3te-ts-common/dto/AuthorizationResponse';
+import { IntrospectionRequest } from '../au3te-ts-common/dto/IntrospectionRequest';
+import { IntrospectionResponse } from '../au3te-ts-common/dto/IntrospectionResponse';
 import { Property } from '../au3te-ts-common/dto/Property';
 import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
@@ -279,6 +281,38 @@ export class AuthleteApiCaller {
     } catch (e: any) {
       // the API call failed
       throw this.apiFailure('/api/pushed_auth_req', e);
+    }
+  }
+
+  public callIntrospection(
+    accessToken: string,
+    scopes: string[],
+    subject: string,
+    clientCertificate: string,
+    dpop: string,
+    htm: string,
+    htu: string
+  ): Promise<IntrospectionResponse> {
+    const request = new IntrospectionRequest()
+      .setToken(accessToken)
+      .setScopes(scopes)
+      .setSubject(subject)
+      .setClientCertificate(clientCertificate)
+      .setDpop(dpop)
+      .setHtm(htm)
+      .setHtu(htu);
+    return this.callIntrospectionInternal(request);
+  }
+
+  public async callIntrospectionInternal(
+    request: IntrospectionRequest
+  ): Promise<IntrospectionResponse> {
+    try {
+      return await this.mApi.introspection(request);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      // the API call failed
+      throw this.apiFailure('/api/auth/introspection', e);
     }
   }
 

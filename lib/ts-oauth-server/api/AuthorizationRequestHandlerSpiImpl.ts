@@ -4,6 +4,7 @@ import { User } from '../../au3te-ts-common/types/User';
 import { Params } from '../../au3te-ts-tsxrs/AuthorizationDecisionHandler';
 import { AuthorizationRequestHandlerSpiAdapter } from '../../au3te-ts-tsxrs/spi/AuthorizationRequestHandlerSpiAdapter';
 import { fromMilliseconds } from '../../util/Date';
+import { MediaType } from '../../util/MediaType';
 import { Session } from '../../util/session';
 import { FederationManager } from '../federation/FederationManager';
 import { Viewable } from '../webapp';
@@ -48,7 +49,7 @@ export class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHand
 
     return new Response(viewable, {
       headers: {
-        'Content-Type': 'text/html',
+        'Content-Type': MediaType.TEXT_HTML_TYPE.withCharset('UTF-8'),
       },
     });
   }
