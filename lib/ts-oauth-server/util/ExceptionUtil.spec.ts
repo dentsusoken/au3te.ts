@@ -17,12 +17,10 @@ describe('ExceptionUtil', () => {
       const response = (e as WebApplicationException).getResponse();
       expect(e).toBeInstanceOf(WebApplicationException);
       expect(response.status).toBe(400);
-      expect(await response.json()).toBe(
-        JSON.stringify({
-          error: 'invalid_request',
-          error_description: 'The request is missing a required parameter',
-        })
-      );
+      expect(await response.json()).toEqual({
+        error: 'invalid_request',
+        error_description: 'The request is missing a required parameter',
+      });
     }
   });
   it('unauthorizedException', async () => {
@@ -39,12 +37,10 @@ describe('ExceptionUtil', () => {
       const response = (e as WebApplicationException).getResponse();
       expect(e).toBeInstanceOf(WebApplicationException);
       expect(response.status).toBe(401);
-      expect(await response.json()).toBe(
-        JSON.stringify({
-          error: 'invalid_token',
-          error_description: 'The access token expired',
-        })
-      );
+      expect(await response.json()).toEqual({
+        error: 'invalid_token',
+        error_description: 'The access token expired',
+      });
       expect(response.headers.get('WWW-Authenticate')).toBe(
         'Bearer realm="example"'
       );
@@ -63,12 +59,10 @@ describe('ExceptionUtil', () => {
       const response = (e as WebApplicationException).getResponse();
       expect(e).toBeInstanceOf(WebApplicationException);
       expect(response.status).toBe(403);
-      expect(await response.json()).toBe(
-        JSON.stringify({
-          error: 'insufficient_scope',
-          error_description: 'The request requires higher privileges',
-        })
-      );
+      expect(await response.json()).toEqual({
+        error: 'insufficient_scope',
+        error_description: 'The request requires higher privileges',
+      });
     }
   });
   it('internalServerErrorExceptionJson', async () => {
@@ -84,12 +78,10 @@ describe('ExceptionUtil', () => {
       const response = (e as WebApplicationException).getResponse();
       expect(e).toBeInstanceOf(WebApplicationException);
       expect(response.status).toBe(500);
-      expect(await response.json()).toBe(
-        JSON.stringify({
-          error: 'server_error',
-          error_description: 'The server encountered an error',
-        })
-      );
+      expect(await response.json()).toEqual({
+        error: 'server_error',
+        error_description: 'The server encountered an error',
+      });
     }
   });
 });

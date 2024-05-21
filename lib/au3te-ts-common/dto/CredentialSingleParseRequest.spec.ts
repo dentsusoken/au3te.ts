@@ -1,6 +1,5 @@
-// TODO 安藤実装済み
 import { describe, expect, it } from 'vitest';
-import { CredentialSingleParseRequest } from "./CredentialSingleParseRequest";
+import { CredentialSingleParseRequest } from './CredentialSingleParseRequest';
 
 describe('CredentialSingleParseRequest', () => {
   const request = new CredentialSingleParseRequest();

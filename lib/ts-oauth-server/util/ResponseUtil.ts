@@ -171,7 +171,7 @@ export class ResponseUtil {
 
   private static builderForTextPlain(
     status: number,
-    entity?: unknown,
+    entity?: string,
     headers?: Record<string, unknown>
   ) {
     return this.build(status, this.MEDIA_TYPE_PLAIN, entity, headers);
@@ -179,7 +179,7 @@ export class ResponseUtil {
 
   private static builderForTextHtml(
     status: number,
-    entity?: unknown,
+    entity?: string,
     headers?: Record<string, unknown>
   ) {
     return this.build(status, this.MEDIA_TYPE_HTML, entity, headers);
@@ -187,7 +187,7 @@ export class ResponseUtil {
 
   private static builderForJson(
     status: number,
-    entity?: unknown,
+    entity?: string,
     headers?: Record<string, unknown>
   ) {
     return this.build(status, this.MEDIA_TYPE_JSON, entity, headers);
@@ -195,7 +195,7 @@ export class ResponseUtil {
 
   private static builderForJwt(
     status: number,
-    entity?: unknown,
+    entity?: string,
     headers?: Record<string, unknown>
   ) {
     return this.build(status, this.MEDIA_TYPE_JWT, entity, headers);
@@ -204,10 +204,10 @@ export class ResponseUtil {
   private static build(
     status: number,
     MediaType: string,
-    entity?: unknown,
+    entity?: string,
     headers?: Record<string, unknown>
   ) {
-    return new Response(JSON.stringify(entity), {
+    return new Response(entity, {
       status,
       headers: {
         'Content-Type': MediaType,

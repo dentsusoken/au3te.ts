@@ -1,4 +1,3 @@
-// TODO 安藤実装済み
 import { describe, expect, it } from 'vitest';
 import { CredentialRequestInfo } from './CredentialRequestInfo';
 import { CredentialSingleParseResponse } from './CredentialSingleParseResponse';
@@ -21,7 +20,7 @@ describe('IntrospectionRequest', () => {
   });
 
   it('setInfo', () => {
-    const info = new CredentialRequestInfo;
+    const info = new CredentialRequestInfo();
     request.setInfo(info);
     expect(request.getInfo()).toBe(info);
   });

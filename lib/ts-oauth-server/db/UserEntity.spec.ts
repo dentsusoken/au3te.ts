@@ -60,11 +60,11 @@ describe('UserEntity', () => {
       'password',
       'name',
       'email',
-      new Address()
+      new Address(),
+      '00-0000-0000',
+      'code'
     );
-    expect(() => user.getAttribute('attributeName')).toThrowError(
-      'Method not implemented.'
-    );
+    expect(user.getAttribute('code')).toEqual('code');
   });
 
   it('should set nationalities correctly', () => {

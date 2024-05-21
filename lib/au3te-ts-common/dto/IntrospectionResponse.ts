@@ -1,4 +1,3 @@
-// TODO 安藤実装済み
 export enum Action {
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
   BAD_REQUEST = 'BAD_REQUEST',

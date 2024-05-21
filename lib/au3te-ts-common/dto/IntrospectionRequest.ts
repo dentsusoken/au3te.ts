@@ -1,4 +1,3 @@
-// TODO 安藤実装済み
 export class IntrospectionRequest {
   private token?: string;
   private scopes?: string[];

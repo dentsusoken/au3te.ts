@@ -28,8 +28,6 @@ export class AccessTokenValidator extends BaseHandler {
   async process(request: IntrospectionRequest) {
     const response: IntrospectionResponse =
       await this.getApiCaller().callIntrospectionInternal(request);
-    // TODO Credential Endpoint check if this response usage is correct
-    // because multiple use of response is not allowed
     this.handleIntrospectionResponse(response);
 
     return response;

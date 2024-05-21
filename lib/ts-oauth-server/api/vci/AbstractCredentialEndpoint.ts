@@ -34,7 +34,7 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
     return JSON.parse(content);
   }
 
-  async introspect(
+  protected async introspect(
     req: Request,
     api: AuthleteApi,
     at: string,
@@ -79,7 +79,7 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
       throw e;
     }
   }
-  getOrderFormat(info: CredentialRequestInfo): OrderFormat {
+  protected getOrderFormat(info: CredentialRequestInfo): OrderFormat {
     console.log(
       'info is instanceof CredentialRequestInfo :>> ',
       info instanceof CredentialRequestInfo

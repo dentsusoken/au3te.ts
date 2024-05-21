@@ -1,7 +1,5 @@
-// TODO 安藤実装済み
 import { describe, expect, it } from 'vitest';
-import { IntrospectionResponse } from './IntrospectionResponse';
-import { Action } from "./PushedAuthReqResponse";
+import { Action, IntrospectionResponse } from './IntrospectionResponse';
 
 describe('IntrospectionRequest', () => {
   const request = new IntrospectionResponse();
@@ -11,8 +9,8 @@ describe('IntrospectionRequest', () => {
   });
 
   it('setAction', () => {
-    request.setAction(Action.CREATED);
-    expect(request.getAction()).toBe(Action.CREATED);
+    request.setAction(Action.OK);
+    expect(request.getAction()).toBe(Action.OK);
   });
 
   it('getSubject', () => {

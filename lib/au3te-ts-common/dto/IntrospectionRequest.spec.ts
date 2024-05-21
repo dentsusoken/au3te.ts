@@ -1,4 +1,3 @@
-// TODO 安藤実装済み
 import { describe, expect, it } from 'vitest';
 import { IntrospectionRequest } from './IntrospectionRequest';
 

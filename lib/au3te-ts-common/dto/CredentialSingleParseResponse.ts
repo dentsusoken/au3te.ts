@@ -1,4 +1,3 @@
-// TODO 安藤実装済み
 import { CredentialRequestInfo } from './CredentialRequestInfo';
 
 export enum Action {

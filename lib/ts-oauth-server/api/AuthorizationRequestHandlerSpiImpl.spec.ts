@@ -25,6 +25,8 @@ describe('AuthorizationRequestHandlerSpiImpl', () => {
 
     // Act
     const response = await handler.generateAuthorizationPage(info);
-    expect(response.headers.get('Content-Type')).toEqual('text/html');
+    expect(response.headers.get('Content-Type')).toEqual(
+      'text/html;charset=utf-8'
+    );
   });
 });

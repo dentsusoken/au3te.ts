@@ -13,7 +13,6 @@ import { ResponseUtil } from '../../util/ResponseUtil';
 import { OrderContext } from '../../vc/OrderContext';
 import { AbstractCredentialEndpoint } from './AbstractCredentialEndpoint';
 
-// TODO Credential Endpoint
 export class CredentialEndpoint extends AbstractCredentialEndpoint {
   async post(request: Request) {
     if (

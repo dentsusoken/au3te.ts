@@ -1,8 +1,6 @@
-// TODO 安藤実装済み
-
 export class CredentialSingleParseRequest {
   private accessToken?: string;
-  private requestContent?: string
+  private requestContent?: string;
 
   getAccessToken(): string | undefined {
     return this.accessToken;

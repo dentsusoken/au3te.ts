@@ -14,11 +14,14 @@ export class MediaType {
   }
 
   public isEquals(type: unknown) {
+    if (!type) {
+      return false;
+    }
     if (this.type === type) {
       return true;
     }
 
-    const mediaTypeOnly = this.type.split(';')[0];
+    const mediaTypeOnly = (type as string).split(';')[0];
 
     if (this.type === mediaTypeOnly) {
       return true;
