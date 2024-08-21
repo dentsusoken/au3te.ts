@@ -16,6 +16,7 @@ import { IntrospectionRequest } from '../../au3te-ts-common/dto/IntrospectionReq
 import { IntrospectionResponse } from '../../au3te-ts-common/dto/IntrospectionResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { ServiceConfigurationRequest } from '../../au3te-ts-common/dto/ServiceConfigurationRequest';
 import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
 import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 import { ClientAuthMethod } from '../../au3te-ts-common/types/ClientAuthMethod';
@@ -38,6 +39,8 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     '/api/%d/vci/single/parse';
   private static readonly VCI_SINGLE_ISSUE_API_PATH: string =
     '/api/%d/vci/single/issue';
+  private static readonly SERVICE_CONFIGURATION_API_PATH: string =
+    '/api/%d/service/configuration';
 
   private readonly mAuth: string;
   private readonly mServiceId: number | undefined;
@@ -111,11 +114,44 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     }
   };
 
+  private GetApiCaller = class extends ApiCaller {
+    public api: AuthleteApiImplV3;
+    constructor(
+      api: AuthleteApiImplV3,
+      request: unknown,
+      path?: string,
+      format?: string,
+      ...args: unknown[]
+    ) {
+      if (typeof path === 'string') {
+        super(request, path);
+      } else {
+        super(request, path!, format!, args);
+      }
+      this.api = api;
+    }
+
+    async call(): Promise<Response> {
+      return await this.api.callGetApi(this.mPath, this.mRequest);
+    }
+  };
+
   protected async callPostApi(
     path: string,
     request: unknown
   ): Promise<Response> {
     return await super.callPostApi(this.mAuth, path, request);
+  }
+
+  protected async callGetApi(
+    path: string,
+    request: unknown
+  ): Promise<Response> {
+    return await super.callGetApi(
+      this.mAuth,
+      path,
+      request as Record<string, unknown[]>
+    );
   }
 
   public async authorization(
@@ -329,6 +365,24 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     csiResonse.setResponseContent(params.responseContent);
 
     return csiResonse;
+  }
+
+  async getServiceConfiguration(
+    request?: ServiceConfigurationRequest,
+    pretty?: boolean
+  ): Promise<string> {
+    const params = request ? request : { pretty };
+    const response = await this.executeApiCall(
+      new this.GetApiCaller(
+        this,
+        params,
+        undefined,
+        AuthleteApiImplV3.SERVICE_CONFIGURATION_API_PATH,
+        this.mServiceId
+      )
+    );
+
+    return await response.text();
   }
 }
 
