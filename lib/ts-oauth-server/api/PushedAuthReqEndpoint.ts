@@ -2,7 +2,7 @@ import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
 import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory';
 import { BasePushedAuthReqEndpoint } from '../../au3te-ts-tsxrs/BasePushedAuthReqEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/PushedAuthReqHandler';
-import { MediaType } from '../../util/MediaType';
+import { MediaType } from '../../util/mediaType';
 
 /**
  * An implementation of a pushed authorization endpoint.

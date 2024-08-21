@@ -2,7 +2,7 @@ import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory
 import { ServiceConfigurationRequest } from '../../au3te-ts-common/dto/ServiceConfigurationRequest';
 import { BaseConfigurationEndpoint } from '../../au3te-ts-tsxrs/BaseConfigurationEndpoint';
 
-export class ConfigrationEndpoint extends BaseConfigurationEndpoint {
+export class ConfigurationEndpoint extends BaseConfigurationEndpoint {
   public async get(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const queryParams = url.searchParams;
@@ -13,7 +13,7 @@ export class ConfigrationEndpoint extends BaseConfigurationEndpoint {
     if (!!pretty || !!patch) {
       return this.handle(
         api,
-        ConfigrationEndpoint.createRequest(pretty, patch)
+        ConfigurationEndpoint.createRequest(pretty, patch)
       );
     }
     return this.handle(api);

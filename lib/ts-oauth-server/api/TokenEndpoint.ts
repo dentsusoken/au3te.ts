@@ -2,7 +2,7 @@ import { AuthleteApi } from '../../au3te-ts-common/api/AuthleteApi';
 import { AuthleteApiFactory } from '../../au3te-ts-common/api/AuthleteApiFactory';
 import { BaseTokenEndpoint } from '../../au3te-ts-tsxrs/BaseTokenEndpoint';
 import { Params } from '../../au3te-ts-tsxrs/TokenRequestHandler';
-import { MediaType } from '../../util/MediaType';
+import { MediaType } from '../../util/mediaType';
 import { getQueryParams } from '../../util/queryParams';
 import { OBBTokenTask } from './OBBTokenTask';
 import { TokenRequestHandlerSpiImpl } from './TokenRequestHandlerSpiImpl';

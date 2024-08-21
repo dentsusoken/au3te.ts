@@ -64,7 +64,7 @@ describe('AuthleteApiImplV3', () => {
   describe('getServiceConfiguration', () => {
     it('should return a string', async () => {
       const impl = new AuthleteApiImplV3(properties);
-      const response = await impl.getServiceConfiguration(true);
+      const response = await impl.getServiceConfiguration(undefined, true);
       console.log('response :>> ', response);
       // expect(response instanceof TokenResponse).toBe(true);
     });

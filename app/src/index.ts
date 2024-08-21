@@ -6,6 +6,7 @@ import {
   PushedAuthReqEndpoint,
   TokenEndpoint,
   loadEnv,
+  ConfigurationEndpoint,
 } from 'au3te';
 import { Hono } from 'hono';
 import { StatusCode } from 'hono/utils/http-status';
@@ -76,6 +77,11 @@ app.post('/api/par', (c) => {
 app.post('/api/credential', async (c) => {
   const endpoint = new CredentialEndpoint();
   return endpoint.post(c.req.raw);
+});
+
+app.get('/.well-known/openid-configuration', async (c) => {
+  const endpoint = new ConfigurationEndpoint();
+  return endpoint.get(c.req.raw);
 });
 
 export default {
