@@ -67,9 +67,6 @@ interface AuthleteApi {
   ): Promise<PushedAuthReqResponse>;
 
   introspection(request: IntrospectionRequest): Promise<IntrospectionResponse>;
-  getCredentialIssuerMetadata(
-    request: CredentialIssuerMetadataRequest
-  ): Promise<CredentialIssuerMetadataResponse>;
   credentialSingleParse(
     request: CredentialSingleParseRequest
   ): Promise<CredentialSingleParseResponse>;
@@ -80,6 +77,9 @@ interface AuthleteApi {
     request?: ServiceConfigurationRequest,
     pretty?: boolean
   ): Promise<string>;
+  credentialIssuerMetadta(
+    request: CredentialIssuerMetadataRequest
+  ): Promise<CredentialIssuerMetadataResponse>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

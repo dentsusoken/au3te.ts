@@ -7,6 +7,7 @@ import {
   TokenEndpoint,
   loadEnv,
   ConfigurationEndpoint,
+  CredentialMetadataEndpoint,
 } from 'au3te';
 import { Hono } from 'hono';
 import { StatusCode } from 'hono/utils/http-status';
@@ -80,8 +81,16 @@ app.post('/api/credential', async (c) => {
 });
 
 app.get('/.well-known/openid-configuration', async (c) => {
+  console.log('this is the openid configuration endpoint');
+
   const endpoint = new ConfigurationEndpoint();
   return endpoint.get(c.req.raw);
+});
+
+app.get('/.well-known/openid-credential-issuer', async (c) => {
+  console.log('this is the credential issuer metadata endpoint');
+  const endpoint = new CredentialMetadataEndpoint();
+  return endpoint.get();
 });
 
 export default {

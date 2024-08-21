@@ -58,15 +58,13 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   abstract introspection(
     request: IntrospectionRequest
   ): Promise<IntrospectionResponse>;
-
-  abstract getCredentialIssuerMetadata(
-    request: CredentialIssuerMetadataRequest
-  ): Promise<CredentialIssuerMetadataResponse>;
-
   abstract getServiceConfiguration(
     request?: ServiceConfigurationRequest,
     pretty?: boolean
   ): Promise<string>;
+  abstract credentialIssuerMetadta(
+    request: CredentialIssuerMetadataRequest
+  ): Promise<CredentialIssuerMetadataResponse>;
 
   protected getTarget(): string {
     return this.mBaseUrl;

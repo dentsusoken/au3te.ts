@@ -41,6 +41,8 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     '/api/%d/vci/single/issue';
   private static readonly SERVICE_CONFIGURATION_API_PATH: string =
     '/api/%d/service/configuration';
+  private static readonly VCI_METADATA_API_PATH: string =
+    '/api/%d/vci/metadata';
 
   private readonly mAuth: string;
   private readonly mServiceId: number | undefined;
@@ -347,26 +349,6 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return csiResonse;
   }
 
-  public async getCredentialIssuerMetadata(
-    request: CredentialIssuerMetadataRequest
-  ) {
-    const response = await this.executeApiCall(
-      new this.PostApiCaller(
-        this,
-        request,
-        undefined,
-        AuthleteApiImplV3.VCI_SINGLE_ISSUE_API_PATH,
-        this.mServiceId
-      )
-    );
-    const params = await response.json();
-    const csiResonse = new CredentialIssuerMetadataResponse();
-    csiResonse.setAction(params.action);
-    csiResonse.setResponseContent(params.responseContent);
-
-    return csiResonse;
-  }
-
   async getServiceConfiguration(
     request?: ServiceConfigurationRequest,
     pretty?: boolean
@@ -383,6 +365,26 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     );
 
     return await response.text();
+  }
+
+  public async credentialIssuerMetadta(
+    request: CredentialIssuerMetadataRequest
+  ) {
+    const response = await this.executeApiCall(
+      new this.PostApiCaller(
+        this,
+        request,
+        undefined,
+        AuthleteApiImplV3.VCI_METADATA_API_PATH,
+        this.mServiceId
+      )
+    );
+    const params = await response.json();
+    const csiResonse = new CredentialIssuerMetadataResponse();
+    csiResonse.setAction(params.action);
+    csiResonse.setResponseContent(params.responseContent);
+
+    return csiResonse;
   }
 }
 

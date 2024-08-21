@@ -24,7 +24,7 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
   private async getCredentialIssuerMetadata(
     api: AuthleteApi
   ): Promise<Record<string, string>> | never {
-    const response = await api.getCredentialIssuerMetadata(
+    const response = await api.credentialIssuerMetadta(
       new CredentialIssuerMetadataRequest()
     );
     const content = response.getResponseContent() || '{}';
