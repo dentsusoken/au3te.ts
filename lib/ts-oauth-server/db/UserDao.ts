@@ -99,7 +99,97 @@ export class UserDao {
         'inga',
         '1991-11-06',
         new Date('2022-04-30')
-      ).setAttribute(MDLConstants.DOC_TYPE_MDL, this.createMDLData1004())
+      ).setAttribute(MDLConstants.DOC_TYPE_MDL, this.createMDLData1004()),
+      new UserEntity(
+        '1005',
+        'test01',
+        '12345678',
+        'test01',
+        'test01@test.jp',
+        new Address()
+          .setCountry('USA')
+          .setLocality('Shoshone')
+          .setStreetAddress('114 0ld State Hwy 127')
+          .setPostalCode('CA 92384'),
+        undefined,
+        undefined,
+        'test01',
+        'test01',
+        undefined,
+        undefined,
+        'https://example.com/test01/profile',
+        'https://example.com/test01/me.jpg',
+        'https://example.com/test01/',
+        'female',
+        'America/Toronto',
+        'en-US',
+        'test01',
+        '1991-11-06',
+        new Date('2022-04-30')
+      ).setAttribute(
+        MDLConstants.DOC_TYPE_MDL,
+        this.createMDLData('0001', 'test01@test.jp')
+      ),
+      new UserEntity(
+        '1006',
+        'test02',
+        '12345678',
+        'test02',
+        'test02@test.jp',
+        new Address()
+          .setCountry('USA')
+          .setLocality('Shoshone')
+          .setStreetAddress('114 0ld State Hwy 127')
+          .setPostalCode('CA 92384'),
+        undefined,
+        undefined,
+        'test02',
+        'test02',
+        undefined,
+        undefined,
+        'https://example.com/test02/profile',
+        'https://example.com/test02/me.jpg',
+        'https://example.com/test02/',
+        'female',
+        'America/Toronto',
+        'en-US',
+        'test02',
+        '1991-11-06',
+        new Date('2022-04-30')
+      ).setAttribute(
+        MDLConstants.DOC_TYPE_MDL,
+        this.createMDLData('0002', 'test02@test.jp')
+      ),
+      new UserEntity(
+        '1007',
+        'test03',
+        '12345678',
+        'test03',
+        'test03@test.jp',
+        new Address()
+          .setCountry('USA')
+          .setLocality('Shoshone')
+          .setStreetAddress('114 0ld State Hwy 127')
+          .setPostalCode('CA 92384'),
+        undefined,
+        undefined,
+        'test03',
+        'test03',
+        undefined,
+        undefined,
+        'https://example.com/test03/profile',
+        'https://example.com/test03/me.jpg',
+        'https://example.com/test03/',
+        'female',
+        'America/Toronto',
+        'en-US',
+        'test03',
+        '1991-11-06',
+        new Date('2022-04-30')
+      ).setAttribute(
+        MDLConstants.DOC_TYPE_MDL,
+        this.createMDLData('0003', 'test03@test.jp')
+      )
     );
   }
 
@@ -119,6 +209,28 @@ export class UserDao {
     nameSpace[MDLClaimNames.ISSUING_COUNTRY] = 'US';
     nameSpace[MDLClaimNames.DOCUMENT_NUMBER] = '12345678';
     nameSpace[MDLClaimNames.DRIVING_PRIVILEGES] = drivingPrivileges;
+
+    const root: Record<string, unknown> = {};
+    root[MDLConstants.NAME_SPACE_MDL] = nameSpace;
+    return root;
+  }
+
+  private static createMDLData(documentNumber: string, givenName: string) {
+    // const vehicleA: Record<string, unknown> = {};
+    // vehicleA['vehicle_category_code'] = 'A';
+    // vehicleA['issue_date'] = 'cbor:1004("2023-01-01")';
+    // vehicleA['expiry_date'] = 'cbor:1004("2043-01-01")';
+
+    // const drivingPrivileges: Record<string, unknown>[] = [];
+    // drivingPrivileges.push(vehicleA);
+
+    const nameSpace: Record<string, unknown> = {};
+    // nameSpace[MDLClaimNames.FAMILY_NAME] = 'Silverstone';
+    nameSpace[MDLClaimNames.GIVEN_NAME] = givenName;
+    // nameSpace[MDLClaimNames.BIRTH_DATE] = 'cbor:1004("1991-11-06")';
+    // nameSpace[MDLClaimNames.ISSUING_COUNTRY] = 'US';
+    nameSpace[MDLClaimNames.DOCUMENT_NUMBER] = documentNumber;
+    // nameSpace[MDLClaimNames.DRIVING_PRIVILEGES] = drivingPrivileges;
 
     const root: Record<string, unknown> = {};
     root[MDLConstants.NAME_SPACE_MDL] = nameSpace;
