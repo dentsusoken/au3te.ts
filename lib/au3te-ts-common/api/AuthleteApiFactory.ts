@@ -45,11 +45,6 @@ export class AuthleteApiFactory {
   }
 
   public static async getDefaultApi(): Promise<AuthleteApi> {
-    console.log(
-      'AuthleteApiFactory.sDefaultApi :>> ',
-      AuthleteApiFactory.sDefaultApi
-    );
-
     if (AuthleteApiFactory.sDefaultApi) {
       return AuthleteApiFactory.sDefaultApi;
     }

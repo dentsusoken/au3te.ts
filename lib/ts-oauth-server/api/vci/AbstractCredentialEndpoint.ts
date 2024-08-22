@@ -80,10 +80,6 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
     }
   }
   protected getOrderFormat(info: CredentialRequestInfo): OrderFormat {
-    console.log(
-      'info is instanceof CredentialRequestInfo :>> ',
-      info instanceof CredentialRequestInfo
-    );
     const format = OrderFormat.byId(info.getFormat() || '');
     if (!format) {
       throw new Error(
