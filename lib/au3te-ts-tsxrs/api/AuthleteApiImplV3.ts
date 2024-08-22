@@ -6,20 +6,26 @@ import { AuthorizationIssueRequest } from '../../au3te-ts-common/dto/Authorizati
 import { AuthorizationIssueResponse } from '../../au3te-ts-common/dto/AuthorizationIssueResponse';
 import { AuthorizationRequest } from '../../au3te-ts-common/dto/AuthorizationRequest';
 import { AuthorizationResponse } from '../../au3te-ts-common/dto/AuthorizationResponse';
+import { AuthzDetails } from '../../au3te-ts-common/dto/AuthzDetails';
+import { Client } from '../../au3te-ts-common/dto/Client';
 import { CredentialIssuerMetadataRequest } from '../../au3te-ts-common/dto/CredentialIssuerMetadataRequest';
 import { CredentialIssuerMetadataResponse } from '../../au3te-ts-common/dto/CredentialIssuerMetadataResponse';
 import { CredentialSingleIssueRequest } from '../../au3te-ts-common/dto/CredentialSingleIssueRequest';
 import { CredentialSingleIssueResponse } from '../../au3te-ts-common/dto/CredentialSingleIssueResponse';
 import { CredentialSingleParseRequest } from '../../au3te-ts-common/dto/CredentialSingleParseRequest';
 import { CredentialSingleParseResponse } from '../../au3te-ts-common/dto/CredentialSingleParseResponse';
+import { DynamicScope } from '../../au3te-ts-common/dto/DynamicScope';
 import { IntrospectionRequest } from '../../au3te-ts-common/dto/IntrospectionRequest';
 import { IntrospectionResponse } from '../../au3te-ts-common/dto/IntrospectionResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { Scope } from '../../au3te-ts-common/dto/Scope';
+import { Service } from '../../au3te-ts-common/dto/Service';
 import { ServiceConfigurationRequest } from '../../au3te-ts-common/dto/ServiceConfigurationRequest';
 import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
 import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
 import { ClientAuthMethod } from '../../au3te-ts-common/types/ClientAuthMethod';
+import { Prompt } from '../../au3te-ts-common/types/Prompt';
 import { AuthleteApiCall, AuthleteApiJaxrsImpl } from './AuthleteApiJaxrsImpl';
 
 export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
@@ -174,26 +180,43 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     authResponse
       .setAcrs(params.acrs)
       .setAction(params.action as AuthorizationResponse.Action)
-      .setAuthorizationDetails(params.authorizationDetails)
+      .setAuthorizationDetails(AuthzDetails.parse(params.authorizationDetails))
       .setClaims(params.claims)
       .setClaimsAtUserInfo(params.claimsAtUserInfo)
-      .setClient(params.client)
-      .setDynamicScopes(params.dynamicScopes)
+      .setClient(Client.parse(params.client))
+      .setDynamicScopes(
+        params.dynamicScopes
+          ? (params.dynamicScopes as unknown[])?.map((v) =>
+              DynamicScope.parse(v as Record<string, unknown>)
+            )
+          : []
+      )
       .setIdTokenClaims(params.idTokenClaims)
       .setLoginHint(params.loginHint)
       .setMaxAge(params.maxAge)
-      .setPrompts(params.prompts)
+      .setPrompts(
+        params.prompts
+          ? ((params.prompts as unknown[])
+              ?.map((v) => Prompt.parse(v as string))
+              .filter((v) => v !== undefined) as Prompt[])
+          : []
+      )
       .setPurpose(params.purpose)
       .setResponseContent(params.responseContent)
-      .setScopes(params.scopes)
-      .setService(params.service)
+      .setScopes(
+        params.scopes
+          ? (params.scopes as unknown[])?.map((v) =>
+              Scope.parse(v as Record<string, unknown>)
+            )
+          : []
+      )
+      .setService(Service.parse(params.service))
       .setSubject(params.subject)
       .setTicket(params.ticket)
       .setUserInfoClaims(params.userInfoClaims)
       .setClaimsLocales(params.claimLocales)
       .setRequestedClaimsForTx(params.requestedClaimsForTx)
       .setRequestedVerifiedClaimsForTx(params.requestedVerifiedClaimsForTx);
-
     return authResponse;
   }
 

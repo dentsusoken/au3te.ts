@@ -21,4 +21,15 @@ export class DynamicScope {
     this.value = value;
     return this;
   }
+
+  static parse(obj: Record<string, unknown>) {
+    const instance = new DynamicScope();
+    if (obj['name']) {
+      instance.name = obj['name'] as string;
+    }
+    if (obj['value']) {
+      instance.value = obj['value'] as string;
+    }
+    return instance;
+  }
 }

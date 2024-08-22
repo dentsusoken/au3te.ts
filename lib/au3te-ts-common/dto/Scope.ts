@@ -15,4 +15,15 @@ export class Scope {
     this.description = description;
     return this;
   }
+
+  static parse(obj: Record<string, unknown>) {
+    const instance = new Scope();
+    if (obj['name']) {
+      instance.name = obj['name'] as string;
+    }
+    if (obj['description']) {
+      instance.description = obj['description'] as string;
+    }
+    return instance;
+  }
 }

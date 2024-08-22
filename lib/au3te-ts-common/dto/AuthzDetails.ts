@@ -26,4 +26,15 @@ export class AuthzDetails {
     }
     return instance;
   }
+
+  static parse(obj: Record<string, unknown>) {
+    const instance = new AuthzDetails();
+    if (obj && obj['elements']) {
+      const elements = obj['elements'] as Record<string, unknown>[];
+      instance.elements = elements.map((element) =>
+        AuthzDetailsElement.parse(element)
+      );
+    }
+    return instance;
+  }
 }
