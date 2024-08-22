@@ -390,7 +390,7 @@ export class AuthleteApiImplV3 extends AuthleteApiJaxrsImpl {
     return await response.text();
   }
 
-  public async credentialIssuerMetadta(
+  public async credentialIssuerMetadata(
     request: CredentialIssuerMetadataRequest
   ) {
     const response = await this.executeApiCall(

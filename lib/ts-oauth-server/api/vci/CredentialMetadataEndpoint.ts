@@ -14,7 +14,7 @@ export class CredentialMetadataEndpoint {
 
   async metadata(api: AuthleteApi): Promise<Response> {
     const request = new CredentialIssuerMetadataRequest().setPretty(true);
-    const response = await api.credentialIssuerMetadta(request);
+    const response = await api.credentialIssuerMetadata(request);
     const content = response.getResponseContent();
 
     switch (response.getAction()) {

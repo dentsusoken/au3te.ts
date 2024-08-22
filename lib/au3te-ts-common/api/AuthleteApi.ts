@@ -77,7 +77,7 @@ interface AuthleteApi {
     request?: ServiceConfigurationRequest,
     pretty?: boolean
   ): Promise<string>;
-  credentialIssuerMetadta(
+  credentialIssuerMetadata(
     request: CredentialIssuerMetadataRequest
   ): Promise<CredentialIssuerMetadataResponse>;
 }

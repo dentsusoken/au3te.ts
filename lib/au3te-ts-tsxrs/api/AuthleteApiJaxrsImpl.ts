@@ -62,7 +62,7 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
     request?: ServiceConfigurationRequest,
     pretty?: boolean
   ): Promise<string>;
-  abstract credentialIssuerMetadta(
+  abstract credentialIssuerMetadata(
     request: CredentialIssuerMetadataRequest
   ): Promise<CredentialIssuerMetadataResponse>;
 
