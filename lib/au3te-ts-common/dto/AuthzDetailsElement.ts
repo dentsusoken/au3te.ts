@@ -98,7 +98,7 @@ export class AuthzDetailsElement {
       .setDataTypes(obj.dataTypes)
       .setIdentifier(obj.identifier)
       .setPrivileges(obj.privileges)
-      .setOtherFields(obj.otherField);
+      .setOtherFields(obj.otherFields);
   }
 
   static parse(obj: Record<string, unknown>) {
