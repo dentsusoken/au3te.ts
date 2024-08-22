@@ -9,7 +9,7 @@ export const AuthorizationView = (props: AuthzPageModel) => {
           name="viewport"
           content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"
         />
-        <title>{props.getServiceName()} | Authorization</title>
+        <title>{`${props.getServiceName() || 'Authorization'}`}</title>
         {/* <link rel="stylesheet" href="./css/authorization.css" />
         <link rel="stylesheet" href="../../css/authorization.css" /> */}
         {/* TODO 別ファイルに分ける */}
@@ -274,11 +274,11 @@ export const AuthorizationView = (props: AuthzPageModel) => {
               <p>The application is requesting the following permissions.</p>
 
               <dl id="scope-list">
-                {props.getScopes()?.map((scope) => (
-                  <>
+                {props.getScopes()?.map((scope, index) => (
+                  <span key={index}>
                     <dt>{scope.getName()}</dt>
                     <dd>{scope.getDescription()}</dd>
-                  </>
+                  </span>
                 ))}
               </dl>
             </div>
@@ -290,8 +290,8 @@ export const AuthorizationView = (props: AuthzPageModel) => {
             <h4 id="claims-for-id_token">Claims for ID Token</h4>
             <div className="indent">
               <ul>
-                {props.getClaimsForIdToken()?.map((claim) => (
-                  <li>{claim}</li>
+                {props.getClaimsForIdToken()?.map((claim, index) => (
+                  <li key={index}>{claim}</li>
                 ))}
               </ul>
             </div>
@@ -303,8 +303,8 @@ export const AuthorizationView = (props: AuthzPageModel) => {
             <h4 id="claims-for-userinfo">Claims for UserInfo</h4>
             <div className="indent">
               <ul>
-                {props.getClaimsForUserInfo()?.map((claim) => (
-                  <li>{claim}</li>
+                {props.getClaimsForUserInfo()?.map((claim, index) => (
+                  <li key={index}>{claim}</li>
                 ))}
               </ul>
             </div>
@@ -345,8 +345,8 @@ export const AuthorizationView = (props: AuthzPageModel) => {
                           <tbody>
                             {props
                               .getVerifiedClaimsForIdToken()
-                              ?.map((pair) => (
-                                <tr>
+                              ?.map((pair, index) => (
+                                <tr key={index}>
                                   <td>{pair.getKey()}</td>
                                   <td>{pair.getValue()}</td>
                                 </tr>
@@ -394,6 +394,7 @@ export const AuthorizationView = (props: AuthzPageModel) => {
                     className="font-default"
                     value={props.getLoginId()}
                     readOnly={!!props.getLoginIdReadOnly()}
+                    onChange={() => {}}
                   />
                   <input
                     type="password"
@@ -401,6 +402,7 @@ export const AuthorizationView = (props: AuthzPageModel) => {
                     name="password"
                     placeholder="Password"
                     className="font-default"
+                    onChange={() => {}}
                   />
                 </div>
               </>
@@ -420,6 +422,7 @@ export const AuthorizationView = (props: AuthzPageModel) => {
                     spellCheck="false"
                     className="font-default"
                     value={props.getLoginId()}
+                    onChange={() => {}}
                     readOnly={!!props.getLoginIdReadOnly()}
                   />
                   <input
@@ -428,6 +431,7 @@ export const AuthorizationView = (props: AuthzPageModel) => {
                     name="password"
                     placeholder="Password"
                     className="font-default"
+                    onChange={() => {}}
                   />
                 </div>
                 {/* {props.getFederations() && <>

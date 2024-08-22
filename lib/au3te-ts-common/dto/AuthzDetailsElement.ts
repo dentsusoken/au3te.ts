@@ -98,6 +98,32 @@ export class AuthzDetailsElement {
       .setDataTypes(obj.dataTypes)
       .setIdentifier(obj.identifier)
       .setPrivileges(obj.privileges)
-      .setOtherFields(obj.otherField);
+      .setOtherFields(obj.otherFields);
+  }
+
+  static parse(obj: Record<string, unknown>) {
+    const instance = new AuthzDetailsElement();
+    if (obj['type']) {
+      instance.type = obj['type'] as string;
+    }
+    if (obj['locations']) {
+      instance.locations = obj['locations'] as string[];
+    }
+    if (obj['actions']) {
+      instance.actions = obj['actions'] as string[];
+    }
+    if (obj['dataTypes']) {
+      instance.dataTypes = obj['dataTypes'] as string[];
+    }
+    if (obj['identifier']) {
+      instance.identifier = obj['identifier'] as string;
+    }
+    if (obj['privileges']) {
+      instance.privileges = obj['privileges'] as string[];
+    }
+    if (obj['otherFields']) {
+      instance.otherFields = obj['otherFields'] as string;
+    }
+    return instance;
   }
 }

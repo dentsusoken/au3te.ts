@@ -6,7 +6,7 @@ import { CredentialSingleIssueRequest } from '../../../au3te-ts-common/dto/Crede
 import { Action as IssueAction } from '../../../au3te-ts-common/dto/CredentialSingleIssueResponse';
 import { CredentialSingleParseRequest } from '../../../au3te-ts-common/dto/CredentialSingleParseRequest';
 import { Action as ParseAction } from '../../../au3te-ts-common/dto/CredentialSingleParseResponse';
-import { MediaType } from '../../../util/MediaType';
+import { MediaType } from '../../../util/mediaType';
 import { WebApplicationException } from '../../../util/WebApplicationException';
 import { ExceptionUtil } from '../../util/ExceptionUtil';
 import { ResponseUtil } from '../../util/ResponseUtil';

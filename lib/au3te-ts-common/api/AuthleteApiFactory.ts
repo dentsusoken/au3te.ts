@@ -49,10 +49,6 @@ export class AuthleteApiFactory {
       return AuthleteApiFactory.sDefaultApi;
     }
 
-    if (AuthleteApiFactory.sDefaultApi) {
-      return AuthleteApiFactory.sDefaultApi;
-    }
-
     const ac = new AuthletePropertiesConfiguration();
     const api = await AuthleteApiFactory.create(ac);
     if (!api) {

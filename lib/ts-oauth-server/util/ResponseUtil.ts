@@ -1,5 +1,5 @@
 import { HttpStatus } from '../../util/HttpStatus';
-import { MediaType } from '../../util/MediaType';
+import { MediaType } from '../../util/mediaType';
 // TODO integrate this with the other ResponseUtil.ts under au3te-ts-tsxrs
 export class ResponseUtil {
   private static readonly MEDIA_TYPE_HTML =

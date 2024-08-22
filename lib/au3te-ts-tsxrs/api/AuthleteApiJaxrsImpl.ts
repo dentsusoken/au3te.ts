@@ -14,9 +14,10 @@ import { IntrospectionRequest } from '../../au3te-ts-common/dto/IntrospectionReq
 import { IntrospectionResponse } from '../../au3te-ts-common/dto/IntrospectionResponse';
 import { PushedAuthReqRequest } from '../../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../../au3te-ts-common/dto/PushedAuthReqResponse';
+import { ServiceConfigurationRequest } from '../../au3te-ts-common/dto/ServiceConfigurationRequest';
 import { TokenRequest } from '../../au3te-ts-common/dto/TokenRequest';
 import { TokenResponse } from '../../au3te-ts-common/dto/TokenResponse';
-import { MediaType } from '../../util/MediaType';
+import { MediaType } from '../../util/mediaType';
 
 export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   private static readonly JSON_UTF8_TYPE =
@@ -57,8 +58,11 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
   abstract introspection(
     request: IntrospectionRequest
   ): Promise<IntrospectionResponse>;
-
-  abstract getCredentialIssuerMetadata(
+  abstract getServiceConfiguration(
+    request?: ServiceConfigurationRequest,
+    pretty?: boolean
+  ): Promise<string>;
+  abstract credentialIssuerMetadata(
     request: CredentialIssuerMetadataRequest
   ): Promise<CredentialIssuerMetadataResponse>;
 
@@ -91,6 +95,29 @@ export abstract class AuthleteApiJaxrsImpl implements AuthleteApi {
       body: JSON.stringify(request),
     });
 
+    return response;
+  }
+
+  protected async callGetApi(
+    auth: string,
+    path: string,
+    request: Record<string, unknown[]>
+  ): Promise<Response> {
+    const url = new URL(`${this.getTarget()}${path}`);
+
+    Object.entries(request).forEach(([key, value]) => {
+      url.searchParams.append(
+        key,
+        typeof value === 'string' ? value : JSON.stringify(value)
+      );
+    });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': AuthleteApiJaxrsImpl.JSON_UTF8_TYPE,
+        Authorization: auth,
+      },
+    });
     return response;
   }
 }

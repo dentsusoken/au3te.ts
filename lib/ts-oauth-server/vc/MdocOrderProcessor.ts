@@ -198,9 +198,8 @@ export class MdocOrderProcessor extends AbstractOrderProcessor {
   }
 
   private static toFullDate(dt: Date): string {
-    return `
-    "cbor:1004("${dt.toISOString().split('T')[0]}")"
-    `;
+    const formattedDate = dt.toISOString().split('T')[0];
+    return `cbor:1004("${formattedDate}")`;
   }
 
   protected computeCredentialDuration(): number {

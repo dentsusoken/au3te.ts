@@ -12,6 +12,7 @@ import { CredentialSingleParseRequest } from '../dto/CredentialSingleParseReques
 import { CredentialSingleParseResponse } from '../dto/CredentialSingleParseResponse';
 import { IntrospectionRequest } from '../dto/IntrospectionRequest';
 import { IntrospectionResponse } from '../dto/IntrospectionResponse';
+import { ServiceConfigurationRequest } from '../dto/ServiceConfigurationRequest';
 import { TokenRequest } from '../dto/TokenRequest';
 import { TokenResponse } from '../dto/TokenResponse';
 
@@ -66,15 +67,19 @@ interface AuthleteApi {
   ): Promise<PushedAuthReqResponse>;
 
   introspection(request: IntrospectionRequest): Promise<IntrospectionResponse>;
-  getCredentialIssuerMetadata(
-    request: CredentialIssuerMetadataRequest
-  ): Promise<CredentialIssuerMetadataResponse>;
   credentialSingleParse(
     request: CredentialSingleParseRequest
   ): Promise<CredentialSingleParseResponse>;
   credentialSingleIssue(
     request: CredentialSingleIssueRequest
   ): Promise<CredentialSingleIssueResponse>;
+  getServiceConfiguration(
+    request?: ServiceConfigurationRequest,
+    pretty?: boolean
+  ): Promise<string>;
+  credentialIssuerMetadata(
+    request: CredentialIssuerMetadataRequest
+  ): Promise<CredentialIssuerMetadataResponse>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

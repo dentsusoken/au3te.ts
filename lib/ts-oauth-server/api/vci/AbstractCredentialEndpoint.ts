@@ -24,7 +24,7 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
   private async getCredentialIssuerMetadata(
     api: AuthleteApi
   ): Promise<Record<string, string>> | never {
-    const response = await api.getCredentialIssuerMetadata(
+    const response = await api.credentialIssuerMetadata(
       new CredentialIssuerMetadataRequest()
     );
     const content = response.getResponseContent() || '{}';
@@ -80,10 +80,6 @@ export class AbstractCredentialEndpoint extends BaseResourceEndpoint {
     }
   }
   protected getOrderFormat(info: CredentialRequestInfo): OrderFormat {
-    console.log(
-      'info is instanceof CredentialRequestInfo :>> ',
-      info instanceof CredentialRequestInfo
-    );
     const format = OrderFormat.byId(info.getFormat() || '');
     if (!format) {
       throw new Error(

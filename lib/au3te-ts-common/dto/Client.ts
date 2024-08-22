@@ -34,4 +34,38 @@ export class Client {
   public getDerivedSectorIdentifier(): string | undefined {
     return this.derivedSectorIdentifier;
   }
+
+  static parse(obj: Record<string, unknown>) {
+    const instance = new Client();
+    if (obj['clientName']) {
+      instance.clientName = obj['clientName'] as string;
+    }
+    if (obj['logoUri']) {
+      instance.logoUri = new URL(obj['logoUri'] as string);
+    }
+    if (obj['clientUri']) {
+      instance.clientUri = new URL(obj['clientUri'] as string);
+    }
+    if (obj['policyUri']) {
+      instance.policyUri = new URL(obj['policyUri'] as string);
+    }
+    if (obj['tosUri']) {
+      instance.tosUri = new URL(obj['tosUri'] as string);
+    }
+    if (obj['description']) {
+      instance.description = obj['description'] as string;
+    }
+    if (obj['subjectType']) {
+      instance.subjectType = SubjectType.parse(
+        obj['subjectType'] as Record<string, unknown>
+      );
+    }
+    if (obj['derivedSectorIdentifier']) {
+      instance.derivedSectorIdentifier = obj[
+        'derivedSectorIdentifier'
+      ] as string;
+    }
+
+    return instance;
+  }
 }

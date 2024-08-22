@@ -4,7 +4,7 @@ import { User } from '../../au3te-ts-common/types/User';
 import { Params } from '../../au3te-ts-tsxrs/AuthorizationDecisionHandler';
 import { AuthorizationRequestHandlerSpiAdapter } from '../../au3te-ts-tsxrs/spi/AuthorizationRequestHandlerSpiAdapter';
 import { fromMilliseconds } from '../../util/Date';
-import { MediaType } from '../../util/MediaType';
+import { MediaType } from '../../util/mediaType';
 import { Session } from '../../util/session';
 import { FederationManager } from '../federation/FederationManager';
 import { Viewable } from '../webapp';

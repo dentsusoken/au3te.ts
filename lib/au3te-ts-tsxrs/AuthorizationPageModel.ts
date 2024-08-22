@@ -32,34 +32,29 @@ export class AuthorizationPageModel {
   constructor(info: AuthorizationResponse, user: User);
   constructor(info: AuthorizationResponse, user?: User);
   constructor(info?: AuthorizationResponse, user?: User) {
-    if (info && user) {
-      const client: Client | undefined = info.getClient();
-      const service = info.getService();
+    const client: Client | undefined = info?.getClient();
+    const service = info?.getService();
 
-      if (typeof client === 'undefined' || typeof service === 'undefined') {
-        return;
-      }
+    this.serviceName = service?.getServiceName();
+    this.clientName = client?.getClientName();
+    this.description = client?.getDescription();
+    this.logoUri = client?.getLogoUri()?.toString();
+    this.clientUri = client?.getClientUri()?.toString();
+    this.policyUri = client?.getPolicyUri()?.toString();
+    this.tosUri = client?.getTosUri()?.toString();
+    this.scopes = this.computeScopes(info);
+    this.loginId = this.computeLoginId(info);
+    this.loginIdReadOnly = this.computeLoginIdReadOnly(info);
+    this.authorizationDetails = this.toString(info?.getAuthorizationDetails());
+    this.user = user;
 
-      this.serviceName = info.getService()?.getServiceName();
-      this.clientName = client.getClientName();
-      this.description = client.getDescription();
-      this.logoUri = client.getLogoUri()?.toString();
-      this.clientUri = client.getClientUri()?.toString();
-      this.policyUri = client.getPolicyUri()?.toString();
-      this.tosUri = client.getTosUri()?.toString();
-      this.scopes = this.computeScopes(info);
-      this.loginId = this.computeLoginId(info);
-      this.loginIdReadOnly = this.computeLoginIdReadOnly(info);
-      this.authorizationDetails = this.toString(info.getAuthorizationDetails());
-      this.user = user;
+    // For "OpenID Connect for Identity Assurance 1.0"
+    this.setupIdentityAssurance(info);
 
-      // For "OpenID Connect for Identity Assurance 1.0"
-      this.setupIdentityAssurance(info);
-
-      // Requested normal claims.
-      this.claimsForIdToken = info.getClaims();
-      this.claimsForUserInfo = info.getClaimsAtUserInfo();
-    }
+    // Requested normal claims.
+    this.claimsForIdToken = info?.getClaims();
+    this.claimsForUserInfo = info?.getClaimsAtUserInfo();
+    // }
   }
 
   getServiceName(): string | undefined {
@@ -126,9 +121,9 @@ export class AuthorizationPageModel {
   isOldIdaFormatUsed() {
     return this.oldIdaFormatUsed;
   }
-  computeScopes(info: AuthorizationResponse): Scope[] {
-    const scopes = info.getScopes();
-    const dynamicScopes = info.getDynamicScopes();
+  computeScopes(info?: AuthorizationResponse): Scope[] {
+    const scopes = info?.getScopes();
+    const dynamicScopes = info?.getDynamicScopes();
     if (typeof scopes === 'undefined') {
       return [];
     }
@@ -136,10 +131,10 @@ export class AuthorizationPageModel {
       return scopes;
     }
     const list = new Array<Scope>();
-    scopes.forEach((scope) => {
+    scopes?.forEach((scope) => {
       list.push(scope);
     });
-    dynamicScopes.forEach((scope) => {
+    dynamicScopes?.forEach((scope) => {
       const value = scope.getValue();
       if (value) {
         list.push(new Scope().setName(value));
@@ -147,15 +142,15 @@ export class AuthorizationPageModel {
     });
     return list;
   }
-  computeLoginId(info: AuthorizationResponse): string {
-    const subject = info.getSubject();
+  computeLoginId(info?: AuthorizationResponse): string {
+    const subject = info?.getSubject();
     if (subject) {
       return subject;
     }
-    return info.getLoginHint() || '';
+    return info?.getLoginHint() || '';
   }
-  computeLoginIdReadOnly(info: AuthorizationResponse): string | undefined {
-    if (info.getSubject()) {
+  computeLoginIdReadOnly(info?: AuthorizationResponse): string | undefined {
+    if (info?.getSubject()) {
       return 'readonly';
     }
     return;
@@ -170,19 +165,19 @@ export class AuthorizationPageModel {
     }
     return JSON.stringify(elements);
   }
-  setupIdentityAssurance(info: AuthorizationResponse): void {
-    this.purpose = info.getPurpose();
+  setupIdentityAssurance(info?: AuthorizationResponse): void {
+    this.purpose = info?.getPurpose();
     this.setupVerifiedClaimsForIdToken(info);
     this.setupVerifiedClaimsForIdToken(info);
     // this.identityAssuranceRequired = this.computeIdentityAssuranceRequired();
   }
-  setupVerifiedClaimsForIdToken(info: AuthorizationResponse): void {
+  setupVerifiedClaimsForIdToken(info?: AuthorizationResponse): void {
     if (this.isOldIdaFormatUsed()) {
       // TODO Implement Old format function
       return;
     }
     this.verifiedClaimsForIdToken = this.extractRequestedClaims(
-      info.getIdTokenClaims()
+      info?.getIdTokenClaims()
     );
   }
   setupVerifiedClaimsForUserInfo(info: AuthorizationResponse) {

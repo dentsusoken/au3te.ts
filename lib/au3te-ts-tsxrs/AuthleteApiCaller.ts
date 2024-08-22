@@ -8,6 +8,7 @@ import { IntrospectionResponse } from '../au3te-ts-common/dto/IntrospectionRespo
 import { Property } from '../au3te-ts-common/dto/Property';
 import { PushedAuthReqRequest } from '../au3te-ts-common/dto/PushedAuthReqRequest';
 import { PushedAuthReqResponse } from '../au3te-ts-common/dto/PushedAuthReqResponse';
+import { ServiceConfigurationRequest } from '../au3te-ts-common/dto/ServiceConfigurationRequest';
 import { TokenRequest } from '../au3te-ts-common/dto/TokenRequest';
 import { TokenResponse } from '../au3te-ts-common/dto/TokenResponse';
 import { URLCoder } from '../au3te-ts-common/web/URLCoder';
@@ -322,5 +323,24 @@ export class AuthleteApiCaller {
 
     // 500 Internal Server Error
     return new Error(message);
+  }
+
+  public async callServiceConfiguration(
+    request?: ServiceConfigurationRequest,
+    pretty?: boolean
+  ): Promise<string> {
+    if (!request && !pretty) {
+      throw new Error('Either request or pretty must be set');
+    }
+    try {
+      if (pretty) {
+        return await this.mApi.getServiceConfiguration(undefined, pretty);
+      } else {
+        return await this.mApi.getServiceConfiguration(request);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      throw this.apiFailure('/api/service/configuration', e);
+    }
   }
 }

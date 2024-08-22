@@ -3,6 +3,8 @@ import { AuthorizationEndpoint } from './ts-oauth-server/api/AuthorizationEndpoi
 import { PushedAuthReqEndpoint } from './ts-oauth-server/api/PushedAuthReqEndpoint';
 import { TokenEndpoint } from './ts-oauth-server/api/TokenEndpoint';
 import { CredentialEndpoint } from './ts-oauth-server/api/vci/CredentialEndpoint';
+import { ConfigurationEndpoint } from './ts-oauth-server/api/ConfigurationEndpoint';
+import { CredentialMetadataEndpoint } from './ts-oauth-server/api/vci/CredentialMetadataEndpoint';
 import { loadEnv } from './util/EnvLoader';
 export const add = (x: number, y: number): number => {
   return x + y;
@@ -15,4 +17,6 @@ export {
   PushedAuthReqEndpoint,
   TokenEndpoint,
   loadEnv,
+  ConfigurationEndpoint,
+  CredentialMetadataEndpoint,
 };

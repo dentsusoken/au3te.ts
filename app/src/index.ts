@@ -6,6 +6,8 @@ import {
   PushedAuthReqEndpoint,
   TokenEndpoint,
   loadEnv,
+  ConfigurationEndpoint,
+  CredentialMetadataEndpoint,
 } from 'au3te';
 import { Hono } from 'hono';
 import { StatusCode } from 'hono/utils/http-status';
@@ -36,7 +38,6 @@ app.get('/session/set', async (c) => {
 app.get('/session/get', async (c) => {
   const session = await KVSession(c);
   const value = await session.get('params');
-  console.log('value :>> ', value);
   return c.text(typeof value === 'string' ? value : JSON.stringify(value));
 });
 
@@ -76,6 +77,16 @@ app.post('/api/par', (c) => {
 app.post('/api/credential', async (c) => {
   const endpoint = new CredentialEndpoint();
   return endpoint.post(c.req.raw);
+});
+
+app.get('/.well-known/openid-configuration', async (c) => {
+  const endpoint = new ConfigurationEndpoint();
+  return endpoint.get(c.req.raw);
+});
+
+app.get('/.well-known/openid-credential-issuer', async (c) => {
+  const endpoint = new CredentialMetadataEndpoint();
+  return endpoint.get();
 });
 
 export default {
