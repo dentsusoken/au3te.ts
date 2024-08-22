@@ -38,7 +38,6 @@ app.get('/session/set', async (c) => {
 app.get('/session/get', async (c) => {
   const session = await KVSession(c);
   const value = await session.get('params');
-  console.log('value :>> ', value);
   return c.text(typeof value === 'string' ? value : JSON.stringify(value));
 });
 
@@ -81,14 +80,11 @@ app.post('/api/credential', async (c) => {
 });
 
 app.get('/.well-known/openid-configuration', async (c) => {
-  console.log('this is the openid configuration endpoint');
-
   const endpoint = new ConfigurationEndpoint();
   return endpoint.get(c.req.raw);
 });
 
 app.get('/.well-known/openid-credential-issuer', async (c) => {
-  console.log('this is the credential issuer metadata endpoint');
   const endpoint = new CredentialMetadataEndpoint();
   return endpoint.get();
 });
