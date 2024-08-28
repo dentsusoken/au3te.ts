@@ -64,6 +64,10 @@ export class TokenEndpoint extends BaseTokenEndpoint {
     response: Response
   ): Promise<void> {
     const responseParams = await response.json();
+    const { access_token } = responseParams;
+    if (access_token) {
+      console.info('Access Token issued successfully');
+    }
     new OBBTokenTask().process(
       authleteApi,
       request,

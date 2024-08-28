@@ -18,6 +18,7 @@ export class ProcessingUtil {
     );
 
     if (loginUser) {
+      console.info('Authenticated successfully :', loginUser.getLoginId());
       session.set('user', loginUser);
       session.set('authTime', Date.now());
     }
